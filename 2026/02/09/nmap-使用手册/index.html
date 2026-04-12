@@ -1,0 +1,1084 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/admin.jpg">
+  <link rel="icon" href="/img/admin.jpg">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="xiaobite">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Nmap 实战使用手册 来源：Nmap Project (https:&#x2F;&#x2F;nmap.org)官方文档：https:&#x2F;&#x2F;nmap.org&#x2F;book&#x2F;man.html   目录 Nmap 实战使用手册 目录 一、概述 二、安装 三、基本语法 四、目标指定 五、主机发现 六、端口扫描技术 6.1 TCP 扫描 6.2 UDP 扫描 6.3 其他扫描   七、端口范围与排序 八、服务与版本探测 九、NSE">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Nmap-使用手册">
+<meta property="og:url" content="https://xiaobite-hacker.github.io/2026/02/09/nmap-%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/index.html">
+<meta property="og:site_name" content="xiaobite">
+<meta property="og:description" content="Nmap 实战使用手册 来源：Nmap Project (https:&#x2F;&#x2F;nmap.org)官方文档：https:&#x2F;&#x2F;nmap.org&#x2F;book&#x2F;man.html   目录 Nmap 实战使用手册 目录 一、概述 二、安装 三、基本语法 四、目标指定 五、主机发现 六、端口扫描技术 6.1 TCP 扫描 6.2 UDP 扫描 6.3 其他扫描   七、端口范围与排序 八、服务与版本探测 九、NSE">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-02-09T06:09:00.000Z">
+<meta property="article:modified_time" content="2026-04-12T07:11:26.565Z">
+<meta property="article:author" content="xiaobite">
+<meta property="article:tag" content="信息收集工具">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Nmap-使用手册 - xiaobite</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"xiaobite-hacker.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>xiaobite</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/prompt/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>prompt</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Nmap-使用手册"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-02-09 14:09" pubdate>
+          2026年2月9日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          37 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Nmap-使用手册</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="Nmap-实战使用手册"><a href="#Nmap-实战使用手册" class="headerlink" title="Nmap 实战使用手册"></a>Nmap 实战使用手册</h1><blockquote>
+<p>来源：Nmap Project (<a target="_blank" rel="noopener" href="https://nmap.org/">https://nmap.org</a>)<br>官方文档：<a target="_blank" rel="noopener" href="https://nmap.org/book/man.html">https://nmap.org/book/man.html</a></p>
+</blockquote>
+<hr>
+<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
+<li><a href="#nmap-%E5%AE%9E%E6%88%98%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C">Nmap 实战使用手册</a><ul>
+<li><a href="#%E7%9B%AE%E5%BD%95">目录</a></li>
+<li><a href="#%E4%B8%80%E6%A6%82%E8%BF%B0">一、概述</a></li>
+<li><a href="#%E4%BA%8C%E5%AE%89%E8%A3%85">二、安装</a></li>
+<li><a href="#%E4%B8%89%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95">三、基本语法</a></li>
+<li><a href="#%E5%9B%9B%E7%9B%AE%E6%A0%87%E6%8C%87%E5%AE%9A">四、目标指定</a></li>
+<li><a href="#%E4%BA%94%E4%B8%BB%E6%9C%BA%E5%8F%91%E7%8E%B0">五、主机发现</a></li>
+<li><a href="#%E5%85%AD%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F%E6%8A%80%E6%9C%AF">六、端口扫描技术</a><ul>
+<li><a href="#61-tcp-%E6%89%AB%E6%8F%8F">6.1 TCP 扫描</a></li>
+<li><a href="#62-udp-%E6%89%AB%E6%8F%8F">6.2 UDP 扫描</a></li>
+<li><a href="#63-%E5%85%B6%E4%BB%96%E6%89%AB%E6%8F%8F">6.3 其他扫描</a></li>
+</ul>
+</li>
+<li><a href="#%E4%B8%83%E7%AB%AF%E5%8F%A3%E8%8C%83%E5%9B%B4%E4%B8%8E%E6%8E%92%E5%BA%8F">七、端口范围与排序</a></li>
+<li><a href="#%E5%85%AB%E6%9C%8D%E5%8A%A1%E4%B8%8E%E7%89%88%E6%9C%AC%E6%8E%A2%E6%B5%8B">八、服务与版本探测</a></li>
+<li><a href="#%E4%B9%9Dnse-%E8%84%9A%E6%9C%AC%E5%BC%95%E6%93%8E">九、NSE 脚本引擎</a><ul>
+<li><a href="#91-%E5%9F%BA%E7%A1%80%E7%94%A8%E6%B3%95">9.1 基础用法</a></li>
+<li><a href="#92-%E5%B8%B8%E7%94%A8%E8%84%9A%E6%9C%AC%E5%88%86%E7%B1%BB">9.2 常用脚本分类</a></li>
+<li><a href="#93-%E5%AE%9E%E7%94%A8%E8%84%9A%E6%9C%AC%E9%80%9F%E6%9F%A5">9.3 实用脚本速查</a></li>
+</ul>
+</li>
+<li><a href="#%E5%8D%81%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E6%8E%A2%E6%B5%8B">十、操作系统探测</a></li>
+<li><a href="#%E5%8D%81%E4%B8%80%E6%97%B6%E9%97%B4%E4%B8%8E%E6%80%A7%E8%83%BD%E8%B0%83%E4%BC%98">十一、时间与性能调优</a></li>
+<li><a href="#%E5%8D%81%E4%BA%8C%E9%98%B2%E7%81%AB%E5%A2%99ids-%E7%BB%95%E8%BF%87">十二、防火墙&#x2F;IDS 绕过</a></li>
+<li><a href="#%E5%8D%81%E4%B8%89%E8%BE%93%E5%87%BA%E6%A0%BC%E5%BC%8F">十三、输出格式</a></li>
+<li><a href="#%E5%8D%81%E5%9B%9B%E6%9D%82%E9%A1%B9%E5%8F%82%E6%95%B0">十四、杂项参数</a></li>
+<li><a href="#%E5%8D%81%E4%BA%94%E5%AE%9E%E6%88%98%E5%9C%BA%E6%99%AF%E9%80%9F%E6%9F%A5">十五、实战场景速查</a><ul>
+<li><a href="#151-%E5%86%85%E7%BD%91%E5%AD%98%E6%B4%BB%E5%8F%91%E7%8E%B0">15.1 内网存活发现</a></li>
+<li><a href="#152-web-%E6%9C%8D%E5%8A%A1%E6%89%AB%E6%8F%8F">15.2 Web 服务扫描</a></li>
+<li><a href="#153-%E5%85%A8%E7%AB%AF%E5%8F%A3%E6%9C%8D%E5%8A%A1%E8%AF%86%E5%88%AB">15.3 全端口服务识别</a></li>
+<li><a href="#154-%E6%BC%8F%E6%B4%9E%E6%A3%80%E6%B5%8B">15.4 漏洞检测</a></li>
+<li><a href="#155-%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86">15.5 信息收集</a></li>
+<li><a href="#156-%E5%AF%86%E7%A0%81%E7%88%86%E7%A0%B4">15.6 密码爆破</a></li>
+<li><a href="#157-smbnetbios-%E6%89%AB%E6%8F%8F">15.7 SMB&#x2F;NetBIOS 扫描</a></li>
+<li><a href="#158-%E9%9A%90%E8%94%BD%E6%89%AB%E6%8F%8F">15.8 隐蔽扫描</a></li>
+<li><a href="#159-ipv6-%E6%89%AB%E6%8F%8F">15.9 IPv6 扫描</a></li>
+<li><a href="#1510-%E5%A4%A7%E8%A7%84%E6%A8%A1%E6%89%AB%E6%8F%8F">15.10 大规模扫描</a></li>
+</ul>
+</li>
+<li><a href="#%E5%8D%81%E5%85%AD%E8%BE%93%E5%87%BA%E8%A7%A3%E6%9E%90%E4%B8%8E%E5%90%8E%E5%A4%84%E7%90%86">十六、输出解析与后处理</a></li>
+<li><a href="#%E5%8D%81%E4%B8%83%E7%AE%A1%E9%81%93%E7%BB%84%E5%90%88">十七、管道组合</a></li>
+<li><a href="#%E5%8D%81%E5%85%AB%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E4%B8%8E%E6%8A%80%E5%B7%A7">十八、常见问题与技巧</a></li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="一、概述"><a href="#一、概述" class="headerlink" title="一、概述"></a>一、概述</h2><p>Nmap（Network Mapper）是全球最知名的网络扫描和安全审计工具，由 Gordon Lyon（Fyodor）开发。它能完成端口扫描、服务识别、操作系统探测、漏洞检测（NSE 脚本）等任务，是渗透测试和网络管理的必备工具。</p>
+<p><strong>核心能力：</strong></p>
+<ul>
+<li>🚪 端口扫描：TCP&#x2F;UDP&#x2F;多协议</li>
+<li>🔍 服务识别：版本号、banner</li>
+<li>💻 OS 指纹：操作系统类型和版本</li>
+<li>📜 NSE 脚本：700+ 脚本，覆盖漏洞检测、信息收集、密码爆破</li>
+<li>🛡️ 防火墙绕过：分片、诱饵、源端口伪装</li>
+<li>📊 多格式输出：XML&#x2F;JSON&#x2F;Greppable&#x2F;Normal</li>
+</ul>
+<hr>
+<h2 id="二、安装"><a href="#二、安装" class="headerlink" title="二、安装"></a>二、安装</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── Debian/Ubuntu ───</span><br>apt install nmap<br><br><span class="hljs-comment"># ─── Kali Linux ───</span><br><span class="hljs-comment"># 自带，无需安装</span><br><br><span class="hljs-comment"># ─── CentOS/RHEL ───</span><br>yum install nmap<br><span class="hljs-comment"># 或</span><br>dnf install nmap<br><br><span class="hljs-comment"># ─── macOS ───</span><br>brew install nmap<br><br><span class="hljs-comment"># ─── 源码编译 ───</span><br>git <span class="hljs-built_in">clone</span> https://github.com/nmap/nmap.git<br><span class="hljs-built_in">cd</span> nmap<br>./configure<br>make<br><span class="hljs-built_in">sudo</span> make install<br><br><span class="hljs-comment"># ─── Docker ───</span><br>docker pull instrumentisto/nmap<br>docker run --<span class="hljs-built_in">rm</span> instrumentisto/nmap -sV target.com<br><br><span class="hljs-comment"># ─── Windows ───</span><br><span class="hljs-comment"># 从 https://nmap.org/download.html 下载安装包</span><br><br><span class="hljs-comment"># ─── 验证安装 ───</span><br>nmap --version<br>nmap -h<br><br><span class="hljs-comment"># ─── 更新 NSE 脚本 ───</span><br>nmap --script-updatedb<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="三、基本语法"><a href="#三、基本语法" class="headerlink" title="三、基本语法"></a>三、基本语法</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">nmap [扫描类型] [选项] &#123;目标&#125;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 基本示例</span><br>nmap target.com                          <span class="hljs-comment"># 默认扫描（前1000端口）</span><br>nmap -sV target.com                      <span class="hljs-comment"># 服务版本探测</span><br>nmap -A target.com                       <span class="hljs-comment"># 全面扫描</span><br>nmap -p 80,443 target.com               <span class="hljs-comment"># 指定端口</span><br>nmap -iL targets.txt                    <span class="hljs-comment"># 从文件读取目标</span><br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="四、目标指定"><a href="#四、目标指定" class="headerlink" title="四、目标指定"></a>四、目标指定</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 单个目标 ───</span><br>nmap 192.168.1.1<br>nmap target.com<br><br><span class="hljs-comment"># ─── 多个目标 ───</span><br>nmap 192.168.1.1 192.168.1.2 192.168.1.3<br>nmap target1.com target2.com<br><br><span class="hljs-comment"># ─── CIDR 范围 ───</span><br>nmap 192.168.1.0/24<br>nmap 10.0.0.0/8<br><br><span class="hljs-comment"># ─── IP 范围 ───</span><br>nmap 192.168.1.1-254<br>nmap 192.168.1-10.1-254<br>nmap 10.0.0-255.1-254<br><br><span class="hljs-comment"># ─── 从文件读取 ───</span><br>nmap -iL targets.txt<br><br><span class="hljs-comment"># ─── 随机目标（用于研究）───</span><br>nmap -iR 100                           <span class="hljs-comment"># 随机扫描 100 个 IP</span><br><br><span class="hljs-comment"># ─── 排除目标 ───</span><br>nmap 192.168.1.0/24 --exclude 192.168.1.1,192.168.1.254<br>nmap 192.168.1.0/24 --excludefile exclude.txt<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="五、主机发现"><a href="#五、主机发现" class="headerlink" title="五、主机发现"></a>五、主机发现</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 列表扫描（不发包，仅列出目标）───</span><br>nmap -sL 192.168.1.0/24<br><br><span class="hljs-comment"># ─── Ping 扫描（只发现存活，不扫端口）───</span><br>nmap -sn 192.168.1.0/24<br>nmap -sn target.com<br><br><span class="hljs-comment"># ─── 跳过主机发现（假设所有主机在线）───</span><br>nmap -Pn target.com<br>nmap -Pn -p 80,443 192.168.1.0/24     <span class="hljs-comment"># 内网穿透扫描常用</span><br><br><span class="hljs-comment"># ─── TCP SYN Ping ───</span><br>nmap -PS 80,443 192.168.1.0/24         <span class="hljs-comment"># 对指定端口发 SYN 包</span><br><br><span class="hljs-comment"># ─── TCP ACK Ping ───</span><br>nmap -PA 80 192.168.1.0/24             <span class="hljs-comment"># 对指定端口发 ACK 包</span><br><br><span class="hljs-comment"># ─── UDP Ping ───</span><br>nmap -PU 53,161 192.168.1.0/24         <span class="hljs-comment"># 对指定端口发 UDP 包</span><br><br><span class="hljs-comment"># ─── SCTP Ping ───</span><br>nmap -PY 80 192.168.1.0/24<br><br><span class="hljs-comment"># ─── ICMP Ping ───</span><br>nmap -PE 192.168.1.0/24                <span class="hljs-comment"># ICMP Echo</span><br>nmap -PP 192.168.1.0/24                <span class="hljs-comment"># ICMP Timestamp</span><br>nmap -PM 192.168.1.0/24                <span class="hljs-comment"># ICMP Netmask</span><br><br><span class="hljs-comment"># ─── IP Protocol Ping ───</span><br>nmap -PO 1,2,4 192.168.1.0/24          <span class="hljs-comment"># 指定协议号</span><br><br><span class="hljs-comment"># ─── DNS 配置 ───</span><br>nmap -n target.com                      <span class="hljs-comment"># 禁用 DNS 解析（加速）</span><br>nmap -R target.com                      <span class="hljs-comment"># 强制 DNS 解析</span><br>nmap --dns-servers 8.8.8.8,1.1.1.1 target.com  <span class="hljs-comment"># 指定 DNS</span><br><br><span class="hljs-comment"># ─── 路由追踪 ───</span><br>nmap --traceroute target.com<br></code></pre></td></tr></table></figure>
+
+<p><strong>主机发现选择建议：</strong></p>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>推荐参数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>内网快速发现</td>
+<td><code>-sn</code></td>
+</tr>
+<tr>
+<td>外网主机发现</td>
+<td><code>-PS80,443</code> 或 <code>-PE</code></td>
+</tr>
+<tr>
+<td>防火墙环境</td>
+<td><code>-Pn</code>（跳过发现）</td>
+</tr>
+<tr>
+<td>深度发现</td>
+<td><code>-PE -PP -PS80,443</code></td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="六、端口扫描技术"><a href="#六、端口扫描技术" class="headerlink" title="六、端口扫描技术"></a>六、端口扫描技术</h2><h3 id="6-1-TCP-扫描"><a href="#6-1-TCP-扫描" class="headerlink" title="6.1 TCP 扫描"></a>6.1 TCP 扫描</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── TCP SYN 扫描（半开扫描，默认，需 root）───</span><br>nmap -sS target.com<br><span class="hljs-comment"># 特点：最快最隐蔽，不完成三次握手</span><br><br><span class="hljs-comment"># ─── TCP Connect 扫描（全连接）───</span><br>nmap -sT target.com<br><span class="hljs-comment"># 特点：不需要 root，但会被日志记录</span><br><br><span class="hljs-comment"># ─── TCP ACK 扫描（防火墙探测）───</span><br>nmap -sA target.com<br><span class="hljs-comment"># 特点：探测防火墙规则，不判断端口开放</span><br><br><span class="hljs-comment"># ─── TCP Window 扫描 ───</span><br>nmap -sW target.com<br><br><span class="hljs-comment"># ─── TCP Maimon 扫描 ───</span><br>nmap -sM target.com<br><br><span class="hljs-comment"># ─── TCP Null 扫描 ───</span><br>nmap -sN target.com<br><span class="hljs-comment"># 特点：无标志位，绕过简单防火墙</span><br><br><span class="hljs-comment"># ─── TCP FIN 扫描 ───</span><br>nmap -sF target.com<br><span class="hljs-comment"># 特点：仅 FIN 标志，绕过简单防火墙</span><br><br><span class="hljs-comment"># ─── TCP Xmas 扫描 ───</span><br>nmap -sX target.com<br><span class="hljs-comment"># 特点：FIN+PSH+URG 标志，绕过简单防火墙</span><br><br><span class="hljs-comment"># ─── 自定义 TCP 标志 ───</span><br>nmap --scanflags PSHSYNFIN target.com<br><br><span class="hljs-comment"># ─── Idle 扫描（极隐蔽，利用僵尸主机）───</span><br>nmap -sI zombie_host target.com<br><span class="hljs-comment"># 特点：完全隐蔽自己的 IP</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>TCP 扫描对比：</strong></p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>需 root</th>
+<th>速度</th>
+<th>隐蔽性</th>
+<th>准确性</th>
+<th>日志记录</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>-sS</code> (SYN)</td>
+<td>✅</td>
+<td>⚡ 快</td>
+<td>🟢 高</td>
+<td>🟢 高</td>
+<td>🟡 部分</td>
+</tr>
+<tr>
+<td><code>-sT</code> (Connect)</td>
+<td>❌</td>
+<td>🟡 中</td>
+<td>🔴 低</td>
+<td>🟢 高</td>
+<td>🔴 是</td>
+</tr>
+<tr>
+<td><code>-sN</code> (Null)</td>
+<td>✅</td>
+<td>🟡 中</td>
+<td>🟡 中</td>
+<td>🟡 中</td>
+<td>🟡 部分</td>
+</tr>
+<tr>
+<td><code>-sF</code> (FIN)</td>
+<td>✅</td>
+<td>🟡 中</td>
+<td>🟡 中</td>
+<td>🟡 中</td>
+<td>🟡 部分</td>
+</tr>
+<tr>
+<td><code>-sX</code> (Xmas)</td>
+<td>✅</td>
+<td>🟡 中</td>
+<td>🟡 中</td>
+<td>🟡 中</td>
+<td>🟡 部分</td>
+</tr>
+<tr>
+<td><code>-sA</code> (ACK)</td>
+<td>✅</td>
+<td>🟡 中</td>
+<td>🟢 高</td>
+<td>🔴 低</td>
+<td>🟡 部分</td>
+</tr>
+<tr>
+<td><code>-sI</code> (Idle)</td>
+<td>✅</td>
+<td>🐢 慢</td>
+<td>⭐ 极高</td>
+<td>🟡 中</td>
+<td>🟢 否</td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="6-2-UDP-扫描"><a href="#6-2-UDP-扫描" class="headerlink" title="6.2 UDP 扫描"></a>6.2 UDP 扫描</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── UDP 扫描（慢但重要）───</span><br>nmap -sU target.com<br><br><span class="hljs-comment"># ─── UDP + 常见端口 ───</span><br>nmap -sU -p 53,67,68,123,137,138,161,162,500,514,520 target.com<br><br><span class="hljs-comment"># ─── UDP + TCP 组合扫描 ───</span><br>nmap -sS -sU -p T:80,443,U:53,161 target.com<br><br><span class="hljs-comment"># ─── UDP 扫描加速（减小超时）───</span><br>nmap -sU --min-rate 1000 target.com<br></code></pre></td></tr></table></figure>
+
+<p><strong>常见 UDP 端口：</strong></p>
+<table>
+<thead>
+<tr>
+<th>端口</th>
+<th>服务</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>53</td>
+<td>DNS</td>
+</tr>
+<tr>
+<td>67&#x2F;68</td>
+<td>DHCP</td>
+</tr>
+<tr>
+<td>123</td>
+<td>NTP</td>
+</tr>
+<tr>
+<td>137&#x2F;138</td>
+<td>NetBIOS</td>
+</tr>
+<tr>
+<td>161&#x2F;162</td>
+<td>SNMP</td>
+</tr>
+<tr>
+<td>500</td>
+<td>IKE&#x2F;IPSec</td>
+</tr>
+<tr>
+<td>514</td>
+<td>Syslog</td>
+</tr>
+<tr>
+<td>520</td>
+<td>RIP</td>
+</tr>
+<tr>
+<td>1434</td>
+<td>MS-SQL</td>
+</tr>
+<tr>
+<td>1900</td>
+<td>UPnP</td>
+</tr>
+<tr>
+<td>5353</td>
+<td>mDNS</td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="6-3-其他扫描"><a href="#6-3-其他扫描" class="headerlink" title="6.3 其他扫描"></a>6.3 其他扫描</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── SCTP INIT 扫描 ───</span><br>nmap -sY target.com<br><br><span class="hljs-comment"># ─── SCTP COOKIE-ECHO 扫描 ───</span><br>nmap -sZ target.com<br><br><span class="hljs-comment"># ─── IP 协议扫描 ───</span><br>nmap -sO target.com<br><br><span class="hljs-comment"># ─── FTP Bounce 扫描 ───</span><br>nmap -b ftp_relay target.com<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="七、端口范围与排序"><a href="#七、端口范围与排序" class="headerlink" title="七、端口范围与排序"></a>七、端口范围与排序</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 指定端口 ───</span><br>nmap -p 80 target.com<br>nmap -p 80,443,8080 target.com<br>nmap -p 1-1024 target.com<br>nmap -p 1-65535 target.com                <span class="hljs-comment"># 全端口</span><br><br><span class="hljs-comment"># ─── 混合协议端口 ───</span><br>nmap -p U:53,111,137,T:21-25,80,139,8080 target.com<br>nmap -p T:80,443,U:53,161 target.com<br><br><span class="hljs-comment"># ─── 排除端口 ───</span><br>nmap -p 1-65535 --exclude-ports 80,443 target.com<br><br><span class="hljs-comment"># ─── 快速扫描（少于默认 1000 端口）───</span><br>nmap -F target.com<br><br><span class="hljs-comment"># ─── 最常见端口 ───</span><br>nmap --top-ports 100 target.com<br>nmap --top-ports 1000 target.com<br>nmap --top-ports 10000 target.com<br><br><span class="hljs-comment"># ─── 按比例扫描 ───</span><br>nmap --port-ratio 0.1 target.com         <span class="hljs-comment"># 扫描开放率 &gt; 10% 的端口</span><br><br><span class="hljs-comment"># ─── 顺序扫描（不随机化）───</span><br>nmap -r target.com<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="八、服务与版本探测"><a href="#八、服务与版本探测" class="headerlink" title="八、服务与版本探测"></a>八、服务与版本探测</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 服务版本探测 ───</span><br>nmap -sV target.com<br><br><span class="hljs-comment"># ─── 版本探测强度 ───</span><br>nmap -sV --version-intensity 0 target.com   <span class="hljs-comment"># 最轻（最快但可能漏报）</span><br>nmap -sV --version-intensity 5 target.com   <span class="hljs-comment"># 默认</span><br>nmap -sV --version-intensity 9 target.com   <span class="hljs-comment"># 最强（最全但最慢）</span><br><br><span class="hljs-comment"># ─── 轻量版本探测 ───</span><br>nmap -sV --version-light target.com          <span class="hljs-comment"># 等同 intensity 2</span><br><br><span class="hljs-comment"># ─── 全量版本探测 ───</span><br>nmap -sV --version-all target.com            <span class="hljs-comment"># 等同 intensity 9</span><br><br><span class="hljs-comment"># ─── 版本探测调试 ───</span><br>nmap -sV --version-trace target.com<br><br><span class="hljs-comment"># ─── 综合探测（版本 + 默认脚本）───</span><br>nmap -sV -sC target.com<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="九、NSE-脚本引擎"><a href="#九、NSE-脚本引擎" class="headerlink" title="九、NSE 脚本引擎"></a>九、NSE 脚本引擎</h2><h3 id="9-1-基础用法"><a href="#9-1-基础用法" class="headerlink" title="9.1 基础用法"></a>9.1 基础用法</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 使用默认脚本 ───</span><br>nmap -sC target.com<br>nmap --script=default target.com<br><br><span class="hljs-comment"># ─── 使用指定脚本 ───</span><br>nmap --script=http-enum target.com<br>nmap --script=http-enum,http-headers target.com<br><br><span class="hljs-comment"># ─── 使用脚本类别 ───</span><br>nmap --script=vuln target.com<br>nmap --script=safe target.com<br>nmap --script=discovery target.com<br>nmap --script=brute target.com<br>nmap --script=auth target.com<br>nmap --script=default,safe target.com<br><br><span class="hljs-comment"># ─── 使用通配符 ───</span><br>nmap --script=<span class="hljs-string">&quot;http-*&quot;</span> target.com<br>nmap --script=<span class="hljs-string">&quot;smb-*&quot;</span> target.com<br><br><span class="hljs-comment"># ─── 传入脚本参数 ───</span><br>nmap --script=http-brute --script-args userdb=users.txt,passdb=pass.txt target.com<br>nmap --script=dns-brute --script-args dns-brute.domain=example.com target.com<br><br><span class="hljs-comment"># ─── 从文件加载参数 ───</span><br>nmap --script-args-file=args.txt target.com<br><br><span class="hljs-comment"># ─── 脚本调试 ───</span><br>nmap --script-trace --script=http-enum target.com<br><br><span class="hljs-comment"># ─── 查看脚本帮助 ───</span><br>nmap --script-help=http-enum<br>nmap --script-help=vuln<br><br><span class="hljs-comment"># ─── 更新脚本数据库 ───</span><br>nmap --script-updatedb<br><br><span class="hljs-comment"># ─── 列出可用脚本 ───</span><br><span class="hljs-built_in">ls</span> /usr/share/nmap/scripts/<br><span class="hljs-built_in">ls</span> /usr/share/nmap/scripts/ | <span class="hljs-built_in">wc</span> -l<br></code></pre></td></tr></table></figure>
+
+<h3 id="9-2-常用脚本分类"><a href="#9-2-常用脚本分类" class="headerlink" title="9.2 常用脚本分类"></a>9.2 常用脚本分类</h3><table>
+<thead>
+<tr>
+<th>类别</th>
+<th>说明</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>auth</code></td>
+<td>认证相关</td>
+<td><code>ftp-anon</code>, <code>http-auth</code></td>
+</tr>
+<tr>
+<td><code>broadcast</code></td>
+<td>广播发现</td>
+<td><code>broadcast-ping</code>, <code>broadcast-dhcp-discover</code></td>
+</tr>
+<tr>
+<td><code>brute</code></td>
+<td>暴力破解</td>
+<td><code>http-brute</code>, <code>ftp-brute</code>, <code>ssh-brute</code></td>
+</tr>
+<tr>
+<td><code>default</code></td>
+<td>默认脚本</td>
+<td>安全且常用的脚本</td>
+</tr>
+<tr>
+<td><code>discovery</code></td>
+<td>信息发现</td>
+<td><code>http-enum</code>, <code>dns-brute</code></td>
+</tr>
+<tr>
+<td><code>dos</code></td>
+<td>拒绝服务</td>
+<td>⚠️ 有破坏性</td>
+</tr>
+<tr>
+<td><code>exploit</code></td>
+<td>漏洞利用</td>
+<td>⚠️ 有破坏性</td>
+</tr>
+<tr>
+<td><code>external</code></td>
+<td>外部依赖</td>
+<td>需联网查询</td>
+</tr>
+<tr>
+<td><code>fuzzer</code></td>
+<td>模糊测试</td>
+<td><code>http-form-fuzzer</code></td>
+</tr>
+<tr>
+<td><code>intrusive</code></td>
+<td>侵入性强</td>
+<td>可能影响目标</td>
+</tr>
+<tr>
+<td><code>malware</code></td>
+<td>恶意软件检测</td>
+<td><code>http-malware-host</code></td>
+</tr>
+<tr>
+<td><code>safe</code></td>
+<td>安全脚本</td>
+<td>不影响目标</td>
+</tr>
+<tr>
+<td><code>version</code></td>
+<td>版本探测</td>
+<td>增强版本识别</td>
+</tr>
+<tr>
+<td><code>vuln</code></td>
+<td>漏洞检测</td>
+<td><code>smb-vuln-*</code>, <code>ssl-heartbleed</code></td>
+</tr>
+</tbody></table>
+<h3 id="9-3-实用脚本速查"><a href="#9-3-实用脚本速查" class="headerlink" title="9.3 实用脚本速查"></a>9.3 实用脚本速查</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 信息收集 ───</span><br>nmap --script=http-enum target.com              <span class="hljs-comment"># HTTP 目录枚举</span><br>nmap --script=http-headers target.com           <span class="hljs-comment"># HTTP 头信息</span><br>nmap --script=http-methods target.com           <span class="hljs-comment"># HTTP 方法探测</span><br>nmap --script=http-title target.com             <span class="hljs-comment"># HTTP 标题</span><br>nmap --script=http-server-header target.com     <span class="hljs-comment"># 服务器头</span><br>nmap --script=http-robots.txt target.com        <span class="hljs-comment"># robots.txt</span><br>nmap --script=http-git target.com               <span class="hljs-comment"># Git 泄露</span><br>nmap --script=http-svn-info target.com          <span class="hljs-comment"># SVN 信息</span><br>nmap --script=ssl-cert target.com               <span class="hljs-comment"># SSL 证书</span><br>nmap --script=ssl-enum-ciphers target.com       <span class="hljs-comment"># SSL 密码套件</span><br>nmap --script=dns-brute target.com              <span class="hljs-comment"># DNS 子域爆破</span><br>nmap --script=dns-zone-transfer target.com      <span class="hljs-comment"># DNS 区域传送</span><br>nmap --script=smb-os-discovery target.com       <span class="hljs-comment"># SMB OS 发现</span><br>nmap --script=smb-enum-shares target.com        <span class="hljs-comment"># SMB 共享枚举</span><br>nmap --script=smb-enum-users target.com         <span class="hljs-comment"># SMB 用户枚举</span><br>nmap --script=snmp-info target.com              <span class="hljs-comment"># SNMP 信息</span><br>nmap --script=mysql-info target.com             <span class="hljs-comment"># MySQL 信息</span><br><br><span class="hljs-comment"># ─── 漏洞检测 ───</span><br>nmap --script=vuln target.com                   <span class="hljs-comment"># 所有漏洞脚本</span><br>nmap --script=smb-vuln-ms17-010 target.com      <span class="hljs-comment"># EternalBlue (WannaCry)</span><br>nmap --script=smb-vuln-ms08-067 target.com      <span class="hljs-comment"># MS08-067</span><br>nmap --script=ssl-heartbleed target.com         <span class="hljs-comment"># Heartbleed</span><br>nmap --script=ssl-poodle target.com             <span class="hljs-comment"># POODLE</span><br>nmap --script=http-vuln-cve2017-5638 target.com <span class="hljs-comment"># Struts2 RCE</span><br>nmap --script=http-vuln-cve2014-6271 target.com <span class="hljs-comment"># Shellshock</span><br>nmap --script=rmi-vuln-classloader target.com   <span class="hljs-comment"># Java RMI</span><br>nmap --script=mysql-vuln-cve2012-2122 target.com <span class="hljs-comment"># MySQL 认证绕过</span><br><br><span class="hljs-comment"># ─── 密码爆破 ───</span><br>nmap --script=ssh-brute target.com              <span class="hljs-comment"># SSH 爆破</span><br>nmap --script=ftp-brute target.com              <span class="hljs-comment"># FTP 爆破</span><br>nmap --script=mysql-brute target.com            <span class="hljs-comment"># MySQL 爆破</span><br>nmap --script=http-brute target.com             <span class="hljs-comment"># HTTP 爆破</span><br>nmap --script=http-form-brute target.com        <span class="hljs-comment"># 表单爆破</span><br>nmap --script=smb-brute target.com              <span class="hljs-comment"># SMB 爆破</span><br>nmap --script=smtp-brute target.com             <span class="hljs-comment"># SMTP 爆破</span><br>nmap --script=vnc-brute target.com              <span class="hljs-comment"># VNC 爆破</span><br><br><span class="hljs-comment"># ─── 匿名访问检测 ───</span><br>nmap --script=ftp-anon target.com               <span class="hljs-comment"># FTP 匿名登录</span><br>nmap --script=http-open-proxy target.com        <span class="hljs-comment"># HTTP 代理检测</span><br><br><span class="hljs-comment"># ─── 探测类 ───</span><br>nmap --script=banner target.com                 <span class="hljs-comment"># 获取 banner</span><br>nmap --script=whois-ip target.com               <span class="hljs-comment"># IP WHOIS</span><br>nmap --script=traceroute-geolocation target.com <span class="hljs-comment"># 路由地理定位</span><br>nmap --script=target-asn target.com             <span class="hljs-comment"># ASN 查询</span><br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十、操作系统探测"><a href="#十、操作系统探测" class="headerlink" title="十、操作系统探测"></a>十、操作系统探测</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── OS 探测 ───</span><br>nmap -O target.com<br><br><span class="hljs-comment"># ─── OS + 服务 + 默认脚本 + 路由追踪（全面扫描）───</span><br>nmap -A target.com<br><br><span class="hljs-comment"># ─── 限制 OS 探测（只对看起来有希望的目标）───</span><br>nmap -O --osscan-limit target.com<br><br><span class="hljs-comment"># ─── 积极猜测 OS ───</span><br>nmap -O --osscan-guess target.com<br><br><span class="hljs-comment"># ─── OS + 版本 ───</span><br>nmap -O -sV target.com<br><br><span class="hljs-comment"># ─── 最全面扫描（推荐正式评估）───</span><br>nmap -sS -sV -O -sC -A --traceroute target.com<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十一、时间与性能调优"><a href="#十一、时间与性能调优" class="headerlink" title="十一、时间与性能调优"></a>十一、时间与性能调优</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 时间模板（T0-T5）───</span><br>nmap -T0 target.com    <span class="hljs-comment"># 极慢（IDS 绕过，Paranoid）</span><br>nmap -T1 target.com    <span class="hljs-comment"># 慢（Sneaky）</span><br>nmap -T2 target.com    <span class="hljs-comment"># 较慢（Polite）</span><br>nmap -T3 target.com    <span class="hljs-comment"># 默认（Normal）</span><br>nmap -T4 target.com    <span class="hljs-comment"># 快速（Aggressive，推荐）</span><br>nmap -T5 target.com    <span class="hljs-comment"># 极快（Insane，可能漏报）</span><br><br><span class="hljs-comment"># ─── 精细控制 ───</span><br>nmap --min-rate 100 target.com               <span class="hljs-comment"># 最低速率 100 包/秒</span><br>nmap --max-rate 5000 target.com              <span class="hljs-comment"># 最高速率 5000 包/秒</span><br>nmap --min-rate 1000 --max-rate 5000 target.com<br><br>nmap --max-retries 2 target.com              <span class="hljs-comment"># 最大重试次数</span><br>nmap --host-timeout 30m target.com           <span class="hljs-comment"># 单主机超时 30 分钟</span><br>nmap --scan-delay 1s target.com              <span class="hljs-comment"># 探针间隔 1 秒</span><br>nmap --max-scan-delay 500ms target.com       <span class="hljs-comment"># 最大探针间隔</span><br><br>nmap --min-hostgroup 64 target.com           <span class="hljs-comment"># 最小并行组</span><br>nmap --max-hostgroup 256 target.com          <span class="hljs-comment"># 最大并行组</span><br>nmap --min-parallelism 10 target.com         <span class="hljs-comment"># 最小并行度</span><br>nmap --max-parallelism 50 target.com         <span class="hljs-comment"># 最大并行度</span><br><br>nmap --min-rtt-timeout 100ms target.com      <span class="hljs-comment"># 最小 RTT 超时</span><br>nmap --max-rtt-timeout 2s target.com         <span class="hljs-comment"># 最大 RTT 超时</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>时间模板对比：</strong></p>
+<table>
+<thead>
+<tr>
+<th>模板</th>
+<th>速度</th>
+<th>隐蔽性</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>T0</td>
+<td>🐌 极慢</td>
+<td>⭐ 最高</td>
+<td>IDS 严格环境</td>
+</tr>
+<tr>
+<td>T1</td>
+<td>🐢 慢</td>
+<td>🟢 高</td>
+<td>谨慎扫描</td>
+</tr>
+<tr>
+<td>T2</td>
+<td>🐢 较慢</td>
+<td>🟢 高</td>
+<td>礼貌扫描</td>
+</tr>
+<tr>
+<td>T3</td>
+<td>🟡 默认</td>
+<td>🟡 中</td>
+<td>一般场景</td>
+</tr>
+<tr>
+<td><strong>T4</strong></td>
+<td><strong>⚡ 快</strong></td>
+<td><strong>🟡 中</strong></td>
+<td><strong>日常使用（推荐）</strong></td>
+</tr>
+<tr>
+<td>T5</td>
+<td>🚀 极快</td>
+<td>🔴 低</td>
+<td>可信内网</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="十二、防火墙-IDS-绕过"><a href="#十二、防火墙-IDS-绕过" class="headerlink" title="十二、防火墙&#x2F;IDS 绕过"></a>十二、防火墙&#x2F;IDS 绕过</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 分片（将包拆成小段）───</span><br>nmap -f target.com                      <span class="hljs-comment"># 8 字节分片</span><br>nmap -f -f target.com                   <span class="hljs-comment"># 16 字节分片</span><br>nmap --mtu 24 target.com                <span class="hljs-comment"># 自定义 MTU</span><br><br><span class="hljs-comment"># ─── 诱饵扫描（隐藏真实 IP）───</span><br>nmap -D RND:10 target.com               <span class="hljs-comment"># 10 个随机诱饵</span><br>nmap -D decoy1,decoy2,ME,decoy3 target.com  <span class="hljs-comment"># 指定诱饵，ME 表示真实 IP</span><br>nmap -D 192.168.1.100,192.168.1.101,ME target.com<br><br><span class="hljs-comment"># ─── 源 IP 伪装（需配合响应接收）───</span><br>nmap -S 1.2.3.4 target.com<br><br><span class="hljs-comment"># ─── 源端口伪装 ───</span><br>nmap -g 53 target.com                   <span class="hljs-comment"># 使用 53 端口（DNS）</span><br>nmap -g 80 target.com                   <span class="hljs-comment"># 使用 80 端口（HTTP）</span><br>nmap --source-port 443 target.com<br><br><span class="hljs-comment"># ─── MAC 地址伪装 ───</span><br>nmap --spoof-mac 00:11:22:33:44:55 target.com<br>nmap --spoof-mac Cisco target.com       <span class="hljs-comment"># 指定厂商</span><br>nmap --spoof-mac 0 target.com           <span class="hljs-comment"># 随机 MAC</span><br><br><span class="hljs-comment"># ─── 自定义数据 ───</span><br>nmap --data-string <span class="hljs-string">&quot;Hello&quot;</span> target.com   <span class="hljs-comment"># 附加 ASCII 字符串</span><br>nmap --data <span class="hljs-string">&quot;deadbeef&quot;</span> target.com       <span class="hljs-comment"># 附加十六进制数据</span><br>nmap --data-length 50 target.com        <span class="hljs-comment"># 附加随机数据</span><br><br><span class="hljs-comment"># ─── 自定义 TTL ───</span><br>nmap --ttl 64 target.com<br><br><span class="hljs-comment"># ─── 代理扫描 ───</span><br>nmap --proxies http://proxy1:8080,socks4://proxy2:1080 target.com<br><br><span class="hljs-comment"># ─── 错误校验和（触发特定防火墙行为）───</span><br>nmap --badsum target.com<br></code></pre></td></tr></table></figure>
+
+<p><strong>绕过策略选择：</strong></p>
+<table>
+<thead>
+<tr>
+<th>防护类型</th>
+<th>推荐策略</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>简单防火墙</td>
+<td><code>-f</code>（分片）</td>
+</tr>
+<tr>
+<td>IDS 告警</td>
+<td><code>-D RND:5</code>（诱饵）</td>
+</tr>
+<tr>
+<td>端口过滤</td>
+<td><code>-g 53</code>（源端口伪装）</td>
+</tr>
+<tr>
+<td>IP 封禁</td>
+<td><code>-D</code>（诱饵）+ 随机化</td>
+</tr>
+<tr>
+<td>严格环境</td>
+<td><code>-f -D RND:5 -g 53</code></td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="十三、输出格式"><a href="#十三、输出格式" class="headerlink" title="十三、输出格式"></a>十三、输出格式</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 正常文本输出 ───</span><br>nmap -oN results.txt target.com<br><br><span class="hljs-comment"># ─── XML 输出 ───</span><br>nmap -oX results.xml target.com<br><br><span class="hljs-comment"># ─── Greppable 输出（适合 grep/awk 解析）───</span><br>nmap -oG results.gnmap target.com<br><br><span class="hljs-comment"># ─── Script Kiddie 输出 ───</span><br>nmap -oS results.txt target.com<br><br><span class="hljs-comment"># ─── 所有格式同时输出 ───</span><br>nmap -oA results target.com<br><span class="hljs-comment"># 生成: results.nmap, results.xml, results.gnmap</span><br><br><span class="hljs-comment"># ─── 详细输出 ───</span><br>nmap -v target.com                      <span class="hljs-comment"># 详细</span><br>nmap -vv target.com                     <span class="hljs-comment"># 更详细</span><br><br><span class="hljs-comment"># ─── 调试输出 ───</span><br>nmap -d target.com                      <span class="hljs-comment"># 调试</span><br>nmap -<span class="hljs-built_in">dd</span> target.com                     <span class="hljs-comment"># 更详细调试</span><br><br><span class="hljs-comment"># ─── 显示端口状态原因 ───</span><br>nmap --reason target.com<br><br><span class="hljs-comment"># ─── 只显示开放端口 ───</span><br>nmap --open target.com<br><br><span class="hljs-comment"># ─── 显示所有收发包 ───</span><br>nmap --packet-trace target.com<br><br><span class="hljs-comment"># ─── 追加输出 ───</span><br>nmap --append-output -oN results.txt target.com<br><br><span class="hljs-comment"># ─── 断点续扫 ───</span><br>nmap --resume results.txt<br><br><span class="hljs-comment"># ─── XML 转 HTML ───</span><br>xsltproc results.xml -o results.html<br>nmap --stylesheet https://nmap.org/nmap.xsl -oX results.xml target.com<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十四、杂项参数"><a href="#十四、杂项参数" class="headerlink" title="十四、杂项参数"></a>十四、杂项参数</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── IPv6 扫描 ───</span><br>nmap -6 target.com<br><br><span class="hljs-comment"># ─── 综合扫描（OS + 版本 + 脚本 + 路由追踪）───</span><br>nmap -A target.com<br><br><span class="hljs-comment"># ─── 版本号 ───</span><br>nmap -V<br><br><span class="hljs-comment"># ─── 帮助 ───</span><br>nmap -h<br>nmap --<span class="hljs-built_in">help</span><br><br><span class="hljs-comment"># ─── 查看网卡接口 ───</span><br>nmap --iflist<br><br><span class="hljs-comment"># ─── 指定网卡 ───</span><br>nmap -e eth0 target.com<br><br><span class="hljs-comment"># ─── 强制特权/非特权模式 ───</span><br>nmap --privileged target.com<br>nmap --unprivileged target.com<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十五、实战场景速查"><a href="#十五、实战场景速查" class="headerlink" title="十五、实战场景速查"></a>十五、实战场景速查</h2><h3 id="15-1-内网存活发现"><a href="#15-1-内网存活发现" class="headerlink" title="15.1 内网存活发现"></a>15.1 内网存活发现</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 快速 Ping 扫描</span><br>nmap -sn 192.168.1.0/24 -oG live_hosts.txt<br>grep <span class="hljs-string">&quot;Up&quot;</span> live_hosts.txt | awk <span class="hljs-string">&#x27;&#123;print $2&#125;&#x27;</span> &gt; ips.txt<br><br><span class="hljs-comment"># ARP 扫描（二层，最准确）</span><br>nmap -sn -PR 192.168.1.0/24<br><br><span class="hljs-comment"># 多网段发现</span><br>nmap -sn 192.168.1.0/24 192.168.2.0/24 10.0.0.0/24<br><br><span class="hljs-comment"># 带 ARP + ICMP + TCP SYN 组合</span><br>nmap -sn -PE -PS80,443,22 192.168.1.0/24<br></code></pre></td></tr></table></figure>
+
+<h3 id="15-2-Web-服务扫描"><a href="#15-2-Web-服务扫描" class="headerlink" title="15.2 Web 服务扫描"></a>15.2 Web 服务扫描</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 常见 Web 端口</span><br>nmap -p 80,443,8080,8443,8888,9090 -sV -sC target.com<br><br><span class="hljs-comment"># HTTP 信息收集</span><br>nmap -p 80,443 --script=http-enum,http-headers,http-methods,http-title,http-server-header target.com<br><br><span class="hljs-comment"># HTTP 漏洞扫描</span><br>nmap -p 80,443 --script=http-vuln-* target.com<br><br><span class="hljs-comment"># Web 技术栈识别</span><br>nmap -p 80,443 --script=http-waf-detect,http-generator,http-robots.txt target.com<br></code></pre></td></tr></table></figure>
+
+<h3 id="15-3-全端口服务识别"><a href="#15-3-全端口服务识别" class="headerlink" title="15.3 全端口服务识别"></a>15.3 全端口服务识别</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 全端口 + 服务版本</span><br>nmap -p- -sV -sC -T4 target.com -oA full_scan<br><br><span class="hljs-comment"># 全端口 SYN 扫描（先扫开放端口）</span><br>nmap -p- -sS --open -T4 -oG ports.gnmap target.com<br>grep <span class="hljs-string">&quot;open&quot;</span> ports.gnmap | awk -F<span class="hljs-string">&#x27;[/ ]&#x27;</span> <span class="hljs-string">&#x27;&#123;print $1&#125;&#x27;</span> | <span class="hljs-built_in">sort</span> -n | <span class="hljs-built_in">uniq</span> &gt; open_ports.txt<br><br><span class="hljs-comment"># 然后对开放端口做服务识别</span><br>nmap -p $(<span class="hljs-built_in">cat</span> open_ports.txt | <span class="hljs-built_in">tr</span> <span class="hljs-string">&#x27;\n&#x27;</span> <span class="hljs-string">&#x27;,&#x27;</span>) -sV -sC target.com -oA services<br></code></pre></td></tr></table></figure>
+
+<h3 id="15-4-漏洞检测"><a href="#15-4-漏洞检测" class="headerlink" title="15.4 漏洞检测"></a>15.4 漏洞检测</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 全面漏洞扫描</span><br>nmap --script=vuln target.com -oN vuln_report.txt<br><br><span class="hljs-comment"># SMB 漏洞（EternalBlue 等）</span><br>nmap -p 445 --script=smb-vuln-* target.com<br><br><span class="hljs-comment"># SSL/TLS 漏洞</span><br>nmap -p 443 --script=ssl-heartbleed,ssl-poodle,ssl-ccs-injection target.com<br>nmap -p 443 --script=ssl-enum-ciphers target.com<br><br><span class="hljs-comment"># 特定 CVE 检测</span><br>nmap -p 445 --script=smb-vuln-ms17-010 target.com         <span class="hljs-comment"># EternalBlue</span><br>nmap -p 445 --script=smb-vuln-ms08-067 target.com         <span class="hljs-comment"># Conficker</span><br>nmap -p 80 --script=http-vuln-cve2017-5638 target.com     <span class="hljs-comment"># Struts2</span><br>nmap -p 80 --script=http-vuln-cve2014-6271 target.com     <span class="hljs-comment"># Shellshock</span><br>nmap -p 80 --script=http-vuln-cve2021-41773 target.com    <span class="hljs-comment"># Apache Path Traversal</span><br><br><span class="hljs-comment"># 扫描整个网段的漏洞</span><br>nmap --script=vuln 192.168.1.0/24 -oN network_vulns.txt<br></code></pre></td></tr></table></figure>
+
+<h3 id="15-5-信息收集"><a href="#15-5-信息收集" class="headerlink" title="15.5 信息收集"></a>15.5 信息收集</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 服务 banner</span><br>nmap -sV --version-all target.com<br><br><span class="hljs-comment"># DNS 信息</span><br>nmap --script=dns-brute,dns-zone-transfer,dns-srv-enum -p 53 target.com<br><br><span class="hljs-comment"># SNMP 信息</span><br>nmap -sU -p 161 --script=snmp-info,snmp-interfaces,snmp-sysdescr target.com<br><br><span class="hljs-comment"># SMB 信息</span><br>nmap -p 445 --script=smb-os-discovery,smb-enum-shares,smb-enum-users target.com<br><br><span class="hljs-comment"># LDAP 信息</span><br>nmap -p 389,636 --script=ldap-search target.com<br><br><span class="hljs-comment"># MySQL 信息</span><br>nmap -p 3306 --script=mysql-info,mysql-enum,mysql-users target.com<br><br><span class="hljs-comment"># Redis 信息</span><br>nmap -p 6379 --script=redis-info target.com<br><br><span class="hljs-comment"># MongoDB 信息</span><br>nmap -p 27017 --script=mongodb-info,mongodb-databases target.com<br></code></pre></td></tr></table></figure>
+
+<h3 id="15-6-密码爆破"><a href="#15-6-密码爆破" class="headerlink" title="15.6 密码爆破"></a>15.6 密码爆破</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># SSH 爆破</span><br>nmap -p 22 --script=ssh-brute --script-args userdb=users.txt,passdb=pass.txt target.com<br><br><span class="hljs-comment"># FTP 爆破</span><br>nmap -p 21 --script=ftp-brute target.com<br><br><span class="hljs-comment"># MySQL 爆破</span><br>nmap -p 3306 --script=mysql-brute target.com<br><br><span class="hljs-comment"># HTTP 表单爆破</span><br>nmap -p 80 --script=http-form-brute --script-args \<br>  <span class="hljs-string">&#x27;http-form-brute.path=/login.php,http-form-brute.uservar=username,http-form-brute.passvar=password&#x27;</span> \<br>  target.com<br><br><span class="hljs-comment"># SMTP 爆破</span><br>nmap -p 25 --script=smtp-brute target.com<br><br><span class="hljs-comment"># RDP 爆破</span><br>nmap -p 3389 --script=rdp-brute target.com<br></code></pre></td></tr></table></figure>
+
+<h3 id="15-7-SMB-NetBIOS-扫描"><a href="#15-7-SMB-NetBIOS-扫描" class="headerlink" title="15.7 SMB&#x2F;NetBIOS 扫描"></a>15.7 SMB&#x2F;NetBIOS 扫描</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 完整 SMB 扫描</span><br>nmap -p 139,445 --script=smb-* target.com<br><br><span class="hljs-comment"># SMB OS 发现</span><br>nmap -p 445 --script=smb-os-discovery target.com<br><br><span class="hljs-comment"># SMB 共享枚举</span><br>nmap -p 445 --script=smb-enum-shares target.com<br><br><span class="hljs-comment"># SMB 用户枚举</span><br>nmap -p 445 --script=smb-enum-users target.com<br><br><span class="hljs-comment"># SMB 漏洞检测</span><br>nmap -p 445 --script=smb-vuln-ms17-010,smb-vuln-ms08-067 target.com<br></code></pre></td></tr></table></figure>
+
+<h3 id="15-8-隐蔽扫描"><a href="#15-8-隐蔽扫描" class="headerlink" title="15.8 隐蔽扫描"></a>15.8 隐蔽扫描</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 分片 + 诱饵 + 源端口 + 慢速</span><br>nmap -sS -f -D RND:5 -g 53 -T1 --data-length 24 target.com<br><br><span class="hljs-comment"># Idle 扫描（最隐蔽，需僵尸主机）</span><br>nmap -sI zombie_host target.com<br><br><span class="hljs-comment"># FIN 扫描（不触发 SYN 告警）</span><br>nmap -sF -T2 target.com<br><br><span class="hljs-comment"># 慢速扫描（避免速率检测）</span><br>nmap -sS -T0 --scan-delay 5s target.com<br></code></pre></td></tr></table></figure>
+
+<h3 id="15-9-IPv6-扫描"><a href="#15-9-IPv6-扫描" class="headerlink" title="15.9 IPv6 扫描"></a>15.9 IPv6 扫描</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># IPv6 扫描</span><br>nmap -6 fe80::1<br>nmap -6 2001:db8::/64<br><br><span class="hljs-comment"># IPv6 主机发现</span><br>nmap -6 -sn ff02::1%eth0                  <span class="hljs-comment"># 链路本地广播</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="15-10-大规模扫描"><a href="#15-10-大规模扫描" class="headerlink" title="15.10 大规模扫描"></a>15.10 大规模扫描</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 大网段快速扫描</span><br>nmap -sn -T4 --min-hostgroup 256 10.0.0.0/8 -oG live.txt<br><br><span class="hljs-comment"># 大规模端口扫描</span><br>nmap -sS -T4 --min-rate 10000 --max-retries 1 \<br>  --host-timeout 5m --top-ports 1000 \<br>  -iL ips.txt -oG mass_scan.gnmap<br><br><span class="hljs-comment"># 大规模服务识别</span><br>nmap -sV -T4 --min-rate 5000 --version-light \<br>  -p 80,443,8080,22,21,25,3306,5432,6379,27017 \<br>  -iL ips.txt -oA mass_services<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十六、输出解析与后处理"><a href="#十六、输出解析与后处理" class="headerlink" title="十六、输出解析与后处理"></a>十六、输出解析与后处理</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 从 GNMAP 提取开放端口 ───</span><br>grep <span class="hljs-string">&quot;open&quot;</span> scan.gnmap | awk <span class="hljs-string">&#x27;&#123;print $2&#125;&#x27;</span> | <span class="hljs-built_in">sort</span> -u &gt; open_hosts.txt<br><br><span class="hljs-comment"># ─── 从 GNMAP 提取特定端口的 IP ───</span><br>grep <span class="hljs-string">&quot;80/open&quot;</span> scan.gnmap | awk <span class="hljs-string">&#x27;&#123;print $2&#125;&#x27;</span> &gt; hosts_80.txt<br>grep <span class="hljs-string">&quot;443/open&quot;</span> scan.gnmap | awk <span class="hljs-string">&#x27;&#123;print $2&#125;&#x27;</span> &gt; hosts_443.txt<br><br><span class="hljs-comment"># ─── 从 XML 提取开放端口 ───</span><br>xmlstarlet sel -t -v <span class="hljs-string">&#x27;//port[@protocol=&quot;tcp&quot;]/state[@state=&quot;open&quot;]/../@portid&#x27;</span> -n scan.xml | <span class="hljs-built_in">sort</span> -un<br><br><span class="hljs-comment"># ─── XML 转 HTML ───</span><br>xsltproc scan.xml -o report.html<br><br><span class="hljs-comment"># ─── 使用 ndiff 对比两次扫描 ───</span><br>ndiff scan1.xml scan2.xml<br><br><span class="hljs-comment"># ─── 用 grepable 格式快速统计 ───</span><br><span class="hljs-built_in">cat</span> scan.gnmap | grep <span class="hljs-string">&quot;Ports:&quot;</span> | awk -F<span class="hljs-string">&#x27;\t&#x27;</span> <span class="hljs-string">&#x27;&#123;print $2&#125;&#x27;</span> | <span class="hljs-built_in">sort</span> | <span class="hljs-built_in">uniq</span> -c | <span class="hljs-built_in">sort</span> -rn<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十七、管道组合"><a href="#十七、管道组合" class="headerlink" title="十七、管道组合"></a>十七、管道组合</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── Nmap + httpx ───</span><br>nmap -p 80,443,8080 --open -oG - target.com | \<br>  grep <span class="hljs-string">&quot;open&quot;</span> | awk <span class="hljs-string">&#x27;&#123;print $2&#125;&#x27;</span> | \<br>  httpx -silent -title<br><br><span class="hljs-comment"># ─── Subfinder → Nmap ───</span><br>subfinder -d example.com -silent | \<br>  xargs -I&#123;&#125; nmap -sV -p 80,443,8080 &#123;&#125; -oG &#123;&#125;.gnmap<br><br><span class="hljs-comment"># ─── Masscan → Nmap（推荐组合）───</span><br>masscan -iL ips.txt -p 1-65535 --rate 10000 -oX masscan.xml<br>grep <span class="hljs-string">&#x27;portid&#x27;</span> masscan.xml | awk -F<span class="hljs-string">&#x27;&quot;&#x27;</span> <span class="hljs-string">&#x27;&#123;print $4&quot;:&quot;$6&#125;&#x27;</span> | <span class="hljs-built_in">sort</span> -u | \<br>  <span class="hljs-keyword">while</span> IFS=: <span class="hljs-built_in">read</span> ip port; <span class="hljs-keyword">do</span><br>    nmap -sV -p <span class="hljs-variable">$port</span> <span class="hljs-variable">$ip</span> -oG <span class="hljs-string">&quot;nmap_<span class="hljs-variable">$&#123;ip&#125;</span>.gnmap&quot;</span><br>  <span class="hljs-keyword">done</span><br><br><span class="hljs-comment"># ─── Nmap 结果 → Nuclei ───</span><br>nmap -p 80,443 --open -oG - target.com | \<br>  grep <span class="hljs-string">&quot;open&quot;</span> | awk <span class="hljs-string">&#x27;&#123;print &quot;https://&quot;$2&#125;&#x27;</span> | \<br>  nuclei -t cves/ -severity critical,high<br><br><span class="hljs-comment"># ─── Nmap 提取存活 → Naabu ───</span><br>nmap -sn 192.168.1.0/24 -oG - | grep <span class="hljs-string">&quot;Up&quot;</span> | awk <span class="hljs-string">&#x27;&#123;print $2&#125;&#x27;</span> | \<br>  naabu -silent -p 80,443,8080,8443<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十八、常见问题与技巧"><a href="#十八、常见问题与技巧" class="headerlink" title="十八、常见问题与技巧"></a>十八、常见问题与技巧</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 以非 root 运行 ───</span><br><span class="hljs-comment"># 非 root 只能用 -sT（TCP Connect）扫描</span><br>nmap -sT target.com<br><br><span class="hljs-comment"># ─── 快速判断哪些主机有 Web 服务 ───</span><br>nmap -p 80,443 --open -sn 192.168.1.0/24<br><br><span class="hljs-comment"># ─── 扫描被过滤端口（防火墙后）───</span><br>nmap -sS -Pn -p 80 target.com         <span class="hljs-comment"># 跳过主机发现</span><br>nmap -sA target.com                    <span class="hljs-comment"># ACK 扫描探测防火墙</span><br><br><span class="hljs-comment"># ─── 查看 Nmap 用到的源端口 ───</span><br>nmap --packet-trace -p 80 target.com<br><br><span class="hljs-comment"># ─── 保存并恢复扫描 ───</span><br>nmap -sV -p- -oA scan target.com      <span class="hljs-comment"># 中断后</span><br>nmap --resume scan.gnmap               <span class="hljs-comment"># 恢复扫描</span><br><br><span class="hljs-comment"># ─── 生成 HTML 报告 ───</span><br>nmap -sV -sC -A -oX report.xml target.com<br>xsltproc report.xml -o report.html<br><br><span class="hljs-comment"># ─── 对比两次扫描结果 ───</span><br>nmap -oX scan1.xml target.com<br><span class="hljs-comment"># ... 一段时间后 ...</span><br>nmap -oX scan2.xml target.com<br>ndiff scan1.xml scan2.xml<br></code></pre></td></tr></table></figure>
+
+<hr>
+<blockquote>
+<p><strong>总结</strong>：Nmap 最核心的用法可以浓缩为几条：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 快速扫描</span><br>nmap -T4 target.com<br><br><span class="hljs-comment"># 全面扫描（推荐正式评估）</span><br>nmap -sS -sV -O -sC -A -p- -T4 target.com -oA full_scan<br><br><span class="hljs-comment"># 内网发现</span><br>nmap -sn 192.168.1.0/24<br><br><span class="hljs-comment"># 漏洞检测</span><br>nmap --script=vuln target.com<br><br><span class="hljs-comment"># Masscan + Nmap 组合（效率最高）</span><br>masscan -p- --rate 10000 target.com | nmap -sV -p [open_ports] target.com<br></code></pre></td></tr></table></figure></blockquote>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86%E5%B7%A5%E5%85%B7/" class="print-no-link">#信息收集工具</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Nmap-使用手册</div>
+      <div>https://xiaobite-hacker.github.io/2026/02/09/nmap-使用手册/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>xiaobite</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2026年2月9日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2026/02/19/naabu-%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/" title="Naabu-使用手册">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Naabu-使用手册</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2026/02/05/masscan-%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/" title="masscan-使用手册">
+                        <span class="hidden-mobile">masscan-使用手册</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

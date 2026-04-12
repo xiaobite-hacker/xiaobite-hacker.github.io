@@ -1,0 +1,921 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/admin.jpg">
+  <link rel="icon" href="/img/admin.jpg">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="xiaobite">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Naabu 实战使用手册 来源：ProjectDiscovery官方仓库：https:&#x2F;&#x2F;github.com&#x2F;projectdiscovery&#x2F;naabu   目录 Naabu 实战使用手册 目录 一、概述 二、安装 三、基本语法 四、目标指定 五、端口指定 六、扫描类型 七、速率控制 八、主机发现 九、Nmap 集成 十、CDN&#x2F;WAF 排除 十一、输出格式 十二、配置文件 十三、高">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Naabu-使用手册">
+<meta property="og:url" content="https://xiaobite-hacker.github.io/2026/02/19/naabu-%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/index.html">
+<meta property="og:site_name" content="xiaobite">
+<meta property="og:description" content="Naabu 实战使用手册 来源：ProjectDiscovery官方仓库：https:&#x2F;&#x2F;github.com&#x2F;projectdiscovery&#x2F;naabu   目录 Naabu 实战使用手册 目录 一、概述 二、安装 三、基本语法 四、目标指定 五、端口指定 六、扫描类型 七、速率控制 八、主机发现 九、Nmap 集成 十、CDN&#x2F;WAF 排除 十一、输出格式 十二、配置文件 十三、高">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-02-19T06:09:24.000Z">
+<meta property="article:modified_time" content="2026-04-12T07:30:35.094Z">
+<meta property="article:author" content="xiaobite">
+<meta property="article:tag" content="信息收集工具">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Naabu-使用手册 - xiaobite</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"xiaobite-hacker.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>xiaobite</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/prompt/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>prompt</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Naabu-使用手册"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-02-19 14:09" pubdate>
+          2026年2月19日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.4k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          21 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Naabu-使用手册</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="Naabu-实战使用手册"><a href="#Naabu-实战使用手册" class="headerlink" title="Naabu 实战使用手册"></a>Naabu 实战使用手册</h1><blockquote>
+<p>来源：ProjectDiscovery<br>官方仓库：<a target="_blank" rel="noopener" href="https://github.com/projectdiscovery/naabu">https://github.com/projectdiscovery/naabu</a></p>
+</blockquote>
+<hr>
+<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
+<li><a href="#naabu-%E5%AE%9E%E6%88%98%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C">Naabu 实战使用手册</a><ul>
+<li><a href="#%E7%9B%AE%E5%BD%95">目录</a></li>
+<li><a href="#%E4%B8%80%E6%A6%82%E8%BF%B0">一、概述</a></li>
+<li><a href="#%E4%BA%8C%E5%AE%89%E8%A3%85">二、安装</a></li>
+<li><a href="#%E4%B8%89%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95">三、基本语法</a></li>
+<li><a href="#%E5%9B%9B%E7%9B%AE%E6%A0%87%E6%8C%87%E5%AE%9A">四、目标指定</a></li>
+<li><a href="#%E4%BA%94%E7%AB%AF%E5%8F%A3%E6%8C%87%E5%AE%9A">五、端口指定</a></li>
+<li><a href="#%E5%85%AD%E6%89%AB%E6%8F%8F%E7%B1%BB%E5%9E%8B">六、扫描类型</a></li>
+<li><a href="#%E4%B8%83%E9%80%9F%E7%8E%87%E6%8E%A7%E5%88%B6">七、速率控制</a></li>
+<li><a href="#%E5%85%AB%E4%B8%BB%E6%9C%BA%E5%8F%91%E7%8E%B0">八、主机发现</a></li>
+<li><a href="#%E4%B9%9Dnmap-%E9%9B%86%E6%88%90">九、Nmap 集成</a></li>
+<li><a href="#%E5%8D%81cdnwaf-%E6%8E%92%E9%99%A4">十、CDN&#x2F;WAF 排除</a></li>
+<li><a href="#%E5%8D%81%E4%B8%80%E8%BE%93%E5%87%BA%E6%A0%BC%E5%BC%8F">十一、输出格式</a></li>
+<li><a href="#%E5%8D%81%E4%BA%8C%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6">十二、配置文件</a></li>
+<li><a href="#%E5%8D%81%E4%B8%89%E9%AB%98%E7%BA%A7%E5%8F%82%E6%95%B0">十三、高级参数</a></li>
+<li><a href="#%E5%8D%81%E5%9B%9B%E5%AE%9E%E6%88%98%E5%9C%BA%E6%99%AF%E9%80%9F%E6%9F%A5">十四、实战场景速查</a><ul>
+<li><a href="#%E5%9C%BA%E6%99%AF-1%E5%BF%AB%E9%80%9F%E7%AB%AF%E5%8F%A3%E5%8F%91%E7%8E%B0">场景 1：快速端口发现</a></li>
+<li><a href="#%E5%9C%BA%E6%99%AF-2%E5%85%A8%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F">场景 2：全端口扫描</a></li>
+<li><a href="#%E5%9C%BA%E6%99%AF-3%E6%89%B9%E9%87%8F%E7%9B%AE%E6%A0%87%E6%89%AB%E6%8F%8F">场景 3：批量目标扫描</a></li>
+<li><a href="#%E5%9C%BA%E6%99%AF-4%E6%8E%92%E9%99%A4-cdn-%E7%9A%84%E6%89%B9%E9%87%8F%E6%89%AB%E6%8F%8F">场景 4：排除 CDN 的批量扫描</a></li>
+<li><a href="#%E5%9C%BA%E6%99%AF-5%E9%AB%98%E9%80%9F%E6%89%AB%E6%8F%8F--nmap-%E6%9C%8D%E5%8A%A1%E8%AF%86%E5%88%AB">场景 5：高速扫描 + Nmap 服务识别</a></li>
+<li><a href="#%E5%9C%BA%E6%99%AF-6%E5%86%85%E7%BD%91%E5%AD%98%E6%B4%BB--%E7%AB%AF%E5%8F%A3">场景 6：内网存活 + 端口</a></li>
+<li><a href="#%E5%9C%BA%E6%99%AF-7udp-%E7%AB%AF%E5%8F%A3%E5%8F%91%E7%8E%B0">场景 7：UDP 端口发现</a></li>
+<li><a href="#%E5%9C%BA%E6%99%AF-8%E8%A2%AB%E5%8A%A8%E7%AB%AF%E5%8F%A3%E6%9F%A5%E8%AF%A2">场景 8：被动端口查询</a></li>
+<li><a href="#%E5%9C%BA%E6%99%AF-9asn-%E6%89%AB%E6%8F%8F">场景 9：ASN 扫描</a></li>
+<li><a href="#%E5%9C%BA%E6%99%AF-10%E6%B5%81%E5%BC%8F%E7%AE%A1%E9%81%93%E6%89%AB%E6%8F%8F">场景 10：流式管道扫描</a></li>
+</ul>
+</li>
+<li><a href="#%E5%8D%81%E4%BA%94%E7%AE%A1%E9%81%93%E7%BB%84%E5%90%88">十五、管道组合</a></li>
+<li><a href="#%E5%8D%81%E5%85%ADnaabu-vs-masscan-vs-nmap-%E5%AF%B9%E6%AF%94">十六、Naabu vs Masscan vs Nmap 对比</a></li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="一、概述"><a href="#一、概述" class="headerlink" title="一、概述"></a>一、概述</h2><p>Naabu 是 ProjectDiscovery 出品的<strong>轻量快速端口扫描器</strong>，专注于一件事：快速发现开放端口。它位于信息收集流水线的核心位置 —— 承上（Subfinder&#x2F;httpx 发现的目标）启下（Nmap&#x2F;Nuclei 深入分析）。</p>
+<p><strong>核心特点：</strong></p>
+<ul>
+<li>⚡ <strong>快速</strong>：SYN&#x2F;CONNECT&#x2F;UDP 扫描，轻量高效</li>
+<li>🔗 <strong>Nmap 集成</strong>：发现端口后自动调用 Nmap 服务识别</li>
+<li>🌐 <strong>IPv4&#x2F;IPv6</strong> 双栈支持</li>
+<li>🛡️ <strong>CDN 排除</strong>：自动跳过 CDN 节点，只扫 80&#x2F;443</li>
+<li>📡 <strong>被动模式</strong>：通过 Shodan InternetDB 获取开放端口</li>
+<li>🔄 <strong>管道友好</strong>：STDIN&#x2F;STDOUT 无缝集成</li>
+<li>🖥️ <strong>主机发现</strong>：ARP&#x2F;TCP SYN&#x2F;ACK&#x2F;ICMP&#x2F;ND 多种方式</li>
+</ul>
+<hr>
+<h2 id="二、安装"><a href="#二、安装" class="headerlink" title="二、安装"></a>二、安装</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 前置依赖：libpcap ───</span><br><span class="hljs-built_in">sudo</span> apt install -y libpcap-dev       <span class="hljs-comment"># Debian/Ubuntu</span><br>brew install libpcap                   <span class="hljs-comment"># macOS</span><br><br><span class="hljs-comment"># ─── Go 安装（推荐）───</span><br>go install -v github.com/projectdiscovery/naabu/v2/cmd/naabu@latest<br><br><span class="hljs-comment"># ─── Docker ───</span><br>docker pull projectdiscovery/naabu:latest<br><br><span class="hljs-comment"># ─── Kali Linux ───</span><br>apt install naabu<br><br><span class="hljs-comment"># ─── 预编译二进制 ───</span><br><span class="hljs-comment"># https://github.com/projectdiscovery/naabu/releases/latest</span><br><br><span class="hljs-comment"># ─── 验证安装 ───</span><br>naabu -version<br>naabu -h<br><br><span class="hljs-comment"># ─── 健康检查 ───</span><br>naabu -health-check<br></code></pre></td></tr></table></figure>
+
+<p><strong>注意：</strong> SYN 扫描需要 root 权限，非 root 用户自动使用 CONNECT 扫描。</p>
+<hr>
+<h2 id="三、基本语法"><a href="#三、基本语法" class="headerlink" title="三、基本语法"></a>三、基本语法</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">naabu [选项] -host &lt;目标&gt;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 最简用法</span><br>naabu -host target.com<br>naabu -host target.com -silent<br><br><span class="hljs-comment"># 指定端口</span><br>naabu -host target.com -p 80,443,8080<br><br><span class="hljs-comment"># 全端口</span><br>naabu -host target.com -p -<br><br><span class="hljs-comment"># 从文件读取</span><br>naabu -list targets.txt<br><br><span class="hljs-comment"># 管道输入</span><br><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;target.com&quot;</span> | naabu -silent<br>subfinder -d target.com -silent | naabu -silent<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="四、目标指定"><a href="#四、目标指定" class="headerlink" title="四、目标指定"></a>四、目标指定</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 单个目标 ───</span><br>naabu -host target.com<br>naabu -host 192.168.1.1<br><br><span class="hljs-comment"># ─── 多个目标（逗号分隔）───</span><br>naabu -host target.com,target.org,192.168.1.1<br><br><span class="hljs-comment"># ─── 从文件读取 ───</span><br>naabu -list targets.txt<br>naabu -l targets.txt<br><br><span class="hljs-comment"># ─── STDIN 输入 ───</span><br><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;target.com&quot;</span> | naabu<br><span class="hljs-built_in">cat</span> targets.txt | naabu<br>subfinder -d target.com -silent | naabu<br><br><span class="hljs-comment"># ─── ASN 输入 ───</span><br><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;AS14421&quot;</span> | naabu -p 80,443<br><br><span class="hljs-comment"># ─── CIDR 范围 ───</span><br>naabu -host 192.168.1.0/24 -p 80,443<br><br><span class="hljs-comment"># ─── 排除目标 ───</span><br>naabu -host 192.168.1.0/24 -exclude-hosts 192.168.1.1,192.168.1.254<br>naabu -host 192.168.1.0/24 -exclude-file excluded.txt<br><br><span class="hljs-comment"># ─── 扫描所有关联 IP ───</span><br>naabu -host target.com -scan-all-ips -p 80,443<br><span class="hljs-comment"># 默认只扫一个 IP，-sa 会扫描所有 A/AAAA 记录</span><br><br><span class="hljs-comment"># ─── IP 版本控制 ───</span><br>naabu -host target.com -ip-version 4       <span class="hljs-comment"># 只扫 IPv4</span><br>naabu -host target.com -ip-version 6       <span class="hljs-comment"># 只扫 IPv6</span><br>naabu -host target.com -ip-version 4,6     <span class="hljs-comment"># 两个都扫（默认）</span><br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="五、端口指定"><a href="#五、端口指定" class="headerlink" title="五、端口指定"></a>五、端口指定</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 单端口 ───</span><br>naabu -host target.com -p 80<br><br><span class="hljs-comment"># ─── 多端口 ───</span><br>naabu -host target.com -p 80,443,8080,8443<br><br><span class="hljs-comment"># ─── 端口范围 ───</span><br>naabu -host target.com -p 1-1024<br>naabu -host target.com -p 8000-9000<br><br><span class="hljs-comment"># ─── 全端口 ───</span><br>naabu -host target.com -p -<br><br><span class="hljs-comment"># ─── Top N 端口 ───</span><br>naabu -host target.com -top-ports 100      <span class="hljs-comment"># Top 100（默认）</span><br>naabu -host target.com -top-ports 1000     <span class="hljs-comment"># Top 1000</span><br>naabu -host target.com -tp full            <span class="hljs-comment"># 全端口（同 -p -）</span><br><br><span class="hljs-comment"># ─── 排除端口 ───</span><br>naabu -host target.com -p - -exclude-ports 80,443<br>naabu -host target.com -p - -ep 22,25,110<br><br><span class="hljs-comment"># ─── 从文件加载端口 ───</span><br>naabu -host target.com -ports-file ports.txt<br><br><span class="hljs-comment"># ─── UDP 端口 ───</span><br>naabu -host target.com -p u:53<br>naabu -host target.com -p u:53,161,123<br>naabu -host target.com -p 80,443,u:53      <span class="hljs-comment"># TCP + UDP 混合</span><br><br><span class="hljs-comment"># ─── UDP 自定义 payload ───</span><br>naabu -host target.com -p u:53 -connect-payload <span class="hljs-string">&quot;DNS query data&quot;</span><br><br><span class="hljs-comment"># ─── 端口阈值（超过阈值跳过扫描）───</span><br>naabu -host target.com -port-threshold 1000<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="六、扫描类型"><a href="#六、扫描类型" class="headerlink" title="六、扫描类型"></a>六、扫描类型</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── SYN 扫描（默认，需 root）───</span><br>naabu -host target.com -scan-type s<br>naabu -host target.com -s s<br><br><span class="hljs-comment"># ─── CONNECT 扫描（不需要 root）───</span><br>naabu -host target.com -scan-type c<br>naabu -host target.com -s c<br><br><span class="hljs-comment"># ─── 被动模式（通过 Shodan InternetDB）───</span><br>naabu -host target.com -passive<br><span class="hljs-comment"># 不发任何包，从 Shodan 数据库查询</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>扫描类型对比：</strong></p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>需 root</th>
+<th>速度</th>
+<th>隐蔽性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>SYN (<code>s</code>)</td>
+<td>✅</td>
+<td>⚡ 最快</td>
+<td>🟢 高</td>
+<td>半开扫描，默认</td>
+</tr>
+<tr>
+<td>CONNECT (<code>c</code>)</td>
+<td>❌</td>
+<td>🟡 中</td>
+<td>🔴 低</td>
+<td>全连接，日志可记录</td>
+</tr>
+<tr>
+<td>Passive</td>
+<td>❌</td>
+<td>⚡ 极快</td>
+<td>⭐ 最高</td>
+<td>不发包，查 Shodan</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="七、速率控制"><a href="#七、速率控制" class="headerlink" title="七、速率控制"></a>七、速率控制</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 并发线程数（默认 25）───</span><br>naabu -host target.com -c 10      <span class="hljs-comment"># 低并发</span><br>naabu -host target.com -c 250     <span class="hljs-comment"># 高并发</span><br>naabu -host target.com -c 500     <span class="hljs-comment"># 极高并发</span><br><br><span class="hljs-comment"># ─── 每秒发包数（默认 1000）───</span><br>naabu -host target.com -rate 5000     <span class="hljs-comment"># 5000 包/秒</span><br>naabu -host target.com -rate 20000    <span class="hljs-comment"># 20000 包/秒</span><br>naabu -host target.com -rate 50000    <span class="hljs-comment"># 50000 包/秒</span><br><br><span class="hljs-comment"># ─── 超时（毫秒，默认 1000）───</span><br>naabu -host target.com -<span class="hljs-built_in">timeout</span> 2000   <span class="hljs-comment"># 2 秒</span><br>naabu -host target.com -<span class="hljs-built_in">timeout</span> 500    <span class="hljs-comment"># 0.5 秒</span><br><br><span class="hljs-comment"># ─── 重试次数（默认 3）───</span><br>naabu -host target.com -retries 1      <span class="hljs-comment"># 快速但可能漏报</span><br>naabu -host target.com -retries 5      <span class="hljs-comment"># 慢但更准确</span><br><br><span class="hljs-comment"># ─── 预热时间（秒，默认 2）───</span><br>naabu -host target.com -warm-up-time 1<br><br><span class="hljs-comment"># ─── TCP 验证（二次确认）───</span><br>naabu -host target.com -verify<br><br><span class="hljs-comment"># ─── 流式模式（禁用 resume/nmap/shuffle 等）───</span><br>naabu -list targets.txt -stream<br></code></pre></td></tr></table></figure>
+
+<p><strong>速率参考：</strong></p>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>并发 (-c)</th>
+<th>速率 (-rate)</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>VPS 默认</td>
+<td>25</td>
+<td>1000</td>
+<td>默认配置</td>
+</tr>
+<tr>
+<td>VPS 高速</td>
+<td>500</td>
+<td>20000</td>
+<td>大规模扫描</td>
+</tr>
+<tr>
+<td>本地低速</td>
+<td>10</td>
+<td>500</td>
+<td>避免打满带宽</td>
+</tr>
+<tr>
+<td>严格环境</td>
+<td>5</td>
+<td>100</td>
+<td>最温和</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="八、主机发现"><a href="#八、主机发现" class="headerlink" title="八、主机发现"></a>八、主机发现</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 仅主机发现（不扫端口）───</span><br>naabu -host 192.168.1.0/24 -sn<br><br><span class="hljs-comment"># ─── 跳过主机发现（直接扫端口）───</span><br>naabu -host target.com -Pn<br><br><span class="hljs-comment"># ─── 启用主机发现 + 端口扫描 ───</span><br>naabu -host 192.168.1.0/24 -wn -p 80,443<br><br><span class="hljs-comment"># ─── ARP Ping ───</span><br>naabu -host 192.168.1.0/24 -sn -arp<br><br><span class="hljs-comment"># ─── TCP SYN Ping ───</span><br>naabu -host 192.168.1.0/24 -sn -ps 80,443<br><br><span class="hljs-comment"># ─── TCP ACK Ping ───</span><br>naabu -host 192.168.1.0/24 -sn -pa 443<br><br><span class="hljs-comment"># ─── ICMP Echo ───</span><br>naabu -host 192.168.1.0/24 -sn -pe<br><br><span class="hljs-comment"># ─── ICMP Timestamp ───</span><br>naabu -host 192.168.1.0/24 -sn -pp<br><br><span class="hljs-comment"># ─── ICMP Address Mask ───</span><br>naabu -host 192.168.1.0/24 -sn -pm<br><br><span class="hljs-comment"># ─── IPv6 Neighbor Discovery ───</span><br>naabu -host 2001:db8::/64 -sn -nd<br><br><span class="hljs-comment"># ─── 组合 Ping ───</span><br>naabu -host 192.168.1.0/24 -wn -pe -ps 80,443 -arp -p 80,443,8080<br><br><span class="hljs-comment"># ─── 反向 PTR 查询 ───</span><br>naabu -host 192.168.1.0/24 -sn -rev-ptr<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="九、Nmap-集成"><a href="#九、Nmap-集成" class="headerlink" title="九、Nmap 集成"></a>九、Nmap 集成</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 自动调用 Nmap 服务识别 ───</span><br>naabu -host target.com -nmap-cli <span class="hljs-string">&#x27;nmap -sV&#x27;</span><br><br><span class="hljs-comment"># ─── Nmap 默认脚本 + 服务版本 ───</span><br>naabu -host target.com -nmap-cli <span class="hljs-string">&#x27;nmap -sV -sC&#x27;</span><br><br><span class="hljs-comment"># ─── Nmap 全面探测 ───</span><br>naabu -host target.com -nmap-cli <span class="hljs-string">&#x27;nmap -A&#x27;</span><br><br><span class="hljs-comment"># ─── Nmap XML 输出 ───</span><br>naabu -host target.com -nmap-cli <span class="hljs-string">&#x27;nmap -sV -oX nmap_output.xml&#x27;</span><br><br><span class="hljs-comment"># ─── Nmap 漏洞扫描 ───</span><br>naabu -host target.com -nmap-cli <span class="hljs-string">&#x27;nmap --script=vuln&#x27;</span><br><br><span class="hljs-comment"># ─── 批量 + Nmap ───</span><br>naabu -list targets.txt -silent -nmap-cli <span class="hljs-string">&#x27;nmap -sV -oX scan.xml&#x27;</span><br><br><span class="hljs-comment"># ─── 高速扫描 + Nmap（实战推荐）───</span><br>naabu -list targets.txt -p - -rate 20000 -c 500 -retries 2 \<br>  -warm-up-time 1 -silent \<br>  -nmap-cli <span class="hljs-string">&#x27;nmap -sV -oX scan.xml&#x27;</span><br><br><span class="hljs-comment"># ─── 排除常见端口 + Nmap ───</span><br>naabu -list targets.txt -p - -exclude-ports 80,443,21,22,25 \<br>  -rate 20000 -c 500 -silent \<br>  -nmap-cli <span class="hljs-string">&#x27;nmap -sV -oX scan.xml&#x27;</span><br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十、CDN-WAF-排除"><a href="#十、CDN-WAF-排除" class="headerlink" title="十、CDN&#x2F;WAF 排除"></a>十、CDN&#x2F;WAF 排除</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 排除 CDN（只扫 80/443）───</span><br>naabu -host target.com -exclude-cdn<br>naabu -host target.com -ec<br><br><span class="hljs-comment"># ─── 显示 CDN 信息 ───</span><br>naabu -host target.com -display-cdn<br>naabu -host target.com -cdn<br><br><span class="hljs-comment"># ─── 组合使用 ───</span><br>naabu -list targets.txt -exclude-cdn -p 80,443,8080,8443 -silent<br></code></pre></td></tr></table></figure>
+
+<p><strong>支持的 CDN：</strong> Cloudflare, Akamai, Incapsula, Sucuri</p>
+<hr>
+<h2 id="十一、输出格式"><a href="#十一、输出格式" class="headerlink" title="十一、输出格式"></a>十一、输出格式</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 静默输出（适合管道）───</span><br>naabu -host target.com -silent<br><br><span class="hljs-comment"># ─── 输出到文件 ───</span><br>naabu -host target.com -o results.txt<br><br><span class="hljs-comment"># ─── JSON 输出 ───</span><br>naabu -host target.com -json -o results.json<br><span class="hljs-comment"># 输出: &#123;&quot;ip&quot;:&quot;1.2.3.4&quot;,&quot;port&quot;:80,&quot;host&quot;:&quot;target.com&quot;&#125;</span><br><br><span class="hljs-comment"># ─── CSV 输出 ───</span><br>naabu -host target.com -csv -o results.csv<br><br><span class="hljs-comment"># ─── 详细输出 ───</span><br>naabu -host target.com -verbose<br>naabu -host target.com -v<br><br><span class="hljs-comment"># ─── 调试输出 ───</span><br>naabu -host target.com -debug<br><br><span class="hljs-comment"># ─── 无颜色 ───</span><br>naabu -host target.com -no-color<br><br><span class="hljs-comment"># ─── 指标端口（默认 63636）───</span><br>naabu -host target.com -metrics-port 8080<br><span class="hljs-comment"># 访问 http://localhost:63636/metrics 查看扫描状态</span><br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十二、配置文件"><a href="#十二、配置文件" class="headerlink" title="十二、配置文件"></a>十二、配置文件</h2><p>配置文件路径：<code>~/.config/naabu/config.yaml</code></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-comment"># ─── config.yaml 示例 ───</span><br><br><span class="hljs-comment"># 端口</span><br><span class="hljs-comment"># port: 80,443,8080</span><br><span class="hljs-comment"># top-ports: 1000</span><br><br><span class="hljs-comment"># 扫描类型</span><br><span class="hljs-comment"># scan-type: s</span><br><br><span class="hljs-comment"># 速率</span><br><span class="hljs-comment"># c: 250</span><br><span class="hljs-comment"># rate: 10000</span><br><span class="hljs-comment"># retries: 2</span><br><span class="hljs-comment"># timeout: 1000</span><br><br><span class="hljs-comment"># 排除</span><br><span class="hljs-comment"># exclude-ports: 22,25,110</span><br><span class="hljs-comment"># exclude-cdn: true</span><br><br><span class="hljs-comment"># 输出</span><br><span class="hljs-comment"># silent: true</span><br><span class="hljs-comment"># json: false</span><br><br><span class="hljs-comment"># DNS</span><br><span class="hljs-comment"># r: 8.8.8.8,1.1.1.1</span><br><br><span class="hljs-comment"># Nmap</span><br><span class="hljs-comment"># nmap-cli: &quot;nmap -sV&quot;</span><br><br><span class="hljs-comment"># 网卡</span><br><span class="hljs-comment"># interface: eth0</span><br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十三、高级参数"><a href="#十三、高级参数" class="headerlink" title="十三、高级参数"></a>十三、高级参数</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 自定义 DNS 解析器 ───</span><br>naabu -host target.com -r 8.8.8.8,1.1.1.1<br>naabu -host target.com -r resolvers.txt<br><br><span class="hljs-comment"># ─── 指定网卡 ───</span><br>naabu -host target.com -interface eth0<br>naabu --interface-list              <span class="hljs-comment"># 列出可用网卡</span><br><br><span class="hljs-comment"># ─── 源 IP ───</span><br>naabu -host target.com -source-ip 192.168.1.100<br><br><span class="hljs-comment"># ─── SOCKS5 代理 ───</span><br>naabu -host target.com -proxy 127.0.0.1:1080<br>naabu -host target.com -proxy 127.0.0.1:1080 -proxy-auth user:pass<br><br><span class="hljs-comment"># ─── 断点续扫 ───</span><br>naabu -list targets.txt -resume    <span class="hljs-comment"># Ctrl-C 后自动保存，-resume 恢复</span><br><br><span class="hljs-comment"># ─── 流式模式 ───</span><br>naabu -list targets.txt -stream<br><span class="hljs-comment"># 禁用 resume、nmap、verify、retries、shuffle 等</span><br><span class="hljs-comment"># 适合大规模管道输入</span><br><br><span class="hljs-comment"># ─── Ping 验证 ───</span><br>naabu -host target.com -ping<br><br><span class="hljs-comment"># ─── 输入读取超时（默认 3 分钟）───</span><br>naabu -stdin -input-read-timeout 1m<br><br><span class="hljs-comment"># ─── 禁用 STDIN ───</span><br>naabu -host target.com -no-stdin<br><br><span class="hljs-comment"># ─── 自更新 ───</span><br>naabu -update<br>naabu -up<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十四、实战场景速查"><a href="#十四、实战场景速查" class="headerlink" title="十四、实战场景速查"></a>十四、实战场景速查</h2><h3 id="场景-1：快速端口发现"><a href="#场景-1：快速端口发现" class="headerlink" title="场景 1：快速端口发现"></a>场景 1：快速端口发现</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">naabu -host target.com -silent -p 80,443,8080,8443<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-2：全端口扫描"><a href="#场景-2：全端口扫描" class="headerlink" title="场景 2：全端口扫描"></a>场景 2：全端口扫描</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">naabu -host target.com -p - -rate 10000 -c 250 -silent<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-3：批量目标扫描"><a href="#场景-3：批量目标扫描" class="headerlink" title="场景 3：批量目标扫描"></a>场景 3：批量目标扫描</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">naabu -list targets.txt -top-ports 1000 -rate 5000 -silent -o ports.txt<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-4：排除-CDN-的批量扫描"><a href="#场景-4：排除-CDN-的批量扫描" class="headerlink" title="场景 4：排除 CDN 的批量扫描"></a>场景 4：排除 CDN 的批量扫描</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">naabu -list targets.txt -exclude-cdn -p 80,443,8080,8443 -silent<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-5：高速扫描-Nmap-服务识别"><a href="#场景-5：高速扫描-Nmap-服务识别" class="headerlink" title="场景 5：高速扫描 + Nmap 服务识别"></a>场景 5：高速扫描 + Nmap 服务识别</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">naabu -list targets.txt -p - -rate 20000 -c 500 -retries 2 \<br>  -warm-up-time 1 -silent \<br>  -nmap-cli <span class="hljs-string">&#x27;nmap -sV -oX services.xml&#x27;</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-6：内网存活-端口"><a href="#场景-6：内网存活-端口" class="headerlink" title="场景 6：内网存活 + 端口"></a>场景 6：内网存活 + 端口</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">naabu -host 192.168.1.0/24 -sn -arp           <span class="hljs-comment"># 主机发现</span><br>naabu -host 192.168.1.0/24 -p 22,80,445,3389   <span class="hljs-comment"># 端口扫描</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-7：UDP-端口发现"><a href="#场景-7：UDP-端口发现" class="headerlink" title="场景 7：UDP 端口发现"></a>场景 7：UDP 端口发现</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">naabu -host target.com -p u:53,161,123,500,514 -silent<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-8：被动端口查询"><a href="#场景-8：被动端口查询" class="headerlink" title="场景 8：被动端口查询"></a>场景 8：被动端口查询</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">naabu -host target.com -passive<br><span class="hljs-comment"># 从 Shodan InternetDB 查询，不发任何包</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-9：ASN-扫描"><a href="#场景-9：ASN-扫描" class="headerlink" title="场景 9：ASN 扫描"></a>场景 9：ASN 扫描</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;AS15169&quot;</span> | naabu -p 80,443 -rate 5000 -silent   <span class="hljs-comment"># Google ASN</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-10：流式管道扫描"><a href="#场景-10：流式管道扫描" class="headerlink" title="场景 10：流式管道扫描"></a>场景 10：流式管道扫描</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">subfinder -d target.com -silent | \<br>  httpx -silent | \<br>  naabu -stream -top-ports 1000 -silent<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十五、管道组合"><a href="#十五、管道组合" class="headerlink" title="十五、管道组合"></a>十五、管道组合</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── Subfinder → Naabu → httpx（经典组合）───</span><br>subfinder -d target.com -silent | \<br>  naabu -silent -rate 5000 | \<br>  httpx -silent -title<br><br><span class="hljs-comment"># ─── Subfinder → Naabu → Nmap ───</span><br>subfinder -d target.com -silent | \<br>  naabu -silent -rate 10000 -nmap-cli <span class="hljs-string">&#x27;nmap -sV -sC&#x27;</span><br><br><span class="hljs-comment"># ─── Subfinder → Naabu → Nuclei ───</span><br>subfinder -d target.com -silent | \<br>  naabu -silent -rate 5000 | \<br>  nuclei -t cves/ -severity critical,high<br><br><span class="hljs-comment"># ─── httpx → Naabu ───</span><br>httpx -l alive.txt -silent | \<br>  naabu -silent -p 80,443,8080,8443,8888<br><br><span class="hljs-comment"># ─── Naabu → httpx（带端口）───</span><br>naabu -host target.com -silent -p 80,443,8080 | \<br>  httpx -silent -title<br><br><span class="hljs-comment"># ─── Amass → Naabu ───</span><br>amass enum -passive -d target.com -silent | \<br>  naabu -silent -top-ports 1000<br><br><span class="hljs-comment"># ─── 全链路流水线 ───</span><br>subfinder -d target.com -silent | \<br>  httpx -silent -title -status-code -tech-detect | \<br>  <span class="hljs-built_in">tee</span> alive.txt | \<br>  naabu -silent -rate 10000 | \<br>  nuclei -t cves/ -severity critical,high -o vulns.txt<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十六、Naabu-vs-Masscan-vs-Nmap-对比"><a href="#十六、Naabu-vs-Masscan-vs-Nmap-对比" class="headerlink" title="十六、Naabu vs Masscan vs Nmap 对比"></a>十六、Naabu vs Masscan vs Nmap 对比</h2><table>
+<thead>
+<tr>
+<th>维度</th>
+<th>Naabu</th>
+<th>Masscan</th>
+<th>Nmap</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>语言</strong></td>
+<td>Go</td>
+<td>C</td>
+<td>C</td>
+</tr>
+<tr>
+<td><strong>速度</strong></td>
+<td>⚡ 快</td>
+<td>🚀 最快</td>
+<td>🐢 慢</td>
+</tr>
+<tr>
+<td><strong>扫描方式</strong></td>
+<td>SYN&#x2F;CONNECT&#x2F;UDP</td>
+<td>SYN</td>
+<td>多种</td>
+</tr>
+<tr>
+<td><strong>默认端口</strong></td>
+<td>Top 100</td>
+<td>无（必须指定）</td>
+<td>1000</td>
+</tr>
+<tr>
+<td><strong>Nmap 集成</strong></td>
+<td>✅ 自动</td>
+<td>❌ 需手动</td>
+<td>—</td>
+</tr>
+<tr>
+<td><strong>CDN 排除</strong></td>
+<td>✅ 内置</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>被动模式</strong></td>
+<td>✅ Shodan</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>主机发现</strong></td>
+<td>✅ 多种</td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><strong>管道集成</strong></td>
+<td>⚡ 极佳</td>
+<td>🟡 可用</td>
+<td>🟡 可用</td>
+</tr>
+<tr>
+<td><strong>配置文件</strong></td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><strong>断点续扫</strong></td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><strong>Go 库调用</strong></td>
+<td>✅</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>适用场景</strong></td>
+<td>自动化流水线</td>
+<td>互联网级扫描</td>
+<td>精细分析</td>
+</tr>
+</tbody></table>
+<p><strong>选择建议：</strong></p>
+<ul>
+<li>🔄 <strong>自动化流水线</strong>：Naabu（管道友好 + CDN 排除 + Nmap 集成）</li>
+<li>🌍 <strong>大规模扫描</strong>：Masscan</li>
+<li>🔬 <strong>精细深入</strong>：Nmap</li>
+<li>🏆 <strong>最佳组合</strong>：Naabu 快扫 → Nmap 服务识别 → Nuclei 漏洞扫描</li>
+</ul>
+<hr>
+<blockquote>
+<p><strong>总结</strong>：Naabu 是信息收集流水线的”<strong>端口中转站</strong>“。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 日常最常用</span><br>naabu -host target.com -silent -p 80,443,8080<br><br><span class="hljs-comment"># 全端口 + Nmap</span><br>naabu -host target.com -p - -rate 10000 -silent -nmap-cli <span class="hljs-string">&#x27;nmap -sV&#x27;</span><br><br><span class="hljs-comment"># 管道组合</span><br>subfinder -d target.com -silent | naabu -silent | httpx -silent<br><br><span class="hljs-comment"># 批量 + 排除 CDN</span><br>naabu -list targets.txt -exclude-cdn -top-ports 1000 -rate 5000 -silent<br></code></pre></td></tr></table></figure></blockquote>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86%E5%B7%A5%E5%85%B7/" class="print-no-link">#信息收集工具</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Naabu-使用手册</div>
+      <div>https://xiaobite-hacker.github.io/2026/02/19/naabu-使用手册/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>xiaobite</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2026年2月19日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2026/03/09/ffuf-%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/" title="ffuf-使用手册">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">ffuf-使用手册</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2026/02/09/nmap-%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/" title="Nmap-使用手册">
+                        <span class="hidden-mobile">Nmap-使用手册</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

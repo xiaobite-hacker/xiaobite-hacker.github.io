@@ -1,0 +1,1494 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/admin.jpg">
+  <link rel="icon" href="/img/admin.jpg">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="xiaobite">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="OneForAll 实战使用手册 来源：shmilylty&#x2F;OneForAll（国产子域收集神器）官方仓库：https:&#x2F;&#x2F;github.com&#x2F;shmilylty&#x2F;OneForAll   目录 OneForAll 实战使用手册 目录 一、概述 二、安装 三、快速上手 四、命令行参数详解 核心参数 端口范围说明   五、核心功能模块 5.1 子域收集（60+ 模块） ① 证书透明度（6">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OneForall-使用手册">
+<meta property="og:url" content="https://xiaobite-hacker.github.io/2026/02/01/oneforall-%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/index.html">
+<meta property="og:site_name" content="xiaobite">
+<meta property="og:description" content="OneForAll 实战使用手册 来源：shmilylty&#x2F;OneForAll（国产子域收集神器）官方仓库：https:&#x2F;&#x2F;github.com&#x2F;shmilylty&#x2F;OneForAll   目录 OneForAll 实战使用手册 目录 一、概述 二、安装 三、快速上手 四、命令行参数详解 核心参数 端口范围说明   五、核心功能模块 5.1 子域收集（60+ 模块） ① 证书透明度（6">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-02-01T05:09:24.000Z">
+<meta property="article:modified_time" content="2026-04-12T07:05:01.866Z">
+<meta property="article:author" content="xiaobite">
+<meta property="article:tag" content="信息收集工具">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>OneForall-使用手册 - xiaobite</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"xiaobite-hacker.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>xiaobite</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/prompt/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>prompt</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="OneForall-使用手册"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-02-01 13:09" pubdate>
+          2026年2月1日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          28 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">OneForall-使用手册</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="OneForAll-实战使用手册"><a href="#OneForAll-实战使用手册" class="headerlink" title="OneForAll 实战使用手册"></a>OneForAll 实战使用手册</h1><blockquote>
+<p>来源：shmilylty&#x2F;OneForAll（国产子域收集神器）<br>官方仓库：<a target="_blank" rel="noopener" href="https://github.com/shmilylty/OneForAll">https://github.com/shmilylty/OneForAll</a></p>
+</blockquote>
+<hr>
+<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
+<li><a href="#oneforall-%E5%AE%9E%E6%88%98%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C">OneForAll 实战使用手册</a><ul>
+<li><a href="#%E7%9B%AE%E5%BD%95">目录</a></li>
+<li><a href="#%E4%B8%80%E6%A6%82%E8%BF%B0">一、概述</a></li>
+<li><a href="#%E4%BA%8C%E5%AE%89%E8%A3%85">二、安装</a></li>
+<li><a href="#%E4%B8%89%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B">三、快速上手</a></li>
+<li><a href="#%E5%9B%9B%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%8F%82%E6%95%B0%E8%AF%A6%E8%A7%A3">四、命令行参数详解</a><ul>
+<li><a href="#%E6%A0%B8%E5%BF%83%E5%8F%82%E6%95%B0">核心参数</a></li>
+<li><a href="#%E7%AB%AF%E5%8F%A3%E8%8C%83%E5%9B%B4%E8%AF%B4%E6%98%8E">端口范围说明</a></li>
+</ul>
+</li>
+<li><a href="#%E4%BA%94%E6%A0%B8%E5%BF%83%E5%8A%9F%E8%83%BD%E6%A8%A1%E5%9D%97">五、核心功能模块</a><ul>
+<li><a href="#51-%E5%AD%90%E5%9F%9F%E6%94%B6%E9%9B%8660-%E6%A8%A1%E5%9D%97">5.1 子域收集（60+ 模块）</a><ul>
+<li><a href="#-%E8%AF%81%E4%B9%A6%E9%80%8F%E6%98%8E%E5%BA%A66-%E4%B8%AA%E6%A8%A1%E5%9D%97">① 证书透明度（6 个模块）</a></li>
+<li><a href="#-%E5%B8%B8%E8%A7%84%E6%A3%80%E6%9F%A56-%E4%B8%AA%E6%A8%A1%E5%9D%97">② 常规检查（6 个模块）</a></li>
+<li><a href="#-%E7%88%AC%E8%99%AB%E6%A1%A3%E6%A1%882-%E4%B8%AA%E6%A8%A1%E5%9D%97">③ 爬虫档案（2 个模块）</a></li>
+<li><a href="#-dns-%E6%95%B0%E6%8D%AE%E9%9B%8624-%E4%B8%AA%E6%A8%A1%E5%9D%97">④ DNS 数据集（24 个模块）</a></li>
+<li><a href="#-dns-%E6%9F%A5%E8%AF%A21-%E4%B8%AA%E6%A8%A1%E5%9D%97">⑤ DNS 查询（1 个模块）</a></li>
+<li><a href="#-%E5%A8%81%E8%83%81%E6%83%85%E6%8A%A56-%E4%B8%AA%E6%A8%A1%E5%9D%97">⑥ 威胁情报（6 个模块）</a></li>
+<li><a href="#-%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E18-%E4%B8%AA%E6%A8%A1%E5%9D%97">⑦ 搜索引擎（18 个模块）</a></li>
+</ul>
+</li>
+<li><a href="#52-%E5%AD%90%E5%9F%9F%E7%88%86%E7%A0%B4">5.2 子域爆破</a></li>
+<li><a href="#53-%E5%AD%90%E5%9F%9F%E9%AA%8C%E8%AF%81">5.3 子域验证</a></li>
+<li><a href="#54-%E5%AD%90%E5%9F%9F%E7%88%AC%E5%8F%96">5.4 子域爬取</a></li>
+<li><a href="#55-%E5%AD%90%E5%9F%9F%E7%BD%AE%E6%8D%A2altdns">5.5 子域置换（altdns）</a></li>
+<li><a href="#56-%E5%AD%90%E5%9F%9F%E6%8E%A5%E7%AE%A1%E6%A3%80%E6%9F%A5">5.6 子域接管检查</a></li>
+<li><a href="#57-cdn-%E6%A3%80%E6%B5%8B">5.7 CDN 检测</a></li>
+<li><a href="#58-web-%E6%8C%87%E7%BA%B9%E8%AF%86%E5%88%AB">5.8 Web 指纹识别</a></li>
+</ul>
+</li>
+<li><a href="#%E5%85%AD%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E8%AF%A6%E8%A7%A3">六、配置文件详解</a><ul>
+<li><a href="#61-settingpy%E6%A0%B8%E5%BF%83%E9%85%8D%E7%BD%AE">6.1 setting.py（核心配置）</a></li>
+<li><a href="#62-apipyapi-key-%E9%85%8D%E7%BD%AE">6.2 api.py（API Key 配置）</a></li>
+</ul>
+</li>
+<li><a href="#%E4%B8%83%E7%8B%AC%E7%AB%8B%E5%AD%90%E6%A8%A1%E5%9D%97%E7%94%A8%E6%B3%95">七、独立子模块用法</a><ul>
+<li><a href="#71-brutepy%E7%8B%AC%E7%AB%8B%E7%88%86%E7%A0%B4">7.1 brute.py（独立爆破）</a></li>
+<li><a href="#72-takeoverpy%E7%8B%AC%E7%AB%8B%E6%8E%A5%E7%AE%A1%E6%A3%80%E6%9F%A5">7.2 takeover.py（独立接管检查）</a></li>
+<li><a href="#73-dbexportpy%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AF%BC%E5%87%BA">7.3 dbexport.py（数据库导出）</a></li>
+</ul>
+</li>
+<li><a href="#%E5%85%AB%E7%BB%93%E6%9E%9C%E8%AF%B4%E6%98%8E">八、结果说明</a></li>
+<li><a href="#%E4%B9%9D%E5%AE%9E%E6%88%98%E5%9C%BA%E6%99%AF%E9%80%9F%E6%9F%A5">九、实战场景速查</a><ul>
+<li><a href="#%E5%9C%BA%E6%99%AF-1%E5%BF%AB%E9%80%9F%E5%AD%90%E5%9F%9F%E6%94%B6%E9%9B%86%E6%97%A0%E7%88%86%E7%A0%B4">场景 1：快速子域收集（无爆破）</a></li>
+<li><a href="#%E5%9C%BA%E6%99%AF-2%E5%85%A8%E9%9D%A2%E6%B7%B1%E5%BA%A6%E6%94%B6%E9%9B%86%E5%90%AB%E7%88%86%E7%A0%B4">场景 2：全面深度收集（含爆破）</a></li>
+<li><a href="#%E5%9C%BA%E6%99%AF-3%E5%8F%AA%E8%8E%B7%E5%8F%96%E5%AD%98%E6%B4%BB%E5%AD%90%E5%9F%9F">场景 3：只获取存活子域</a></li>
+<li><a href="#%E5%9C%BA%E6%99%AF-4%E6%89%B9%E9%87%8F%E5%9F%9F%E5%90%8D%E6%94%B6%E9%9B%86">场景 4：批量域名收集</a></li>
+<li><a href="#%E5%9C%BA%E6%99%AF-5%E6%94%B6%E9%9B%86--%E7%88%86%E7%A0%B4--%E6%8E%A5%E7%AE%A1%E6%A3%80%E6%9F%A5">场景 5：收集 + 爆破 + 接管检查</a></li>
+<li><a href="#%E5%9C%BA%E6%99%AF-6json-%E6%A0%BC%E5%BC%8F%E8%BE%93%E5%87%BA%E5%88%B0%E6%8C%87%E5%AE%9A%E7%9B%AE%E5%BD%95">场景 6：JSON 格式输出到指定目录</a></li>
+<li><a href="#%E5%9C%BA%E6%99%AF-7%E8%87%AA%E5%AE%9A%E4%B9%89%E6%A8%A1%E5%9D%97--%E4%BB%A3%E7%90%86">场景 7：自定义模块 + 代理</a></li>
+<li><a href="#%E5%9C%BA%E6%99%AF-8%E9%80%92%E5%BD%92%E7%88%86%E7%A0%B4--fuzz">场景 8：递归爆破 + Fuzz</a></li>
+<li><a href="#%E5%9C%BA%E6%99%AF-9%E5%8F%AA%E4%BD%BF%E7%94%A8%E5%9B%BD%E5%86%85%E6%BA%90%E6%97%A0%E9%9C%80%E4%BB%A3%E7%90%86">场景 9：只使用国内源（无需代理）</a></li>
+<li><a href="#%E5%9C%BA%E6%99%AF-10%E6%95%B0%E6%8D%AE%E5%BA%93%E5%A2%9E%E9%87%8F%E5%AF%B9%E6%AF%94">场景 10：数据库增量对比</a></li>
+</ul>
+</li>
+<li><a href="#%E5%8D%81%E7%AE%A1%E9%81%93%E7%BB%84%E5%90%88">十、管道组合</a></li>
+<li><a href="#%E5%8D%81%E4%B8%80docker-%E7%94%A8%E6%B3%95">十一、Docker 用法</a></li>
+<li><a href="#%E5%8D%81%E4%BA%8Coneforall-vs-subfinder-vs-amass-%E5%AF%B9%E6%AF%94">十二、OneForAll vs Subfinder vs Amass 对比</a></li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="一、概述"><a href="#一、概述" class="headerlink" title="一、概述"></a>一、概述</h2><p>OneForAll 是一款<strong>国产</strong>、功能全面的子域收集工具，集百家之长，融合了 60+ 收集模块、子域爆破、子域验证、子域爬取、子域置换、子域接管检查等功能于一体。</p>
+<p><strong>核心特点：</strong></p>
+<ul>
+<li>📦 <strong>60+ 收集模块</strong>：证书透明度、DNS 数据集、搜索引擎、威胁情报、爬虫档案、DNS 查询</li>
+<li>💣 <strong>子域爆破</strong>：基于 massdns，每秒 35 万+ DNS 解析，支持递归爆破、fuzz 模式</li>
+<li>✅ <strong>子域验证</strong>：DNS 解析 + HTTP 请求 + title&#x2F;banner 获取</li>
+<li>🔍 <strong>子域爬取</strong>：从响应体和 JS 中二次发现子域</li>
+<li>🔄 <strong>子域置换</strong>：利用 altdns 技术重组子域名发现新子域</li>
+<li>⚠️ <strong>子域接管检查</strong>：检测子域接管风险（支持自动接管）</li>
+<li>🌐 <strong>CDN 检测</strong>：识别 CDN 节点</li>
+<li>🏷️ <strong>Web 指纹识别</strong>：识别 Web 技术栈</li>
+<li>🗄️ <strong>SQLite3 数据库</strong>：持久化存储，支持增量对比</li>
+</ul>
+<hr>
+<h2 id="二、安装"><a href="#二、安装" class="headerlink" title="二、安装"></a>二、安装</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 1. 克隆项目（推荐码云，国内快）───</span><br>git <span class="hljs-built_in">clone</span> https://gitee.com/shmilylty/OneForAll.git<br><span class="hljs-comment"># 或</span><br>git <span class="hljs-built_in">clone</span> https://github.com/shmilylty/OneForAll.git<br><br><span class="hljs-comment"># ─── 2. 安装依赖 ───</span><br><span class="hljs-built_in">cd</span> OneForAll/<br>python3 -m pip install -U pip setuptools wheel<br>pip3 install -r requirements.txt<br><br><span class="hljs-comment"># ─── 3. 验证安装 ───</span><br>python3 oneforall.py --<span class="hljs-built_in">help</span><br><br><span class="hljs-comment"># ─── 更新项目 ───</span><br>git stash<br>git fetch --all<br>git pull<br>git stash pop<br><br><span class="hljs-comment"># ─── Docker 安装 ───</span><br>docker pull shmilylty/oneforall<br></code></pre></td></tr></table></figure>
+
+<p><strong>环境要求：</strong> Python &gt;&#x3D; 3.6.0</p>
+<hr>
+<h2 id="三、快速上手"><a href="#三、快速上手" class="headerlink" title="三、快速上手"></a>三、快速上手</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 最简用法 ───</span><br>python3 oneforall.py --target example.com run<br><br><span class="hljs-comment"># ─── 批量扫描 ───</span><br>python3 oneforall.py --targets domains.txt run<br><br><span class="hljs-comment"># ─── 开启爆破 ───</span><br>python3 oneforall.py --target example.com --brute True run<br><br><span class="hljs-comment"># ─── 只导出存活子域 ───</span><br>python3 oneforall.py --target example.com --valid True run<br><br><span class="hljs-comment"># ─── JSON 格式输出 ───</span><br>python3 oneforall.py --target example.com --<span class="hljs-built_in">fmt</span> json run<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="四、命令行参数详解"><a href="#四、命令行参数详解" class="headerlink" title="四、命令行参数详解"></a>四、命令行参数详解</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">python3 oneforall.py --<span class="hljs-built_in">help</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="核心参数"><a href="#核心参数" class="headerlink" title="核心参数"></a>核心参数</h3><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+<th>默认值</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>--target</code></td>
+<td>单个目标域名（必填）</td>
+<td>—</td>
+<td><code>--target example.com</code></td>
+</tr>
+<tr>
+<td><code>--targets</code></td>
+<td>批量域名文件（必填）</td>
+<td>—</td>
+<td><code>--targets domains.txt</code></td>
+</tr>
+<tr>
+<td><code>--brute</code></td>
+<td>是否开启子域爆破</td>
+<td>False</td>
+<td><code>--brute True</code></td>
+</tr>
+<tr>
+<td><code>--dns</code></td>
+<td>是否进行 DNS 解析</td>
+<td>True</td>
+<td><code>--dns True</code></td>
+</tr>
+<tr>
+<td><code>--req</code></td>
+<td>是否进行 HTTP 请求</td>
+<td>True</td>
+<td><code>--req True</code></td>
+</tr>
+<tr>
+<td><code>--port</code></td>
+<td>HTTP 请求端口范围</td>
+<td>small</td>
+<td><code>--port small</code> &#x2F; <code>medium</code> &#x2F; <code>large</code></td>
+</tr>
+<tr>
+<td><code>--valid</code></td>
+<td>只导出存活子域</td>
+<td>False</td>
+<td><code>--valid True</code></td>
+</tr>
+<tr>
+<td><code>--fmt</code></td>
+<td>结果保存格式</td>
+<td>csv</td>
+<td><code>--fmt csv</code> &#x2F; <code>json</code> &#x2F; <code>txt</code></td>
+</tr>
+<tr>
+<td><code>--path</code></td>
+<td>结果保存路径</td>
+<td>None（自动）</td>
+<td><code>--path /tmp/results</code></td>
+</tr>
+<tr>
+<td><code>--takeover</code></td>
+<td>是否检查子域接管</td>
+<td>False</td>
+<td><code>--takeover True</code></td>
+</tr>
+<tr>
+<td><code>--show</code></td>
+<td>是否在终端显示结果</td>
+<td>False</td>
+<td><code>--show True</code></td>
+</tr>
+</tbody></table>
+<h3 id="端口范围说明"><a href="#端口范围说明" class="headerlink" title="端口范围说明"></a>端口范围说明</h3><table>
+<thead>
+<tr>
+<th>参数值</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>small</code></td>
+<td>仅探测 80、443 端口（默认）</td>
+</tr>
+<tr>
+<td><code>medium</code></td>
+<td>探测常见 Web 端口</td>
+</tr>
+<tr>
+<td><code>large</code></td>
+<td>探测大量端口</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="五、核心功能模块"><a href="#五、核心功能模块" class="headerlink" title="五、核心功能模块"></a>五、核心功能模块</h2><h3 id="5-1-子域收集（60-模块）"><a href="#5-1-子域收集（60-模块）" class="headerlink" title="5.1 子域收集（60+ 模块）"></a>5.1 子域收集（60+ 模块）</h3><p>OneForAll 集成 7 大类、60+ 收集模块：</p>
+<h4 id="①-证书透明度（6-个模块）"><a href="#①-证书透明度（6-个模块）" class="headerlink" title="① 证书透明度（6 个模块）"></a>① 证书透明度（6 个模块）</h4><table>
+<thead>
+<tr>
+<th>模块</th>
+<th>需要代理</th>
+<th>需要 API</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>censys_api</code></td>
+<td>否</td>
+<td>✅</td>
+<td>Censys 证书搜索引擎</td>
+</tr>
+<tr>
+<td><code>certspotter</code></td>
+<td>否</td>
+<td>否</td>
+<td>SSLMate 证书监控</td>
+</tr>
+<tr>
+<td><code>crtsh</code></td>
+<td>否</td>
+<td>否</td>
+<td>crt.sh 证书透明度</td>
+</tr>
+<tr>
+<td><code>entrust</code></td>
+<td>否</td>
+<td>否</td>
+<td>Entrust 证书</td>
+</tr>
+<tr>
+<td><code>google</code></td>
+<td>✅</td>
+<td>否</td>
+<td>Google 证书搜索</td>
+</tr>
+<tr>
+<td><code>spyse_api</code></td>
+<td>否</td>
+<td>✅</td>
+<td>Spyse API</td>
+</tr>
+</tbody></table>
+<h4 id="②-常规检查（6-个模块）"><a href="#②-常规检查（6-个模块）" class="headerlink" title="② 常规检查（6 个模块）"></a>② 常规检查（6 个模块）</h4><table>
+<thead>
+<tr>
+<th>模块</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>axfr</code></td>
+<td>DNS 域传送漏洞利用</td>
+</tr>
+<tr>
+<td><code>cdx</code></td>
+<td>检查跨域策略文件</td>
+</tr>
+<tr>
+<td><code>cert</code></td>
+<td>检查 HTTPS 证书</td>
+</tr>
+<tr>
+<td><code>csp</code></td>
+<td>检查内容安全策略</td>
+</tr>
+<tr>
+<td><code>robots</code></td>
+<td>检查 robots.txt</td>
+</tr>
+<tr>
+<td><code>sitemap</code></td>
+<td>检查 sitemap 文件</td>
+</tr>
+<tr>
+<td><code>dnssec</code></td>
+<td>NSEC 记录遍历</td>
+</tr>
+</tbody></table>
+<h4 id="③-爬虫档案（2-个模块）"><a href="#③-爬虫档案（2-个模块）" class="headerlink" title="③ 爬虫档案（2 个模块）"></a>③ 爬虫档案（2 个模块）</h4><table>
+<thead>
+<tr>
+<th>模块</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>archivecrawl</code></td>
+<td>Archive.org 爬虫档案</td>
+</tr>
+<tr>
+<td><code>commoncrawl</code></td>
+<td>CommonCrawl 爬虫档案</td>
+</tr>
+</tbody></table>
+<h4 id="④-DNS-数据集（24-个模块）"><a href="#④-DNS-数据集（24-个模块）" class="headerlink" title="④ DNS 数据集（24 个模块）"></a>④ DNS 数据集（24 个模块）</h4><table>
+<thead>
+<tr>
+<th>模块</th>
+<th>需要 API</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>bufferover</code></td>
+<td>否</td>
+<td>TLS 缓冲区</td>
+</tr>
+<tr>
+<td><code>cebaidu</code></td>
+<td>否</td>
+<td>百度 DNS 数据</td>
+</tr>
+<tr>
+<td><code>chinaz</code></td>
+<td>否</td>
+<td>站长工具</td>
+</tr>
+<tr>
+<td><code>chinaz_api</code></td>
+<td>✅</td>
+<td>站长工具 API</td>
+</tr>
+<tr>
+<td><code>circl_api</code></td>
+<td>✅</td>
+<td>CIRCL PassiveDNS</td>
+</tr>
+<tr>
+<td><code>cloudflare_api</code></td>
+<td>✅</td>
+<td>Cloudflare DNS</td>
+</tr>
+<tr>
+<td><code>dnsdb</code></td>
+<td>否</td>
+<td>DNSDB</td>
+</tr>
+<tr>
+<td><code>dnsdb_api</code></td>
+<td>✅</td>
+<td>DNSDB API</td>
+</tr>
+<tr>
+<td><code>dnsdumpster</code></td>
+<td>否</td>
+<td>DNSDumpster</td>
+</tr>
+<tr>
+<td><code>hackertarget</code></td>
+<td>否</td>
+<td>HackerTarget</td>
+</tr>
+<tr>
+<td><code>ip138</code></td>
+<td>否</td>
+<td>IP138</td>
+</tr>
+<tr>
+<td><code>netcraft</code></td>
+<td>否</td>
+<td>Netcraft</td>
+</tr>
+<tr>
+<td><code>ptrarchive</code></td>
+<td>✅</td>
+<td>PTR Archive</td>
+</tr>
+<tr>
+<td><code>rapiddns</code></td>
+<td>否</td>
+<td>RapidDNS</td>
+</tr>
+<tr>
+<td><code>riddler</code></td>
+<td>✅</td>
+<td>Riddler</td>
+</tr>
+<tr>
+<td><code>robtex</code></td>
+<td>否</td>
+<td>Robtex</td>
+</tr>
+<tr>
+<td><code>securitytrails_api</code></td>
+<td>✅</td>
+<td>SecurityTrails</td>
+</tr>
+<tr>
+<td><code>sitedossier</code></td>
+<td>否</td>
+<td>SiteDossier</td>
+</tr>
+<tr>
+<td><code>threatcrowd</code></td>
+<td>否</td>
+<td>ThreatCrowd</td>
+</tr>
+<tr>
+<td><code>wzpc</code></td>
+<td>否</td>
+<td>站长之家</td>
+</tr>
+<tr>
+<td><code>ximcx</code></td>
+<td>否</td>
+<td>小米查询</td>
+</tr>
+<tr>
+<td><code>bevigil_api</code></td>
+<td>✅</td>
+<td>BeVigil</td>
+</tr>
+<tr>
+<td><code>binaryedge_api</code></td>
+<td>✅</td>
+<td>BinaryEdge</td>
+</tr>
+<tr>
+<td><code>qianxun</code></td>
+<td>否</td>
+<td>千寻</td>
+</tr>
+</tbody></table>
+<h4 id="⑤-DNS-查询（1-个模块）"><a href="#⑤-DNS-查询（1-个模块）" class="headerlink" title="⑤ DNS 查询（1 个模块）"></a>⑤ DNS 查询（1 个模块）</h4><table>
+<thead>
+<tr>
+<th>模块</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>srv</code></td>
+<td>枚举常见 SRV 记录</td>
+</tr>
+</tbody></table>
+<h4 id="⑥-威胁情报（6-个模块）"><a href="#⑥-威胁情报（6-个模块）" class="headerlink" title="⑥ 威胁情报（6 个模块）"></a>⑥ 威胁情报（6 个模块）</h4><table>
+<thead>
+<tr>
+<th>模块</th>
+<th>需要 API</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>alienvault</code></td>
+<td>否</td>
+<td>AlienVault OTX</td>
+</tr>
+<tr>
+<td><code>riskiq_api</code></td>
+<td>✅</td>
+<td>RiskIQ PassiveTotal</td>
+</tr>
+<tr>
+<td><code>threatbook_api</code></td>
+<td>✅</td>
+<td>微步在线</td>
+</tr>
+<tr>
+<td><code>threatminer</code></td>
+<td>否</td>
+<td>ThreatMiner</td>
+</tr>
+<tr>
+<td><code>virustotal</code></td>
+<td>否</td>
+<td>VirusTotal（网页）</td>
+</tr>
+<tr>
+<td><code>virustotal_api</code></td>
+<td>✅</td>
+<td>VirusTotal API</td>
+</tr>
+</tbody></table>
+<h4 id="⑦-搜索引擎（18-个模块）"><a href="#⑦-搜索引擎（18-个模块）" class="headerlink" title="⑦ 搜索引擎（18 个模块）"></a>⑦ 搜索引擎（18 个模块）</h4><table>
+<thead>
+<tr>
+<th>模块</th>
+<th>需要代理</th>
+<th>需要 API</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>ask</code></td>
+<td>✅</td>
+<td>否</td>
+<td>Ask.com</td>
+</tr>
+<tr>
+<td><code>baidu</code></td>
+<td>否</td>
+<td>否</td>
+<td>百度</td>
+</tr>
+<tr>
+<td><code>bing</code></td>
+<td>否</td>
+<td>否</td>
+<td>Bing</td>
+</tr>
+<tr>
+<td><code>bing_api</code></td>
+<td>否</td>
+<td>✅</td>
+<td>Bing API</td>
+</tr>
+<tr>
+<td><code>duckduckgo</code></td>
+<td>✅</td>
+<td>否</td>
+<td>DuckDuckGo</td>
+</tr>
+<tr>
+<td><code>exalead</code></td>
+<td>否</td>
+<td>否</td>
+<td>Exalead</td>
+</tr>
+<tr>
+<td><code>fofa_api</code></td>
+<td>否</td>
+<td>✅</td>
+<td>FOFA</td>
+</tr>
+<tr>
+<td><code>gitee</code></td>
+<td>否</td>
+<td>否</td>
+<td>Gitee</td>
+</tr>
+<tr>
+<td><code>github</code></td>
+<td>否</td>
+<td>否</td>
+<td>GitHub（需配置账号）</td>
+</tr>
+<tr>
+<td><code>github_api</code></td>
+<td>否</td>
+<td>✅</td>
+<td>GitHub API</td>
+</tr>
+<tr>
+<td><code>google</code></td>
+<td>✅</td>
+<td>否</td>
+<td>Google</td>
+</tr>
+<tr>
+<td><code>google_api</code></td>
+<td>✅</td>
+<td>✅</td>
+<td>Google API</td>
+</tr>
+<tr>
+<td><code>shodan_api</code></td>
+<td>否</td>
+<td>✅</td>
+<td>Shodan</td>
+</tr>
+<tr>
+<td><code>so</code></td>
+<td>否</td>
+<td>否</td>
+<td>360 搜索</td>
+</tr>
+<tr>
+<td><code>sogou</code></td>
+<td>否</td>
+<td>否</td>
+<td>搜狗</td>
+</tr>
+<tr>
+<td><code>yahoo</code></td>
+<td>✅</td>
+<td>否</td>
+<td>Yahoo</td>
+</tr>
+<tr>
+<td><code>yandex</code></td>
+<td>✅</td>
+<td>否</td>
+<td>Yandex</td>
+</tr>
+<tr>
+<td><code>zoomeye_api</code></td>
+<td>否</td>
+<td>✅</td>
+<td>ZoomEye</td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="5-2-子域爆破"><a href="#5-2-子域爆破" class="headerlink" title="5.2 子域爆破"></a>5.2 子域爆破</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 开启爆破（默认字典）───</span><br>python3 oneforall.py --target example.com --brute True run<br><br><span class="hljs-comment"># ─── 自定义字典（在 setting.py 中配置）───</span><br><span class="hljs-comment"># brute_wordlist_path = &quot;/path/to/wordlist.txt&quot;</span><br><br><span class="hljs-comment"># ─── Fuzz 模式 ───</span><br><span class="hljs-comment"># 在 config/setting.py 中设置：</span><br><span class="hljs-comment"># enable_fuzz = True</span><br><span class="hljs-comment"># fuzz_place = &quot;www.*.example.com&quot;     # 指定爆破位置</span><br><span class="hljs-comment"># fuzz_rule = &quot;[a-z][0-9]&quot;             # 正则规则</span><br><br><span class="hljs-comment"># ─── 递归爆破 ───</span><br><span class="hljs-comment"># 在 config/setting.py 中设置：</span><br><span class="hljs-comment"># enable_recursive_brute = True</span><br><span class="hljs-comment"># brute_recursive_depth = 2             # 递归深度</span><br><br><span class="hljs-comment"># ─── 独立运行爆破模块 ───</span><br>python3 brute.py --target example.com<br>python3 brute.py --targets domains.txt<br>python3 brute.py --target example.com --wordlist /path/to/dict.txt<br></code></pre></td></tr></table></figure>
+
+<p><strong>爆破性能参数（setting.py）：</strong></p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>默认值</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>brute_concurrent_num</code></td>
+<td>2000</td>
+<td>并发查询数（最大推荐 10000）</td>
+</tr>
+<tr>
+<td><code>enable_recursive_brute</code></td>
+<td>False</td>
+<td>递归爆破</td>
+</tr>
+<tr>
+<td><code>brute_recursive_depth</code></td>
+<td>2</td>
+<td>递归深度</td>
+</tr>
+<tr>
+<td><code>enable_fuzz</code></td>
+<td>False</td>
+<td>Fuzz 模式</td>
+</tr>
+<tr>
+<td><code>fuzz_place</code></td>
+<td>None</td>
+<td>爆破位置，<code>*</code> 表示爆破点</td>
+</tr>
+<tr>
+<td><code>fuzz_rule</code></td>
+<td>None</td>
+<td>Fuzz 正则规则</td>
+</tr>
+<tr>
+<td><code>use_china_nameservers</code></td>
+<td>True</td>
+<td>使用中国 DNS 服务器</td>
+</tr>
+<tr>
+<td><code>brute_ip_blacklist</code></td>
+<td>见配置</td>
+<td>IP 黑名单</td>
+</tr>
+<tr>
+<td><code>brute_cname_blacklist</code></td>
+<td>见配置</td>
+<td>CNAME 黑名单（泛解析过滤）</td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="5-3-子域验证"><a href="#5-3-子域验证" class="headerlink" title="5.3 子域验证"></a>5.3 子域验证</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 默认开启 DNS 解析 + HTTP 请求 ───</span><br>python3 oneforall.py --target example.com run<br><br><span class="hljs-comment"># ─── 禁用 DNS 解析 ───</span><br>python3 oneforall.py --target example.com --dns False run<br><br><span class="hljs-comment"># ─── 禁用 HTTP 请求 ───</span><br>python3 oneforall.py --target example.com --req False run<br><br><span class="hljs-comment"># ─── 只要存活子域 ───</span><br>python3 oneforall.py --target example.com --valid True run<br><br><span class="hljs-comment"># ─── 请求更多端口 ───</span><br>python3 oneforall.py --target example.com --port medium run<br>python3 oneforall.py --target example.com --port large run<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="5-4-子域爬取"><a href="#5-4-子域爬取" class="headerlink" title="5.4 子域爬取"></a>5.4 子域爬取</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 默认开启，从响应体和 JS 中再次发现子域 ───</span><br><span class="hljs-comment"># 在 setting.py 中配置：</span><br><span class="hljs-comment"># enable_finder_module = True</span><br></code></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="5-5-子域置换（altdns）"><a href="#5-5-子域置换（altdns）" class="headerlink" title="5.5 子域置换（altdns）"></a>5.5 子域置换（altdns）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 默认开启，利用置换技术重组子域 ───</span><br><span class="hljs-comment"># 在 setting.py 中配置：</span><br><span class="hljs-comment"># enable_altdns_module = True</span><br><span class="hljs-comment"># 例如发现 dev.example.com → 自动尝试：</span><br><span class="hljs-comment">#   prod.example.com, staging.example.com, test.example.com ...</span><br></code></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="5-6-子域接管检查"><a href="#5-6-子域接管检查" class="headerlink" title="5.6 子域接管检查"></a>5.6 子域接管检查</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 开启接管检查 ───</span><br>python3 oneforall.py --target example.com --takeover True run<br><br><span class="hljs-comment"># ─── 独立运行接管检查 ───</span><br>python3 takeover.py --target example.com<br>python3 takeover.py --targets domains.txt<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="5-7-CDN-检测"><a href="#5-7-CDN-检测" class="headerlink" title="5.7 CDN 检测"></a>5.7 CDN 检测</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 默认开启 CDN 检测 ───</span><br><span class="hljs-comment"># 在 setting.py 中配置：</span><br><span class="hljs-comment"># enable_cdn_check = True</span><br></code></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="5-8-Web-指纹识别"><a href="#5-8-Web-指纹识别" class="headerlink" title="5.8 Web 指纹识别"></a>5.8 Web 指纹识别</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 默认开启 WEB 指纹识别 ───</span><br><span class="hljs-comment"># 在 setting.py 中配置：</span><br><span class="hljs-comment"># enable_banner_identify = True</span><br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="六、配置文件详解"><a href="#六、配置文件详解" class="headerlink" title="六、配置文件详解"></a>六、配置文件详解</h2><h3 id="6-1-setting-py（核心配置）"><a href="#6-1-setting-py（核心配置）" class="headerlink" title="6.1 setting.py（核心配置）"></a>6.1 setting.py（核心配置）</h3><p>路径：<code>config/setting.py</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># ─── 入口参数设置 ───</span><br>enable_check_network = <span class="hljs-literal">True</span>      <span class="hljs-comment"># 网络环境检查</span><br>enable_brute_module = <span class="hljs-literal">True</span>       <span class="hljs-comment"># 使用爆破模块</span><br>enable_dns_resolve = <span class="hljs-literal">True</span>        <span class="hljs-comment"># DNS 解析</span><br>enable_http_request = <span class="hljs-literal">True</span>       <span class="hljs-comment"># HTTP 请求</span><br>enable_finder_module = <span class="hljs-literal">True</span>      <span class="hljs-comment"># 从响应体/JS 二次发现子域</span><br>enable_altdns_module = <span class="hljs-literal">True</span>      <span class="hljs-comment"># 子域置换</span><br>enable_cdn_check = <span class="hljs-literal">True</span>          <span class="hljs-comment"># CDN 检测</span><br>enable_banner_identify = <span class="hljs-literal">True</span>    <span class="hljs-comment"># Web 指纹识别</span><br>enable_takeover_check = <span class="hljs-literal">False</span>    <span class="hljs-comment"># 子域接管检查（默认关闭）</span><br><br><span class="hljs-comment"># ─── 输出设置 ───</span><br>result_export_alive = <span class="hljs-literal">False</span>      <span class="hljs-comment"># 只导出存活</span><br>result_save_format = <span class="hljs-string">&#x27;csv&#x27;</span>       <span class="hljs-comment"># 输出格式：csv / json / txt</span><br>result_save_path = <span class="hljs-literal">None</span>          <span class="hljs-comment"># 输出路径</span><br><br><span class="hljs-comment"># ─── 收集模块设置 ───</span><br>enable_all_module = <span class="hljs-literal">True</span>         <span class="hljs-comment"># 启用所有收集模块</span><br>enable_partial_module = []       <span class="hljs-comment"># 只启用部分模块（需关闭 enable_all_module）</span><br>save_module_result = <span class="hljs-literal">False</span>       <span class="hljs-comment"># 保存各模块结果为 JSON</span><br><br><span class="hljs-comment"># ─── 爆破设置 ───</span><br>brute_concurrent_num = <span class="hljs-number">2000</span>      <span class="hljs-comment"># 并发数</span><br>brute_wordlist_path = <span class="hljs-literal">None</span>       <span class="hljs-comment"># 自定义字典路径</span><br>enable_recursive_brute = <span class="hljs-literal">False</span>   <span class="hljs-comment"># 递归爆破</span><br>brute_recursive_depth = <span class="hljs-number">2</span>        <span class="hljs-comment"># 递归深度</span><br>enable_fuzz = <span class="hljs-literal">False</span>              <span class="hljs-comment"># Fuzz 模式</span><br>fuzz_place = <span class="hljs-literal">None</span>                <span class="hljs-comment"># 爆破位置：www.*.example.com</span><br>fuzz_rule = <span class="hljs-literal">None</span>                 <span class="hljs-comment"># Fuzz 规则：[a-z][0-9]</span><br>use_china_nameservers = <span class="hljs-literal">True</span>     <span class="hljs-comment"># 中国 DNS</span><br><br><span class="hljs-comment"># ─── 代理设置 ───</span><br>enable_request_proxy = <span class="hljs-literal">False</span>     <span class="hljs-comment"># 全局代理开关</span><br>proxy_all_module = <span class="hljs-literal">False</span>         <span class="hljs-comment"># 代理所有模块</span><br>proxy_partial_module = [...]     <span class="hljs-comment"># 代理指定模块</span><br>request_proxy_pool = [<br>    &#123;<span class="hljs-string">&#x27;http&#x27;</span>: <span class="hljs-string">&#x27;http://127.0.0.1:1080&#x27;</span>, <span class="hljs-string">&#x27;https&#x27;</span>: <span class="hljs-string">&#x27;http://127.0.0.1:1080&#x27;</span>&#125;<br>]<br><br><span class="hljs-comment"># ─── 请求设置 ───</span><br>request_timeout_second = (<span class="hljs-number">13</span>, <span class="hljs-number">27</span>)  <span class="hljs-comment"># 超时秒数</span><br>request_ssl_verify = <span class="hljs-literal">False</span>         <span class="hljs-comment"># SSL 验证</span><br>request_allow_redirect = <span class="hljs-literal">True</span>      <span class="hljs-comment"># 允许重定向</span><br>request_redirect_limit = <span class="hljs-number">10</span>        <span class="hljs-comment"># 重定向次数限制</span><br>enable_random_ua = <span class="hljs-literal">True</span>            <span class="hljs-comment"># 随机 UA</span><br><br><span class="hljs-comment"># ─── 搜索设置 ───</span><br>enable_recursive_search = <span class="hljs-literal">False</span>    <span class="hljs-comment"># 递归搜索</span><br>search_recursive_times = <span class="hljs-number">2</span>         <span class="hljs-comment"># 递归层数</span><br><br><span class="hljs-comment"># ─── 网络空间测绘 ───</span><br>cam_records_maximum_per_domain = <span class="hljs-number">1000</span>  <span class="hljs-comment"># 单域名最大记录数</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="6-2-api-py（API-Key-配置）"><a href="#6-2-api-py（API-Key-配置）" class="headerlink" title="6.2 api.py（API Key 配置）"></a>6.2 api.py（API Key 配置）</h3><p>路径：<code>config/api.py</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># ─── 示例配置 ───</span><br><br><span class="hljs-comment"># 选择使用哪些模块</span><br>enable_all_module = <span class="hljs-literal">True</span><br><span class="hljs-comment"># 只使用特定模块：</span><br><span class="hljs-comment"># enable_partial_module = [</span><br><span class="hljs-comment">#     (&#x27;modules.search&#x27;, &#x27;ask&#x27;),</span><br><span class="hljs-comment">#     (&#x27;modules.search&#x27;, &#x27;baidu&#x27;),</span><br><span class="hljs-comment">#     (&#x27;modules.cert&#x27;, &#x27;crtsh&#x27;),</span><br><span class="hljs-comment"># ]</span><br><br><span class="hljs-comment"># ─── 代理配置 ───</span><br>enable_proxy = <span class="hljs-literal">False</span><br>proxy_all_module = <span class="hljs-literal">False</span><br>proxy_partial_module = [<span class="hljs-string">&#x27;GoogleQuery&#x27;</span>, <span class="hljs-string">&#x27;AskSearch&#x27;</span>]<br><br><span class="hljs-comment"># ─── API Key 配置（根据需要填入）───</span><br><br><span class="hljs-comment"># Shodan</span><br>shodan_api_key = <span class="hljs-string">&#x27;YOUR_SHODAN_API_KEY&#x27;</span><br><br><span class="hljs-comment"># FOFA</span><br>fofa_api_email = <span class="hljs-string">&#x27;your@email.com&#x27;</span><br>fofa_api_key = <span class="hljs-string">&#x27;YOUR_FOFA_API_KEY&#x27;</span><br><br><span class="hljs-comment"># ZoomEye</span><br>zoomeye_api_key = <span class="hljs-string">&#x27;YOUR_ZOOMEYE_API_KEY&#x27;</span><br><br><span class="hljs-comment"># GitHub（用于 GitHub 搜索模块）</span><br>github_api_key = <span class="hljs-string">&#x27;YOUR_GITHUB_TOKEN&#x27;</span><br><br><span class="hljs-comment"># VirusTotal</span><br>virustotal_api_key = <span class="hljs-string">&#x27;YOUR_VT_API_KEY&#x27;</span><br><br><span class="hljs-comment"># Censys</span><br>censys_api_id = <span class="hljs-string">&#x27;YOUR_CENSYS_ID&#x27;</span><br>censys_api_secret = <span class="hljs-string">&#x27;YOUR_CENSYS_SECRET&#x27;</span><br><br><span class="hljs-comment"># SecurityTrails</span><br>securitytrails_api_key = <span class="hljs-string">&#x27;YOUR_ST_API_KEY&#x27;</span><br><br><span class="hljs-comment"># BinaryEdge</span><br>binaryedge_api_key = <span class="hljs-string">&#x27;YOUR_BE_API_KEY&#x27;</span><br><br><span class="hljs-comment"># ThreatBook 微步</span><br>threatbook_api_key = <span class="hljs-string">&#x27;YOUR_THREATBOOK_API_KEY&#x27;</span><br><br><span class="hljs-comment"># RiskIQ / PassiveTotal</span><br>riskiq_api_username = <span class="hljs-string">&#x27;your@email.com&#x27;</span><br>riskiq_api_key = <span class="hljs-string">&#x27;YOUR_RISKIQ_API_KEY&#x27;</span><br><br><span class="hljs-comment"># Hunter</span><br>hunter_api_key = <span class="hljs-string">&#x27;YOUR_HUNTER_API_KEY&#x27;</span><br><br><span class="hljs-comment"># Quake</span><br>quake_api_key = <span class="hljs-string">&#x27;YOUR_QUAKE_API_KEY&#x27;</span><br><br><span class="hljs-comment"># Bing API</span><br>bing_api_key = <span class="hljs-string">&#x27;YOUR_BING_API_KEY&#x27;</span><br><br><span class="hljs-comment"># Google API（需配置自定义搜索引擎）</span><br>google_api_key = <span class="hljs-string">&#x27;YOUR_GOOGLE_API_KEY&#x27;</span><br>google_api_cx = <span class="hljs-string">&#x27;YOUR_CUSTOM_SEARCH_ENGINE_ID&#x27;</span><br><br><span class="hljs-comment"># CIRCL</span><br>circl_api_username = <span class="hljs-string">&#x27;your@email.com&#x27;</span><br>circl_api_password = <span class="hljs-string">&#x27;YOUR_PASSWORD&#x27;</span><br><br><span class="hljs-comment"># Cloudflare</span><br>cloudflare_api_key = <span class="hljs-string">&#x27;YOUR_CF_API_KEY&#x27;</span><br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="七、独立子模块用法"><a href="#七、独立子模块用法" class="headerlink" title="七、独立子模块用法"></a>七、独立子模块用法</h2><h3 id="7-1-brute-py（独立爆破）"><a href="#7-1-brute-py（独立爆破）" class="headerlink" title="7.1 brute.py（独立爆破）"></a>7.1 brute.py（独立爆破）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 基础爆破 ───</span><br>python3 brute.py --target example.com<br><br><span class="hljs-comment"># ─── 批量爆破 ───</span><br>python3 brute.py --targets domains.txt<br><br><span class="hljs-comment"># ─── 指定字典 ───</span><br>python3 brute.py --target example.com --wordlist /path/to/dict.txt<br><br><span class="hljs-comment"># ─── 递归爆破 ───</span><br>python3 brute.py --target example.com --recursive True<br><br><span class="hljs-comment"># ─── Fuzz 模式 ───</span><br>python3 brute.py --target example.com --fuzz True --fuzz_place <span class="hljs-string">&quot;www.*.example.com&quot;</span><br><br><span class="hljs-comment"># ─── 输出格式 ───</span><br>python3 brute.py --target example.com --<span class="hljs-built_in">fmt</span> json<br>python3 brute.py --target example.com --<span class="hljs-built_in">fmt</span> csv<br></code></pre></td></tr></table></figure>
+
+<h3 id="7-2-takeover-py（独立接管检查）"><a href="#7-2-takeover-py（独立接管检查）" class="headerlink" title="7.2 takeover.py（独立接管检查）"></a>7.2 takeover.py（独立接管检查）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 检查单个域名 ───</span><br>python3 takeover.py --target example.com<br><br><span class="hljs-comment"># ─── 检查多个域名 ───</span><br>python3 takeover.py --targets subdomains.txt<br><br><span class="hljs-comment"># ─── 输出格式 ───</span><br>python3 takeover.py --target example.com --<span class="hljs-built_in">fmt</span> json<br></code></pre></td></tr></table></figure>
+
+<h3 id="7-3-dbexport-py（数据库导出）"><a href="#7-3-dbexport-py（数据库导出）" class="headerlink" title="7.3 dbexport.py（数据库导出）"></a>7.3 dbexport.py（数据库导出）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 导出指定域名结果 ───</span><br>python3 dbexport.py --target example.com<br><br><span class="hljs-comment"># ─── 导出格式 ───</span><br>python3 dbexport.py --target example.com --<span class="hljs-built_in">fmt</span> json<br>python3 dbexport.py --target example.com --<span class="hljs-built_in">fmt</span> csv<br><br><span class="hljs-comment"># ─── 只导出存活子域 ───</span><br>python3 dbexport.py --target example.com --alive True<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="八、结果说明"><a href="#八、结果说明" class="headerlink" title="八、结果说明"></a>八、结果说明</h2><p>运行后在 <code>results/</code> 目录生成：</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs applescript">results/<br>├── example.com.csv                     <span class="hljs-comment"># 该域名的子域收集结果</span><br>├── example_com_origin_result.json      <span class="hljs-comment"># 各模块原始结果（可选）</span><br>├── all_subdomain_result_1700000000.csv <span class="hljs-comment"># 所有域名汇总结果</span><br>└── <span class="hljs-literal">result</span>.sqlite3                      <span class="hljs-comment"># SQLite3 数据库</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>数据库表说明：</strong></p>
+<table>
+<thead>
+<tr>
+<th>表名</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>example_com_origin_result</code></td>
+<td>各模块原始收集结果</td>
+</tr>
+<tr>
+<td><code>example_com_resolve_result</code></td>
+<td>DNS 解析后结果</td>
+</tr>
+<tr>
+<td><code>example_com_last_result</code></td>
+<td>上一次收集结果（需运行 2 次以上）</td>
+</tr>
+<tr>
+<td><code>example_com_now_result</code></td>
+<td>当前收集结果（<strong>重点关注</strong>）</td>
+</tr>
+</tbody></table>
+<p><strong>CSV 结果字段：</strong></p>
+<figure class="highlight gauss"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs gauss">id, alive, request, resolve, url, subdomain, level, cname, content, <span class="hljs-built_in">title</span>, banner, <span class="hljs-built_in">header</span>, history, resolve_result, reason, <span class="hljs-keyword">new</span>, from_module<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="九、实战场景速查"><a href="#九、实战场景速查" class="headerlink" title="九、实战场景速查"></a>九、实战场景速查</h2><h3 id="场景-1：快速子域收集（无爆破）"><a href="#场景-1：快速子域收集（无爆破）" class="headerlink" title="场景 1：快速子域收集（无爆破）"></a>场景 1：快速子域收集（无爆破）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">python3 oneforall.py --target example.com run<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-2：全面深度收集（含爆破）"><a href="#场景-2：全面深度收集（含爆破）" class="headerlink" title="场景 2：全面深度收集（含爆破）"></a>场景 2：全面深度收集（含爆破）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">python3 oneforall.py --target example.com --brute True run<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-3：只获取存活子域"><a href="#场景-3：只获取存活子域" class="headerlink" title="场景 3：只获取存活子域"></a>场景 3：只获取存活子域</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">python3 oneforall.py --target example.com --valid True run<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-4：批量域名收集"><a href="#场景-4：批量域名收集" class="headerlink" title="场景 4：批量域名收集"></a>场景 4：批量域名收集</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">python3 oneforall.py --targets domains.txt run<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-5：收集-爆破-接管检查"><a href="#场景-5：收集-爆破-接管检查" class="headerlink" title="场景 5：收集 + 爆破 + 接管检查"></a>场景 5：收集 + 爆破 + 接管检查</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">python3 oneforall.py --target example.com --brute True --takeover True run<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-6：JSON-格式输出到指定目录"><a href="#场景-6：JSON-格式输出到指定目录" class="headerlink" title="场景 6：JSON 格式输出到指定目录"></a>场景 6：JSON 格式输出到指定目录</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">python3 oneforall.py --target example.com --<span class="hljs-built_in">fmt</span> json --path /tmp/output run<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-7：自定义模块-代理"><a href="#场景-7：自定义模块-代理" class="headerlink" title="场景 7：自定义模块 + 代理"></a>场景 7：自定义模块 + 代理</h3><p>编辑 <code>config/api.py</code>：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs python">enable_all_module = <span class="hljs-literal">False</span><br>enable_partial_module = [<br>    (<span class="hljs-string">&#x27;modules.cert&#x27;</span>, <span class="hljs-string">&#x27;crtsh&#x27;</span>),<br>    (<span class="hljs-string">&#x27;modules.cert&#x27;</span>, <span class="hljs-string">&#x27;certspotter&#x27;</span>),<br>    (<span class="hljs-string">&#x27;modules.search&#x27;</span>, <span class="hljs-string">&#x27;baidu&#x27;</span>),<br>    (<span class="hljs-string">&#x27;modules.search&#x27;</span>, <span class="hljs-string">&#x27;bing&#x27;</span>),<br>    (<span class="hljs-string">&#x27;modules.dns&#x27;</span>, <span class="hljs-string">&#x27;hackertarget&#x27;</span>),<br>    (<span class="hljs-string">&#x27;modules.threat&#x27;</span>, <span class="hljs-string">&#x27;alienvault&#x27;</span>),<br>]<br>enable_proxy = <span class="hljs-literal">True</span><br>proxy_partial_module = [<span class="hljs-string">&#x27;GoogleQuery&#x27;</span>, <span class="hljs-string">&#x27;AskSearch&#x27;</span>]<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">python3 oneforall.py --target example.com run<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-8：递归爆破-Fuzz"><a href="#场景-8：递归爆破-Fuzz" class="headerlink" title="场景 8：递归爆破 + Fuzz"></a>场景 8：递归爆破 + Fuzz</h3><p>编辑 <code>config/setting.py</code>：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python">enable_recursive_brute = <span class="hljs-literal">True</span><br>brute_recursive_depth = <span class="hljs-number">3</span><br>enable_fuzz = <span class="hljs-literal">True</span><br>fuzz_place = <span class="hljs-string">&quot;www.*.example.com&quot;</span><br>fuzz_rule = <span class="hljs-string">&quot;[a-z][0-9]&quot;</span><br>brute_concurrent_num = <span class="hljs-number">5000</span><br></code></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">python3 oneforall.py --target example.com --brute True run<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-9：只使用国内源（无需代理）"><a href="#场景-9：只使用国内源（无需代理）" class="headerlink" title="场景 9：只使用国内源（无需代理）"></a>场景 9：只使用国内源（无需代理）</h3><p>编辑 <code>config/api.py</code>：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs python">enable_all_module = <span class="hljs-literal">False</span><br>enable_partial_module = [<br>    (<span class="hljs-string">&#x27;modules.cert&#x27;</span>, <span class="hljs-string">&#x27;crtsh&#x27;</span>),<br>    (<span class="hljs-string">&#x27;modules.cert&#x27;</span>, <span class="hljs-string">&#x27;certspotter&#x27;</span>),<br>    (<span class="hljs-string">&#x27;modules.dns&#x27;</span>, <span class="hljs-string">&#x27;cebaidu&#x27;</span>),<br>    (<span class="hljs-string">&#x27;modules.dns&#x27;</span>, <span class="hljs-string">&#x27;chinaz&#x27;</span>),<br>    (<span class="hljs-string">&#x27;modules.dns&#x27;</span>, <span class="hljs-string">&#x27;hackertarget&#x27;</span>),<br>    (<span class="hljs-string">&#x27;modules.dns&#x27;</span>, <span class="hljs-string">&#x27;rapiddns&#x27;</span>),<br>    (<span class="hljs-string">&#x27;modules.dns&#x27;</span>, <span class="hljs-string">&#x27;dnsdumpster&#x27;</span>),<br>    (<span class="hljs-string">&#x27;modules.search&#x27;</span>, <span class="hljs-string">&#x27;baidu&#x27;</span>),<br>    (<span class="hljs-string">&#x27;modules.search&#x27;</span>, <span class="hljs-string">&#x27;bing&#x27;</span>),<br>    (<span class="hljs-string">&#x27;modules.search&#x27;</span>, <span class="hljs-string">&#x27;so&#x27;</span>),<br>    (<span class="hljs-string">&#x27;modules.search&#x27;</span>, <span class="hljs-string">&#x27;sogou&#x27;</span>),<br>    (<span class="hljs-string">&#x27;modules.threat&#x27;</span>, <span class="hljs-string">&#x27;alienvault&#x27;</span>),<br>    (<span class="hljs-string">&#x27;modules.threat&#x27;</span>, <span class="hljs-string">&#x27;threatminer&#x27;</span>),<br>]<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">python3 oneforall.py --target example.com run<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-10：数据库增量对比"><a href="#场景-10：数据库增量对比" class="headerlink" title="场景 10：数据库增量对比"></a>场景 10：数据库增量对比</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 第一次运行</span><br>python3 oneforall.py --target example.com run<br><br><span class="hljs-comment"># 一段时间后第二次运行</span><br>python3 oneforall.py --target example.com run<br><br><span class="hljs-comment"># 查看数据库中的 now_result 和 last_result 表对比差异</span><br>sqlite3 results/result.sqlite3 <span class="hljs-string">&quot;SELECT subdomain FROM example_com_now_result EXCEPT SELECT subdomain FROM example_com_last_result;&quot;</span><br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十、管道组合"><a href="#十、管道组合" class="headerlink" title="十、管道组合"></a>十、管道组合</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── OneForAll → httpx 存活验证 ───</span><br>python3 oneforall.py --target example.com --valid True --<span class="hljs-built_in">fmt</span> json --path /tmp/oneforall run<br><span class="hljs-built_in">cat</span> /tmp/oneforall/example.com.json | jq -r <span class="hljs-string">&#x27;.[] | select(.alive==1) | .subdomain&#x27;</span> | httpx -silent<br><br><span class="hljs-comment"># ─── OneForAll → httpx → nuclei 漏洞扫描 ───</span><br>python3 oneforall.py --target example.com --valid True --<span class="hljs-built_in">fmt</span> csv --path /tmp/recon run<br><span class="hljs-built_in">cat</span> /tmp/recon/example.com.csv | <span class="hljs-built_in">tail</span> -n +2 | <span class="hljs-built_in">cut</span> -d<span class="hljs-string">&#x27;,&#x27;</span> -f6 | httpx -silent | nuclei -t cves/ -severity critical,high<br><br><span class="hljs-comment"># ─── OneForAll + Subfinder + Amass 联合（取并集）───</span><br>&#123;<br>  python3 oneforall.py --target example.com --<span class="hljs-built_in">fmt</span> csv --path /tmp/oneforall run 2&gt;/dev/null<br>  <span class="hljs-built_in">cat</span> /tmp/oneforall/example.com.csv | <span class="hljs-built_in">tail</span> -n +2 | <span class="hljs-built_in">cut</span> -d<span class="hljs-string">&#x27;,&#x27;</span> -f6<br>  subfinder -d example.com -silent<br>  amass enum -passive -d example.com -silent 2&gt;/dev/null<br>&#125; | <span class="hljs-built_in">sort</span> -u | httpx -silent -o complete_alive.txt<br><br><span class="hljs-comment"># ─── OneForAll → naabu 端口扫描 ───</span><br>python3 oneforall.py --target example.com --<span class="hljs-built_in">fmt</span> csv --path /tmp/recon run<br><span class="hljs-built_in">cat</span> /tmp/recon/example.com.csv | <span class="hljs-built_in">tail</span> -n +2 | <span class="hljs-built_in">cut</span> -d<span class="hljs-string">&#x27;,&#x27;</span> -f6 | naabu -silent -o ports.txt<br><br><span class="hljs-comment"># ─── 完整流水线 ───</span><br>python3 oneforall.py --target example.com --brute True --takeover True --<span class="hljs-built_in">fmt</span> json --path /tmp/recon run<br><span class="hljs-built_in">cat</span> /tmp/recon/example.com.json | jq -r <span class="hljs-string">&#x27;.[] | select(.alive==1) | .subdomain&#x27;</span> | \<br>  httpx -silent -title -status-code -tech-detect | \<br>  <span class="hljs-built_in">tee</span> alive.txt | \<br>  nuclei -t cves/ -severity critical,high -o vulns.txt<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十一、Docker-用法"><a href="#十一、Docker-用法" class="headerlink" title="十一、Docker 用法"></a>十一、Docker 用法</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 基础扫描 ───</span><br>docker run -it --<span class="hljs-built_in">rm</span> -v ~/results:/OneForAll/results shmilylty/oneforall --target example.com run<br><br><span class="hljs-comment"># ─── 挂载配置和结果 ───</span><br>docker run -it --<span class="hljs-built_in">rm</span> \<br>  -v ~/results:/OneForAll/results \<br>  -v ~/.config/oneforall:/OneForAll/config \<br>  shmilylty/oneforall --target example.com --brute True run<br><br><span class="hljs-comment"># ─── 批量扫描 ───</span><br>docker run -it --<span class="hljs-built_in">rm</span> \<br>  -v ~/results:/OneForAll/results \<br>  -v /path/to/domains.txt:/OneForAll/domains.txt \<br>  shmilylty/oneforall --targets /OneForAll/domains.txt run<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十二、OneForAll-vs-Subfinder-vs-Amass-对比"><a href="#十二、OneForAll-vs-Subfinder-vs-Amass-对比" class="headerlink" title="十二、OneForAll vs Subfinder vs Amass 对比"></a>十二、OneForAll vs Subfinder vs Amass 对比</h2><table>
+<thead>
+<tr>
+<th>维度</th>
+<th>OneForAll</th>
+<th>Subfinder</th>
+<th>Amass</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>语言</strong></td>
+<td>Python</td>
+<td>Go</td>
+<td>Go</td>
+</tr>
+<tr>
+<td><strong>类型</strong></td>
+<td>综合平台</td>
+<td>被动枚举</td>
+<td>被动+主动+爆破</td>
+</tr>
+<tr>
+<td><strong>收集模块数</strong></td>
+<td>60+</td>
+<td>40+</td>
+<td>80+</td>
+</tr>
+<tr>
+<td><strong>子域爆破</strong></td>
+<td>✅ massdns</td>
+<td>❌</td>
+<td>✅ 字典</td>
+</tr>
+<tr>
+<td><strong>子域验证</strong></td>
+<td>✅ DNS+HTTP</td>
+<td>❌（需配合）</td>
+<td>❌（需配合）</td>
+</tr>
+<tr>
+<td><strong>子域爬取</strong></td>
+<td>✅</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>子域置换</strong></td>
+<td>✅ altdns</td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><strong>子域接管</strong></td>
+<td>✅</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>CDN 检测</strong></td>
+<td>✅</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>指纹识别</strong></td>
+<td>✅</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>数据持久化</strong></td>
+<td>✅ SQLite3</td>
+<td>❌</td>
+<td>✅ 图数据库</td>
+</tr>
+<tr>
+<td><strong>可视化</strong></td>
+<td>❌</td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><strong>速度</strong></td>
+<td>🟡 中等</td>
+<td>⚡ 极快</td>
+<td>🐢 慢</td>
+</tr>
+<tr>
+<td><strong>管道集成</strong></td>
+<td>🟡 需格式转换</td>
+<td>⚡ 极佳</td>
+<td>🟡 可用</td>
+</tr>
+<tr>
+<td><strong>资源占用</strong></td>
+<td>🔴 较高</td>
+<td>🟢 极低</td>
+<td>🔴 较高</td>
+</tr>
+<tr>
+<td><strong>适用场景</strong></td>
+<td>全面侦察</td>
+<td>自动化流水线</td>
+<td>深度发现</td>
+</tr>
+</tbody></table>
+<p><strong>最佳实践：三者联合</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash">&#123;<br>  python3 oneforall.py --target example.com --<span class="hljs-built_in">fmt</span> csv --path /tmp/oneforall run 2&gt;/dev/null<br>  <span class="hljs-built_in">cat</span> /tmp/oneforall/example.com.csv | <span class="hljs-built_in">tail</span> -n +2 | <span class="hljs-built_in">cut</span> -d<span class="hljs-string">&#x27;,&#x27;</span> -f6<br>  subfinder -d example.com -silent<br>  amass enum -passive -d example.com -silent 2&gt;/dev/null<br>&#125; | <span class="hljs-built_in">sort</span> -u &gt; all_subs.txt<br><span class="hljs-built_in">cat</span> all_subs.txt | httpx -silent -title -status-code -tech-detect -o alive.txt<br></code></pre></td></tr></table></figure>
+
+<hr>
+<blockquote>
+<p><strong>总结</strong>：OneForAll 是”瑞士军刀”级别的子域收集工具，适合需要<strong>一站式全面侦察</strong>的场景。如果你的流程是自动化的（流水线），Subfinder 更合适。如果需要深度且有持久化需求，Amass 更合适。三者联合使用，取并集，是最完整的方案。</p>
+</blockquote>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86%E5%B7%A5%E5%85%B7/" class="print-no-link">#信息收集工具</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>OneForall-使用手册</div>
+      <div>https://xiaobite-hacker.github.io/2026/02/01/oneforall-使用手册/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>xiaobite</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2026年2月1日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2026/02/05/masscan-%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/" title="masscan-使用手册">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">masscan-使用手册</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2026/01/13/subfinder-%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/" title="subfinder-使用手册">
+                        <span class="hidden-mobile">subfinder-使用手册</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

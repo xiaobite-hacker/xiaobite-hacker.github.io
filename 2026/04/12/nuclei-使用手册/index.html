@@ -1,0 +1,1476 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/admin.jpg">
+  <link rel="icon" href="/img/admin.jpg">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="xiaobite">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="nuclei 实战使用手册 来源：projectdiscovery&#x2F;nuclei官方仓库：https:&#x2F;&#x2F;github.com&#x2F;projectdiscovery&#x2F;nuclei模板仓库：https:&#x2F;&#x2F;github.com&#x2F;projectdiscovery&#x2F;nuclei-templates官方文档：https:&#x2F;&#x2F;docs.projectdiscovery.io&#x2F;tools&#x2F;nuclei&#x2F;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="fscan-使用手册">
+<meta property="og:url" content="https://xiaobite-hacker.github.io/2026/04/12/nuclei-%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/index.html">
+<meta property="og:site_name" content="xiaobite">
+<meta property="og:description" content="nuclei 实战使用手册 来源：projectdiscovery&#x2F;nuclei官方仓库：https:&#x2F;&#x2F;github.com&#x2F;projectdiscovery&#x2F;nuclei模板仓库：https:&#x2F;&#x2F;github.com&#x2F;projectdiscovery&#x2F;nuclei-templates官方文档：https:&#x2F;&#x2F;docs.projectdiscovery.io&#x2F;tools&#x2F;nuclei&#x2F;">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-04-12T10:41:22.000Z">
+<meta property="article:modified_time" content="2026-04-12T10:46:36.480Z">
+<meta property="article:author" content="xiaobite">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>fscan-使用手册 - xiaobite</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"xiaobite-hacker.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>xiaobite</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/prompt/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>prompt</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="fscan-使用手册"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-04-12 18:41" pubdate>
+          2026年4月12日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.4k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          37 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">fscan-使用手册</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="nuclei-实战使用手册"><a href="#nuclei-实战使用手册" class="headerlink" title="nuclei 实战使用手册"></a>nuclei 实战使用手册</h1><blockquote>
+<p>来源：projectdiscovery&#x2F;nuclei<br>官方仓库：<a target="_blank" rel="noopener" href="https://github.com/projectdiscovery/nuclei">https://github.com/projectdiscovery/nuclei</a><br>模板仓库：<a target="_blank" rel="noopener" href="https://github.com/projectdiscovery/nuclei-templates">https://github.com/projectdiscovery/nuclei-templates</a><br>官方文档：<a target="_blank" rel="noopener" href="https://docs.projectdiscovery.io/tools/nuclei/">https://docs.projectdiscovery.io/tools/nuclei/</a></p>
+</blockquote>
+<hr>
+<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
+<li><a href="#%E4%B8%80%E6%A6%82%E8%BF%B0">一、概述</a></li>
+<li><a href="#%E4%BA%8C%E5%AE%89%E8%A3%85">二、安装</a></li>
+<li><a href="#%E4%B8%89%E6%A8%A1%E6%9D%BF%E4%BD%93%E7%B3%BB">三、模板体系</a></li>
+<li><a href="#%E5%9B%9B%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95%E4%B8%8E%E5%8F%82%E6%95%B0%E6%80%BB%E8%A7%88">四、基本语法与参数总览</a></li>
+<li><a href="#%E4%BA%94%E5%9F%BA%E7%A1%80%E6%89%AB%E6%8F%8F">五、基础扫描</a></li>
+<li><a href="#%E5%85%AD%E6%A8%A1%E6%9D%BF%E7%AD%9B%E9%80%89%E4%B8%8E%E8%BF%87%E6%BB%A4">六、模板筛选与过滤</a></li>
+<li><a href="#%E4%B8%83%E5%8D%8F%E8%AE%AE%E4%B8%8E%E6%89%AB%E6%8F%8F%E7%B1%BB%E5%9E%8B">七、协议与扫描类型</a></li>
+<li><a href="#%E5%85%AB%E8%BE%93%E5%87%BA%E6%8E%A7%E5%88%B6">八、输出控制</a></li>
+<li><a href="#%E4%B9%9D%E9%80%9F%E7%8E%87%E4%B8%8E%E6%80%A7%E8%83%BD%E6%8E%A7%E5%88%B6">九、速率与性能控制</a></li>
+<li><a href="#%E5%8D%81%E8%AF%B7%E6%B1%82%E9%85%8D%E7%BD%AE">十、请求配置</a></li>
+<li><a href="#%E5%8D%81%E4%B8%80interactshoast">十一、Interactsh（OAST）</a></li>
+<li><a href="#%E5%8D%81%E4%BA%8Cdastfuzzing">十二、DAST（Fuzzing）</a></li>
+<li><a href="#%E5%8D%81%E4%B8%89uncover%E8%B5%84%E4%BA%A7%E5%8F%91%E7%8E%B0">十三、Uncover（资产发现）</a></li>
+<li><a href="#%E5%8D%81%E5%9B%9Bheadless-%E6%97%A0%E5%A4%B4%E6%B5%8F%E8%A7%88%E5%99%A8">十四、Headless 无头浏览器</a></li>
+<li><a href="#%E5%8D%81%E4%BA%94%E6%A8%A1%E6%9D%BF%E7%BC%96%E5%86%99%E5%9F%BA%E7%A1%80">十五、模板编写基础</a></li>
+<li><a href="#%E5%8D%81%E5%85%AD%E5%AE%9E%E6%88%98%E5%9C%BA%E6%99%AF%E9%80%9F%E6%9F%A5">十六、实战场景速查</a></li>
+<li><a href="#%E5%8D%81%E4%B8%83%E7%AE%A1%E9%81%93%E7%BB%84%E5%90%88">十七、管道组合</a></li>
+<li><a href="#%E5%8D%81%E5%85%AB%E5%B8%B8%E8%A7%81%E8%B8%A9%E5%9D%91">十八、常见踩坑</a></li>
+<li><a href="#%E5%8D%81%E4%B9%9Dnuclei-vs-%E5%85%B6%E4%BB%96%E5%B7%A5%E5%85%B7%E5%AF%B9%E6%AF%94">十九、nuclei vs 其他工具对比</a></li>
+</ul>
+<hr>
+<h2 id="一、概述"><a href="#一、概述" class="headerlink" title="一、概述"></a>一、概述</h2><p>nuclei 是 ProjectDiscovery 开发的<strong>基于 YAML 模板的高速漏洞扫描器</strong>。通过社区贡献的模板，可以快速检测 Web 应用、API、网络服务、DNS、云配置中的已知漏洞。</p>
+<p><strong>核心特点：</strong></p>
+<ul>
+<li>⚡ <strong>极快</strong>：并行扫描 + 请求聚类，速度远超传统扫描器</li>
+<li>🎯 <strong>零误报</strong>：模板模拟真实攻击步骤，减少误报</li>
+<li>📝 <strong>YAML 模板</strong>：简单易读，社区贡献了 10000+ 模板</li>
+<li>🔌 <strong>多协议</strong>：HTTP &#x2F; DNS &#x2F; TCP &#x2F; SSL &#x2F; WebSocket &#x2F; WHOIS &#x2F; JavaScript &#x2F; Code &#x2F; File</li>
+<li>🧠 <strong>DAST 模式</strong>：支持主动 Fuzzing</li>
+<li>🌐 <strong>OAST</strong>：集成 Interactsh 进行盲漏洞检测（SSRF &#x2F; DNS 注入等）</li>
+<li>🔍 <strong>Uncover</strong>：集成 Shodan &#x2F; Censys &#x2F; FOFA &#x2F; Hunter &#x2F; ZoomEye 进行资产发现</li>
+<li>🖥 <strong>无头浏览器</strong>：支持 Headless 模板检测 XSS 等前端漏洞</li>
+<li>🔗 <strong>CI&#x2F;CD 集成</strong>：可集成到 DevSecOps 流水线</li>
+</ul>
+<hr>
+<h2 id="二、安装"><a href="#二、安装" class="headerlink" title="二、安装"></a>二、安装</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── Go 安装（推荐）───</span><br>go install -v github.com/projectdiscovery/nuclei/v3/cmd/nuclei@latest<br><br><span class="hljs-comment"># ─── Kali Linux ───</span><br><span class="hljs-built_in">sudo</span> apt install nuclei<br><br><span class="hljs-comment"># ─── macOS Homebrew ───</span><br>brew install nuclei<br><br><span class="hljs-comment"># ─── Docker ───</span><br>docker pull projectdiscovery/nuclei:latest<br><br><span class="hljs-comment"># ─── 更新 ───</span><br>nuclei -update<br><br><span class="hljs-comment"># ─── 更新模板 ───</span><br>nuclei -update-templates<br><br><span class="hljs-comment"># ─── 验证安装 ───</span><br>nuclei -version<br><br><span class="hljs-comment"># ─── 重置所有配置（包括模板）───</span><br>nuclei -reset<br></code></pre></td></tr></table></figure>
+
+<p><strong>依赖</strong>：Go &gt;&#x3D; 1.24.2（源码安装时）</p>
+<hr>
+<h2 id="三、模板体系"><a href="#三、模板体系" class="headerlink" title="三、模板体系"></a>三、模板体系</h2><h3 id="3-1-模板目录"><a href="#3-1-模板目录" class="headerlink" title="3.1 模板目录"></a>3.1 模板目录</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 模板默认路径 ───</span><br><span class="hljs-comment"># ~/.nuclei-templates/ 或 ~/nuclei-templates/</span><br><br><span class="hljs-comment"># ─── 查看模板数量 ───</span><br><span class="hljs-built_in">ls</span> ~/.nuclei-templates/ -la<br><br><span class="hljs-comment"># ─── 列出所有可用标签 ───</span><br>nuclei -tgl<br></code></pre></td></tr></table></figure>
+
+<h3 id="3-2-模板分类目录结构"><a href="#3-2-模板分类目录结构" class="headerlink" title="3.2 模板分类目录结构"></a>3.2 模板分类目录结构</h3><figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs nix">nuclei-templates<span class="hljs-symbol">/</span><br>├── cves<span class="hljs-symbol">/</span>                    <span class="hljs-comment"># 已知 CVE 漏洞</span><br>├── vulnerabilities<span class="hljs-symbol">/</span>         <span class="hljs-comment"># 通用漏洞</span><br>├── exposures<span class="hljs-symbol">/</span>               <span class="hljs-comment"># 信息泄露</span><br>├── misconfiguration<span class="hljs-symbol">/</span>        <span class="hljs-comment"># 配置错误</span><br>├── takeovers<span class="hljs-symbol">/</span>               <span class="hljs-comment"># 子域名接管</span><br>├── default-logins<span class="hljs-symbol">/</span>          <span class="hljs-comment"># 默认登录凭据</span><br>├── dns<span class="hljs-symbol">/</span>                     <span class="hljs-comment"># DNS 相关</span><br>├── file<span class="hljs-symbol">/</span>                    <span class="hljs-comment"># 文件相关</span><br>├── headless<span class="hljs-symbol">/</span>                <span class="hljs-comment"># 无头浏览器模板</span><br>├── network<span class="hljs-symbol">/</span>                 <span class="hljs-comment"># 网络服务</span><br>├── ssl<span class="hljs-symbol">/</span>                     <span class="hljs-comment"># SSL/TLS</span><br>├── panels<span class="hljs-symbol">/</span>                  <span class="hljs-comment"># 登录面板检测</span><br>├── technologies<span class="hljs-symbol">/</span>            <span class="hljs-comment"># 技术栈检测</span><br>├── fuzzing<span class="hljs-symbol">/</span>                 <span class="hljs-comment"># Fuzzing 模板（DAST）</span><br>├── helpers<span class="hljs-symbol">/</span>                 <span class="hljs-comment"># 辅助模板</span><br>├── workflows<span class="hljs-symbol">/</span>               <span class="hljs-comment"># 工作流</span><br>└── code<span class="hljs-symbol">/</span>                    <span class="hljs-comment"># 代码执行模板</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="3-3-常用模板标签"><a href="#3-3-常用模板标签" class="headerlink" title="3.3 常用模板标签"></a>3.3 常用模板标签</h3><table>
+<thead>
+<tr>
+<th>标签</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>cve</code></td>
+<td>CVE 漏洞</td>
+</tr>
+<tr>
+<td><code>rce</code></td>
+<td>远程代码执行</td>
+</tr>
+<tr>
+<td><code>lfi</code></td>
+<td>本地文件包含</td>
+</tr>
+<tr>
+<td><code>sqli</code></td>
+<td>SQL 注入</td>
+</tr>
+<tr>
+<td><code>xss</code></td>
+<td>跨站脚本</td>
+</tr>
+<tr>
+<td><code>ssrf</code></td>
+<td>服务端请求伪造</td>
+</tr>
+<tr>
+<td><code>ssti</code></td>
+<td>模板注入</td>
+</tr>
+<tr>
+<td><code>xxe</code></td>
+<td>XML 外部实体</td>
+</tr>
+<tr>
+<td><code>redirect</code></td>
+<td>重定向漏洞</td>
+</tr>
+<tr>
+<td><code>injection</code></td>
+<td>通用注入</td>
+</tr>
+<tr>
+<td><code>default-login</code></td>
+<td>默认登录</td>
+</tr>
+<tr>
+<td><code>exposure</code></td>
+<td>信息泄露</td>
+</tr>
+<tr>
+<td><code>misconfig</code></td>
+<td>配置错误</td>
+</tr>
+<tr>
+<td><code>takeover</code></td>
+<td>子域名接管</td>
+</tr>
+<tr>
+<td><code>tech</code></td>
+<td>技术检测</td>
+</tr>
+<tr>
+<td><code>panel</code></td>
+<td>登录面板</td>
+</tr>
+<tr>
+<td><code>wordpress</code> &#x2F; <code>jira</code> &#x2F; <code>gitlab</code> &#x2F; …</td>
+<td>特定产品</td>
+</tr>
+<tr>
+<td><code>dast</code></td>
+<td>DAST&#x2F;Fuzzing 模板</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>网络层</td>
+</tr>
+<tr>
+<td><code>dns</code></td>
+<td>DNS 层</td>
+</tr>
+<tr>
+<td><code>ssl</code></td>
+<td>SSL&#x2F;TLS</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="四、基本语法与参数总览"><a href="#四、基本语法与参数总览" class="headerlink" title="四、基本语法与参数总览"></a>四、基本语法与参数总览</h2><h3 id="4-1-基本语法"><a href="#4-1-基本语法" class="headerlink" title="4.1 基本语法"></a>4.1 基本语法</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">nuclei -u &lt;目标&gt; [选项]<br>nuclei -l &lt;目标列表&gt; [选项]<br></code></pre></td></tr></table></figure>
+
+<h3 id="4-2-参数总览"><a href="#4-2-参数总览" class="headerlink" title="4.2 参数总览"></a>4.2 参数总览</h3><h4 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h4><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>-u, -target</code></td>
+<td>目标 URL&#x2F;主机（可多次）</td>
+</tr>
+<tr>
+<td><code>-l, -list</code></td>
+<td>目标列表文件</td>
+</tr>
+<tr>
+<td><code>-eh, -exclude-hosts</code></td>
+<td>排除的主机</td>
+</tr>
+<tr>
+<td><code>-sa, -scan-all-ips</code></td>
+<td>扫描 DNS 记录关联的所有 IP</td>
+</tr>
+<tr>
+<td><code>-resume</code></td>
+<td>恢复扫描</td>
+</tr>
+<tr>
+<td><code>-im, -input-mode</code></td>
+<td>输入模式（list &#x2F; burp &#x2F; jsonl &#x2F; yaml &#x2F; openapi &#x2F; swagger）</td>
+</tr>
+</tbody></table>
+<h4 id="模板选择"><a href="#模板选择" class="headerlink" title="模板选择"></a>模板选择</h4><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>-t, -templates</code></td>
+<td>指定模板&#x2F;目录（逗号分隔）</td>
+</tr>
+<tr>
+<td><code>-turl, -template-url</code></td>
+<td>模板 URL</td>
+</tr>
+<tr>
+<td><code>-w, -workflows</code></td>
+<td>指定工作流</td>
+</tr>
+<tr>
+<td><code>-nt, -new-templates</code></td>
+<td>仅运行最新版本新增模板</td>
+</tr>
+<tr>
+<td><code>-as, -automatic-scan</code></td>
+<td>自动扫描（Wappalyzer 技术检测 → 标签映射）</td>
+</tr>
+<tr>
+<td><code>-validate</code></td>
+<td>验证模板语法</td>
+</tr>
+<tr>
+<td><code>-tl</code></td>
+<td>列出匹配当前筛选条件的模板</td>
+</tr>
+<tr>
+<td><code>-tgl</code></td>
+<td>列出所有可用标签</td>
+</tr>
+<tr>
+<td><code>-code</code></td>
+<td>启用 Code 协议模板</td>
+</tr>
+<tr>
+<td><code>-esc, -enable-self-contained</code></td>
+<td>启用 Self-contained 模板</td>
+</tr>
+<tr>
+<td><code>-file</code></td>
+<td>启用 File 模板</td>
+</tr>
+</tbody></table>
+<h4 id="模板筛选"><a href="#模板筛选" class="headerlink" title="模板筛选"></a>模板筛选</h4><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>-tags</code></td>
+<td>按标签筛选（逗号分隔）</td>
+</tr>
+<tr>
+<td><code>-etags, -exclude-tags</code></td>
+<td>排除标签</td>
+</tr>
+<tr>
+<td><code>-itags, -include-tags</code></td>
+<td>强制包含标签（即使被排除）</td>
+</tr>
+<tr>
+<td><code>-id, -template-id</code></td>
+<td>按模板 ID 筛选（支持通配符）</td>
+</tr>
+<tr>
+<td><code>-eid, -exclude-id</code></td>
+<td>排除模板 ID</td>
+</tr>
+<tr>
+<td><code>-s, -severity</code></td>
+<td>按严重级别（info &#x2F; low &#x2F; medium &#x2F; high &#x2F; critical）</td>
+</tr>
+<tr>
+<td><code>-es, -exclude-severity</code></td>
+<td>排除严重级别</td>
+</tr>
+<tr>
+<td><code>-a, -author</code></td>
+<td>按作者筛选</td>
+</tr>
+<tr>
+<td><code>-pt, -type</code></td>
+<td>按协议类型（dns &#x2F; http &#x2F; tcp &#x2F; ssl &#x2F; file &#x2F; headless &#x2F; websocket &#x2F; whois &#x2F; code &#x2F; javascript）</td>
+</tr>
+<tr>
+<td><code>-ept, -exclude-type</code></td>
+<td>排除协议类型</td>
+</tr>
+<tr>
+<td><code>-t, -templates</code></td>
+<td>指定模板目录&#x2F;文件</td>
+</tr>
+<tr>
+<td><code>-et, -exclude-templates</code></td>
+<td>排除模板目录&#x2F;文件</td>
+</tr>
+<tr>
+<td><code>-it, -include-templates</code></td>
+<td>强制包含模板</td>
+</tr>
+<tr>
+<td><code>-em, -exclude-matchers</code></td>
+<td>排除特定匹配结果</td>
+</tr>
+<tr>
+<td><code>-tc, -template-condition</code></td>
+<td>DSL 条件筛选</td>
+</tr>
+</tbody></table>
+<h4 id="输出"><a href="#输出" class="headerlink" title="输出"></a>输出</h4><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>-o, -output</code></td>
+<td>输出文件</td>
+</tr>
+<tr>
+<td><code>-j, -jsonl</code></td>
+<td>JSONL 格式输出</td>
+</tr>
+<tr>
+<td><code>-silent</code></td>
+<td>静默模式（仅显示发现结果）</td>
+</tr>
+<tr>
+<td><code>-nc, -no-color</code></td>
+<td>无颜色输出</td>
+</tr>
+<tr>
+<td><code>-or, -omit-raw</code></td>
+<td>省略请求&#x2F;响应原始数据</td>
+</tr>
+<tr>
+<td><code>-ot, -omit-template</code></td>
+<td>省略模板内容</td>
+</tr>
+<tr>
+<td><code>-nm, -no-meta</code></td>
+<td>省略元数据</td>
+</tr>
+<tr>
+<td><code>-ts, -timestamp</code></td>
+<td>显示时间戳</td>
+</tr>
+<tr>
+<td><code>-ms, -matcher-status</code></td>
+<td>显示匹配失败状态</td>
+</tr>
+<tr>
+<td><code>-sresp, -store-resp</code></td>
+<td>保存所有请求&#x2F;响应</td>
+</tr>
+<tr>
+<td><code>-srd, -store-resp-dir</code></td>
+<td>响应保存目录</td>
+</tr>
+<tr>
+<td><code>-me, -markdown-export</code></td>
+<td>Markdown 格式导出</td>
+</tr>
+<tr>
+<td><code>-se, -sarif-export</code></td>
+<td>SARIF 格式导出</td>
+</tr>
+<tr>
+<td><code>-je, -json-export</code></td>
+<td>JSON 格式导出</td>
+</tr>
+<tr>
+<td><code>-jle, -jsonl-export</code></td>
+<td>JSONL 格式导出</td>
+</tr>
+<tr>
+<td><code>-rdb, -report-db</code></td>
+<td>报告数据库</td>
+</tr>
+<tr>
+<td><code>-rd, -redact</code></td>
+<td>隐藏敏感字段</td>
+</tr>
+</tbody></table>
+<h4 id="速率控制"><a href="#速率控制" class="headerlink" title="速率控制"></a>速率控制</h4><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>-rl, -rate-limit</code></td>
+<td>每秒最大请求数</td>
+<td>150</td>
+</tr>
+<tr>
+<td><code>-bs, -bulk-size</code></td>
+<td>每模板并行主机数</td>
+<td>25</td>
+</tr>
+<tr>
+<td><code>-c, -concurrency</code></td>
+<td>并行模板数</td>
+<td>25</td>
+</tr>
+<tr>
+<td><code>-pc, -payload-concurrency</code></td>
+<td>每模板并行载荷数</td>
+<td>25</td>
+</tr>
+</tbody></table>
+<h4 id="请求配置"><a href="#请求配置" class="headerlink" title="请求配置"></a>请求配置</h4><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>-fr, -follow-redirects</code></td>
+<td>跟随重定向</td>
+</tr>
+<tr>
+<td><code>-fhr, -follow-host-redirects</code></td>
+<td>仅跟随同主机重定向</td>
+</tr>
+<tr>
+<td><code>-mr, -max-redirects</code></td>
+<td>最大重定向数（默认 10）</td>
+</tr>
+<tr>
+<td><code>-dr, -disable-redirects</code></td>
+<td>禁用重定向</td>
+</tr>
+<tr>
+<td><code>-H, -header</code></td>
+<td>自定义 Header（可多次）</td>
+</tr>
+<tr>
+<td><code>-V, -var</code></td>
+<td>自定义变量</td>
+</tr>
+<tr>
+<td><code>-ev, -env-vars</code></td>
+<td>启用环境变量</td>
+</tr>
+<tr>
+<td><code>-sni</code></td>
+<td>自定义 TLS SNI</td>
+</tr>
+<tr>
+<td><code>-fh2, -force-http2</code></td>
+<td>强制 HTTP&#x2F;2</td>
+</tr>
+<tr>
+<td><code>-ztls</code></td>
+<td>使用 ztls 库</td>
+</tr>
+<tr>
+<td><code>-tlsi, -tls-impersonate</code></td>
+<td>TLS JA3 随机化</td>
+</tr>
+<tr>
+<td><code>-cc, -client-cert</code></td>
+<td>客户端证书</td>
+</tr>
+<tr>
+<td><code>-ck, -client-key</code></td>
+<td>客户端密钥</td>
+</tr>
+</tbody></table>
+<h4 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h4><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>-timeout</code></td>
+<td>超时秒数</td>
+<td>10</td>
+</tr>
+<tr>
+<td><code>-retries</code></td>
+<td>重试次数</td>
+<td>1</td>
+</tr>
+<tr>
+<td><code>-spm, -stop-at-first-match</code></td>
+<td>首个匹配即停止</td>
+<td>关闭</td>
+</tr>
+<tr>
+<td><code>-ss, -scan-strategy</code></td>
+<td>扫描策略（auto &#x2F; host-spray &#x2F; template-spray）</td>
+<td>auto</td>
+</tr>
+<tr>
+<td><code>-stream</code></td>
+<td>流式模式</td>
+<td>关闭</td>
+</tr>
+<tr>
+<td><code>-mhe, -max-host-error</code></td>
+<td>单主机最大错误数</td>
+<td>30</td>
+</tr>
+<tr>
+<td><code>-project</code></td>
+<td>使用项目缓存避免重复请求</td>
+<td>关闭</td>
+</tr>
+<tr>
+<td><code>-nh, -no-httpx</code></td>
+<td>禁用 httpx 探测非 URL 输入</td>
+<td>关闭</td>
+</tr>
+</tbody></table>
+<h4 id="DAST-Fuzzing"><a href="#DAST-Fuzzing" class="headerlink" title="DAST&#x2F;Fuzzing"></a>DAST&#x2F;Fuzzing</h4><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>-dast</code></td>
+<td>启用 DAST 模板</td>
+</tr>
+<tr>
+<td><code>-dts, -dast-server</code></td>
+<td>DAST 服务模式（实时 Fuzzing）</td>
+</tr>
+<tr>
+<td><code>-ft, -fuzzing-type</code></td>
+<td>Fuzzing 类型（replace &#x2F; prefix &#x2F; postfix &#x2F; infix）</td>
+</tr>
+<tr>
+<td><code>-fm, -fuzzing-mode</code></td>
+<td>Fuzzing 模式（multiple &#x2F; single）</td>
+</tr>
+<tr>
+<td><code>-fa, -fuzz-aggression</code></td>
+<td>Fuzzing 激进程度（low &#x2F; medium &#x2F; high）</td>
+</tr>
+</tbody></table>
+<h4 id="Interactsh-OAST"><a href="#Interactsh-OAST" class="headerlink" title="Interactsh &#x2F; OAST"></a>Interactsh &#x2F; OAST</h4><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>-iserver</code></td>
+<td>自建 Interactsh 服务器</td>
+</tr>
+<tr>
+<td><code>-itoken</code></td>
+<td>Interactsh 认证 Token</td>
+</tr>
+<tr>
+<td><code>-ni, -no-interactsh</code></td>
+<td>禁用 Interactsh</td>
+</tr>
+</tbody></table>
+<h4 id="Uncover"><a href="#Uncover" class="headerlink" title="Uncover"></a>Uncover</h4><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>-uc, -uncover</code></td>
+<td>启用 Uncover</td>
+</tr>
+<tr>
+<td><code>-uq, -uncover-query</code></td>
+<td>搜索查询</td>
+</tr>
+<tr>
+<td><code>-ue, -uncover-engine</code></td>
+<td>搜索引擎（shodan &#x2F; censys &#x2F; fofa &#x2F; hunter &#x2F; zoomeye 等）</td>
+</tr>
+<tr>
+<td><code>-ul, -uncover-limit</code></td>
+<td>结果数量限制（默认 100）</td>
+</tr>
+</tbody></table>
+<h4 id="Headless"><a href="#Headless" class="headerlink" title="Headless"></a>Headless</h4><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>-headless</code></td>
+<td>启用无头浏览器模板</td>
+</tr>
+<tr>
+<td><code>-page-timeout</code></td>
+<td>页面超时（默认 20s）</td>
+</tr>
+<tr>
+<td><code>-sb, -show-browser</code></td>
+<td>显示浏览器窗口</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="五、基础扫描"><a href="#五、基础扫描" class="headerlink" title="五、基础扫描"></a>五、基础扫描</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 单目标扫描（所有模板）───</span><br>nuclei -u https://target.com<br><br><span class="hljs-comment"># ─── 静默模式（仅显示漏洞）───</span><br>nuclei -u https://target.com -silent<br><br><span class="hljs-comment"># ─── 从文件读取目标 ───</span><br>nuclei -l targets.txt -silent<br><br><span class="hljs-comment"># ─── 从 stdin 读取（管道输入）───</span><br>httpx -l hosts.txt -silent | nuclei -silent<br><br><span class="hljs-comment"># ─── 指定严重级别 ───</span><br>nuclei -u https://target.com -s critical,high -silent<br>nuclei -u https://target.com -s critical,high,medium -silent<br><br><span class="hljs-comment"># ─── 输出到文件 ───</span><br>nuclei -u https://target.com -silent -o results.txt<br><br><span class="hljs-comment"># ─── JSONL 输出 ───</span><br>nuclei -u https://target.com -silent -j -o results.jsonl<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="六、模板筛选与过滤"><a href="#六、模板筛选与过滤" class="headerlink" title="六、模板筛选与过滤"></a>六、模板筛选与过滤</h2><h3 id="6-1-按标签筛选"><a href="#6-1-按标签筛选" class="headerlink" title="6.1 按标签筛选"></a>6.1 按标签筛选</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── CVE 漏洞 ───</span><br>nuclei -u https://target.com -tags cve -silent<br><br><span class="hljs-comment"># ─── RCE 漏洞 ───</span><br>nuclei -u https://target.com -tags rce -silent<br><br><span class="hljs-comment"># ─── 多标签 ───</span><br>nuclei -u https://target.com -tags cve,rce,lfi,sqli -silent<br><br><span class="hljs-comment"># ─── 排除标签 ───</span><br>nuclei -u https://target.com -etags dos -silent<br><br><span class="hljs-comment"># ─── 特定产品 ───</span><br>nuclei -u https://target.com -tags wordpress -silent<br>nuclei -u https://target.com -tags gitlab -silent<br>nuclei -u https://target.com -tags jira -silent<br></code></pre></td></tr></table></figure>
+
+<h3 id="6-2-按严重级别筛选"><a href="#6-2-按严重级别筛选" class="headerlink" title="6.2 按严重级别筛选"></a>6.2 按严重级别筛选</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 仅 Critical + High ───</span><br>nuclei -u https://target.com -s critical,high -silent<br><br><span class="hljs-comment"># ─── 排除 info 级别 ───</span><br>nuclei -u https://target.com -es info -silent<br><br><span class="hljs-comment"># ─── 仅 Critical ───</span><br>nuclei -u https://target.com -s critical -silent<br></code></pre></td></tr></table></figure>
+
+<h3 id="6-3-按模板-ID-筛选"><a href="#6-3-按模板-ID-筛选" class="headerlink" title="6.3 按模板 ID 筛选"></a>6.3 按模板 ID 筛选</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 指定模板 ID ───</span><br>nuclei -u https://target.com -<span class="hljs-built_in">id</span> CVE-2021-44228 -silent<br><br><span class="hljs-comment"># ─── 通配符 ───</span><br>nuclei -u https://target.com -<span class="hljs-built_in">id</span> <span class="hljs-string">&quot;CVE-2024-*&quot;</span> -silent<br><br><span class="hljs-comment"># ─── 排除模板 ID ───</span><br>nuclei -u https://target.com -eid CVE-2021-44228 -silent<br></code></pre></td></tr></table></figure>
+
+<h3 id="6-4-按协议类型筛选"><a href="#6-4-按协议类型筛选" class="headerlink" title="6.4 按协议类型筛选"></a>6.4 按协议类型筛选</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 仅 HTTP 模板 ───</span><br>nuclei -u https://target.com -pt http -silent<br><br><span class="hljs-comment"># ─── 仅 DNS 模板 ───</span><br>nuclei -u target.com -pt dns -silent<br><br><span class="hljs-comment"># ─── 仅 TCP 模板 ───</span><br>nuclei -u target.com:443 -pt tcp -silent<br><br><span class="hljs-comment"># ─── 仅 SSL 模板 ───</span><br>nuclei -u target.com -pt ssl -silent<br></code></pre></td></tr></table></figure>
+
+<h3 id="6-5-指定模板目录"><a href="#6-5-指定模板目录" class="headerlink" title="6.5 指定模板目录"></a>6.5 指定模板目录</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 仅 CVE 模板 ───</span><br>nuclei -u https://target.com -t ~/.nuclei-templates/cves/ -silent<br><br><span class="hljs-comment"># ─── 仅默认登录模板 ───</span><br>nuclei -u https://target.com -t ~/.nuclei-templates/default-logins/ -silent<br><br><span class="hljs-comment"># ─── 仅泄露检测 ───</span><br>nuclei -u https://target.com -t ~/.nuclei-templates/exposures/ -silent<br><br><span class="hljs-comment"># ─── 仅配置错误 ───</span><br>nuclei -u https://target.com -t ~/.nuclei-templates/misconfiguration/ -silent<br><br><span class="hljs-comment"># ─── 多个目录 ───</span><br>nuclei -u https://target.com \<br>  -t ~/.nuclei-templates/cves/ \<br>  -t ~/.nuclei-templates/vulnerabilities/ \<br>  -silent<br></code></pre></td></tr></table></figure>
+
+<h3 id="6-6-按作者筛选"><a href="#6-6-按作者筛选" class="headerlink" title="6.6 按作者筛选"></a>6.6 按作者筛选</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">nuclei -u https://target.com -a <span class="hljs-string">&quot;pdteam&quot;</span> -silent<br></code></pre></td></tr></table></figure>
+
+<h3 id="6-7-自动扫描"><a href="#6-7-自动扫描" class="headerlink" title="6.7 自动扫描"></a>6.7 自动扫描</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 自动检测技术栈，自动选择相关模板 ───</span><br>nuclei -u https://target.com -as -silent<br></code></pre></td></tr></table></figure>
+
+<h3 id="6-8-列出模板"><a href="#6-8-列出模板" class="headerlink" title="6.8 列出模板"></a>6.8 列出模板</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 列出所有可用标签 ───</span><br>nuclei -tgl<br><br><span class="hljs-comment"># ─── 列出匹配条件的模板 ───</span><br>nuclei -tags cve -tl<br><br><span class="hljs-comment"># ─── 列出 critical 级别模板 ───</span><br>nuclei -s critical -tl<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="七、协议与扫描类型"><a href="#七、协议与扫描类型" class="headerlink" title="七、协议与扫描类型"></a>七、协议与扫描类型</h2><h3 id="7-1-HTTP-扫描（默认）"><a href="#7-1-HTTP-扫描（默认）" class="headerlink" title="7.1 HTTP 扫描（默认）"></a>7.1 HTTP 扫描（默认）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">nuclei -u https://target.com -silent<br></code></pre></td></tr></table></figure>
+
+<h3 id="7-2-DNS-扫描"><a href="#7-2-DNS-扫描" class="headerlink" title="7.2 DNS 扫描"></a>7.2 DNS 扫描</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">nuclei -u target.com -pt dns -silent<br></code></pre></td></tr></table></figure>
+
+<h3 id="7-3-TCP-扫描"><a href="#7-3-TCP-扫描" class="headerlink" title="7.3 TCP 扫描"></a>7.3 TCP 扫描</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">nuclei -u target.com:443 -pt tcp -silent<br>nuclei -u target.com:3306 -pt tcp -silent<br></code></pre></td></tr></table></figure>
+
+<h3 id="7-4-SSL-TLS-扫描"><a href="#7-4-SSL-TLS-扫描" class="headerlink" title="7.4 SSL&#x2F;TLS 扫描"></a>7.4 SSL&#x2F;TLS 扫描</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">nuclei -u target.com -pt ssl -silent<br></code></pre></td></tr></table></figure>
+
+<h3 id="7-5-WebSocket-扫描"><a href="#7-5-WebSocket-扫描" class="headerlink" title="7.5 WebSocket 扫描"></a>7.5 WebSocket 扫描</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">nuclei -u wss://target.com/ws -pt websocket -silent<br></code></pre></td></tr></table></figure>
+
+<h3 id="7-6-Headless（无头浏览器）"><a href="#7-6-Headless（无头浏览器）" class="headerlink" title="7.6 Headless（无头浏览器）"></a>7.6 Headless（无头浏览器）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">nuclei -u https://target.com -headless -silent<br></code></pre></td></tr></table></figure>
+
+<h3 id="7-7-Network-扫描"><a href="#7-7-Network-扫描" class="headerlink" title="7.7 Network 扫描"></a>7.7 Network 扫描</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">nuclei -u target.com -pt network -silent<br></code></pre></td></tr></table></figure>
+
+<h3 id="7-8-Code-协议"><a href="#7-8-Code-协议" class="headerlink" title="7.8 Code 协议"></a>7.8 Code 协议</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">nuclei -u https://target.com -code -silent<br></code></pre></td></tr></table></figure>
+
+<h3 id="7-9-File-扫描"><a href="#7-9-File-扫描" class="headerlink" title="7.9 File 扫描"></a>7.9 File 扫描</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">nuclei -u /path/to/file -file -silent<br></code></pre></td></tr></table></figure>
+
+<h3 id="7-10-JavaScript-模板"><a href="#7-10-JavaScript-模板" class="headerlink" title="7.10 JavaScript 模板"></a>7.10 JavaScript 模板</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">nuclei -u https://target.com -pt javascript -silent<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="八、输出控制"><a href="#八、输出控制" class="headerlink" title="八、输出控制"></a>八、输出控制</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 输出到文件 ───</span><br>nuclei -u https://target.com -o results.txt -silent<br><br><span class="hljs-comment"># ─── JSONL 格式 ───</span><br>nuclei -u https://target.com -j -o results.jsonl -silent<br><br><span class="hljs-comment"># ─── JSON 导出 ───</span><br>nuclei -u https://target.com -je results.json -silent<br><br><span class="hljs-comment"># ─── Markdown 导出 ───</span><br>nuclei -u https://target.com -me ./markdown_report/ -silent<br><br><span class="hljs-comment"># ─── SARIF 导出（CI/CD 集成）───</span><br>nuclei -u https://target.com -se results.sarif -silent<br><br><span class="hljs-comment"># ─── 保存所有请求/响应 ───</span><br>nuclei -u https://target.com -sresp -srd ./responses/ -silent<br><br><span class="hljs-comment"># ─── JSON 中包含请求/响应 ───</span><br>nuclei -u https://target.com -j -irr -silent<br><br><span class="hljs-comment"># ─── 省略请求/响应（减小输出体积）───</span><br>nuclei -u https://target.com -j -or -silent<br><br><span class="hljs-comment"># ─── 显示时间戳 ───</span><br>nuclei -u https://target.com -ts -silent<br><br><span class="hljs-comment"># ─── 隐藏敏感字段 ───</span><br>nuclei -u https://target.com -rd <span class="hljs-string">&quot;token,password,api_key&quot;</span> -silent<br><br><span class="hljs-comment"># ─── 报告数据库 ───</span><br>nuclei -u https://target.com -rdb results.db -silent<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="九、速率与性能控制"><a href="#九、速率与性能控制" class="headerlink" title="九、速率与性能控制"></a>九、速率与性能控制</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 每秒最大请求数（默认 150）───</span><br>nuclei -l targets.txt -rl 50 -silent<br><br><span class="hljs-comment"># ─── 并行模板数（默认 25）───</span><br>nuclei -l targets.txt -c 50 -silent<br><br><span class="hljs-comment"># ─── 每模板并行主机数（默认 25）───</span><br>nuclei -l targets.txt -bs 50 -silent<br><br><span class="hljs-comment"># ─── 综合调优（大规模扫描）───</span><br>nuclei -l targets.txt -rl 300 -c 50 -bs 50 -silent<br><br><span class="hljs-comment"># ─── 保守扫描（反 WAF）───</span><br>nuclei -l targets.txt -rl 30 -c 10 -bs 10 -silent<br><br><span class="hljs-comment"># ─── 流式模式（大目标列表）───</span><br>nuclei -l targets.txt -stream -silent<br><br><span class="hljs-comment"># ─── 首个匹配即停止（单目标）───</span><br>nuclei -u https://target.com -spm -silent<br><br><span class="hljs-comment"># ─── 超时设置 ───</span><br>nuclei -u https://target.com -<span class="hljs-built_in">timeout</span> 15 -silent<br><br><span class="hljs-comment"># ─── 重试次数 ───</span><br>nuclei -u https://target.com -retries 3 -silent<br><br><span class="hljs-comment"># ─── 扫描策略 ───</span><br>nuclei -l targets.txt -ss host-spray -silent    <span class="hljs-comment"># 按主机轮询</span><br>nuclei -l targets.txt -ss template-spray -silent <span class="hljs-comment"># 按模板轮询</span><br><br><span class="hljs-comment"># ─── 项目缓存（避免重复请求）───</span><br>nuclei -l targets.txt -project -silent<br><br><span class="hljs-comment"># ─── 禁用 httpx 探测 ───</span><br>nuclei -l targets.txt -nh -silent<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十、请求配置"><a href="#十、请求配置" class="headerlink" title="十、请求配置"></a>十、请求配置</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 自定义 Header ───</span><br>nuclei -u https://target.com -H <span class="hljs-string">&quot;Authorization: Bearer token&quot;</span> -silent<br>nuclei -u https://target.com -H <span class="hljs-string">&quot;Cookie: session=abc123&quot;</span> -silent<br><br><span class="hljs-comment"># ─── 从文件加载 Header ───</span><br>nuclei -u https://target.com -H headers.txt -silent<br><br><span class="hljs-comment"># ─── 跟随重定向 ───</span><br>nuclei -u https://target.com -fr -silent<br><br><span class="hljs-comment"># ─── 自定义变量 ───</span><br>nuclei -u https://target.com -V <span class="hljs-string">&quot;api_key=xxx&quot;</span> -V <span class="hljs-string">&quot;token=yyy&quot;</span> -silent<br><br><span class="hljs-comment"># ─── 启用环境变量 ───</span><br>nuclei -u https://target.com -ev -silent<br><br><span class="hljs-comment"># ─── 自定义 SNI ───</span><br>nuclei -u https://target.com -sni target.com -silent<br><br><span class="hljs-comment"># ─── 强制 HTTP/2 ───</span><br>nuclei -u https://target.com -fh2 -silent<br><br><span class="hljs-comment"># ─── TLS JA3 随机化（反 WAF）───</span><br>nuclei -u https://target.com -tlsi -silent<br><br><span class="hljs-comment"># ─── 客户端证书 ───</span><br>nuclei -u https://target.com -cc client.pem -ck client.key -silent<br><br><span class="hljs-comment"># ─── 自定义 DNS 解析器 ───</span><br>nuclei -u https://target.com -r resolvers.txt -silent<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十一、Interactsh（OAST）"><a href="#十一、Interactsh（OAST）" class="headerlink" title="十一、Interactsh（OAST）"></a>十一、Interactsh（OAST）</h2><p>Interactsh 用于检测<strong>带外漏洞</strong>（SSRF &#x2F; DNS 注入 &#x2F; Blind XSS &#x2F; Log4Shell 等）。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 默认使用公共 Interactsh 服务器 ───</span><br>nuclei -u https://target.com -tags ssrf -silent<br><br><span class="hljs-comment"># ─── 自建 Interactsh 服务器 ───</span><br>nuclei -u https://target.com -iserver oast.example.com -itoken your_token -silent<br><br><span class="hljs-comment"># ─── 禁用 Interactsh（跳过 OAST 模板）───</span><br>nuclei -u https://target.com -ni -silent<br></code></pre></td></tr></table></figure>
+
+<p><strong>涉及 OAST 的常见漏洞</strong>：SSRF &#x2F; DNS 注入 &#x2F; Blind XSS &#x2F; Log4Shell (CVE-2021-44228) &#x2F; 邮件注入 &#x2F; XXE</p>
+<hr>
+<h2 id="十二、DAST（Fuzzing）"><a href="#十二、DAST（Fuzzing）" class="headerlink" title="十二、DAST（Fuzzing）"></a>十二、DAST（Fuzzing）</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 启用 DAST 模板 ───</span><br>nuclei -u https://target.com -dast -silent<br><br><span class="hljs-comment"># ─── DAST 服务模式（实时 Fuzzing）───</span><br>nuclei -u https://target.com -dts -dtsa localhost:9055 -silent<br><br><span class="hljs-comment"># ─── 设置 Fuzzing 激进程度 ───</span><br>nuclei -u https://target.com -dast -fa high -silent<br>nuclei -u https://target.com -dast -fa medium -silent<br>nuclei -u https://target.com -dast -fa low -silent<br><br><span class="hljs-comment"># ─── 指定 Fuzzing 类型 ───</span><br>nuclei -u https://target.com -dast -ft replace -silent<br><br><span class="hljs-comment"># ─── 显示 Fuzzing 点位（调试）───</span><br>nuclei -u https://target.com -dast -dfp -silent<br><br><span class="hljs-comment"># ─── DAST 扫描报告 ───</span><br>nuclei -u https://target.com -dast -dtr dast_report.txt -silent<br><br><span class="hljs-comment"># ─── Fuzzing 范围控制 ───</span><br>nuclei -u https://target.com -dast -cs <span class="hljs-string">&quot;https://target.com/api/*&quot;</span> -silent<br>nuclei -u https://target.com -dast -cos <span class="hljs-string">&quot;https://target.com/static/*&quot;</span> -silent<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十三、Uncover（资产发现）"><a href="#十三、Uncover（资产发现）" class="headerlink" title="十三、Uncover（资产发现）"></a>十三、Uncover（资产发现）</h2><p>集成 Shodan &#x2F; Censys &#x2F; FOFA &#x2F; Hunter &#x2F; ZoomEye 等搜索引擎。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 从 Shodan 搜索并扫描 ───</span><br>nuclei -uc -uq <span class="hljs-string">&quot;http.favicon.hash:-123456&quot;</span> -ue shodan -silent<br><br><span class="hljs-comment"># ─── 从 Censys 搜索 ───</span><br>nuclei -uc -uq <span class="hljs-string">&quot;services.http.response.html:admin&quot;</span> -ue censys -silent<br><br><span class="hljs-comment"># ─── 从 FOFA 搜索 ───</span><br>nuclei -uc -uq <span class="hljs-string">&#x27;title=&quot;后台管理&quot;&#x27;</span> -ue fofa -silent<br><br><span class="hljs-comment"># ─── 从 Hunter 搜索 ───</span><br>nuclei -uc -uq <span class="hljs-string">&#x27;web.title=&quot;管理&quot;&#x27;</span> -ue hunter -silent<br><br><span class="hljs-comment"># ─── 多搜索引擎 ───</span><br>nuclei -uc -uq <span class="hljs-string">&quot;product:nginx&quot;</span> -ue shodan,censys -ul 200 -silent<br><br><span class="hljs-comment"># ─── 自定义返回字段 ───</span><br>nuclei -uc -uq <span class="hljs-string">&quot;port:443&quot;</span> -ue shodan -uf host -silent<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十四、Headless-无头浏览器"><a href="#十四、Headless-无头浏览器" class="headerlink" title="十四、Headless 无头浏览器"></a>十四、Headless 无头浏览器</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 启用 Headless 模板 ───</span><br>nuclei -u https://target.com -headless -silent<br><br><span class="hljs-comment"># ─── 显示浏览器窗口（调试）───</span><br>nuclei -u https://target.com -headless -sb -silent<br><br><span class="hljs-comment"># ─── 页面超时 ───</span><br>nuclei -u https://target.com -headless -page-timeout 30 -silent<br><br><span class="hljs-comment"># ─── Headless 并发控制 ───</span><br>nuclei -l targets.txt -headless -hbs 5 -headc 5 -silent<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十五、模板编写基础"><a href="#十五、模板编写基础" class="headerlink" title="十五、模板编写基础"></a>十五、模板编写基础</h2><h3 id="15-1-最简-HTTP-模板"><a href="#15-1-最简-HTTP-模板" class="headerlink" title="15.1 最简 HTTP 模板"></a>15.1 最简 HTTP 模板</h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">id:</span> <span class="hljs-string">basic-example</span><br><br><span class="hljs-attr">info:</span><br>  <span class="hljs-attr">name:</span> <span class="hljs-string">Basic</span> <span class="hljs-string">Example</span> <span class="hljs-string">Template</span><br>  <span class="hljs-attr">author:</span> <span class="hljs-string">yourname</span><br>  <span class="hljs-attr">severity:</span> <span class="hljs-string">info</span><br><br><span class="hljs-attr">http:</span><br>  <span class="hljs-bullet">-</span> <span class="hljs-attr">method:</span> <span class="hljs-string">GET</span><br>    <span class="hljs-attr">path:</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-string">&quot;<span class="hljs-template-variable">&#123;&#123;BaseURL&#125;&#125;</span>/robots.txt&quot;</span><br><br>    <span class="hljs-attr">matchers:</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-attr">type:</span> <span class="hljs-string">word</span><br>        <span class="hljs-attr">words:</span><br>          <span class="hljs-bullet">-</span> <span class="hljs-string">&quot;Disallow:&quot;</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="15-2-带变量的模板"><a href="#15-2-带变量的模板" class="headerlink" title="15.2 带变量的模板"></a>15.2 带变量的模板</h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">id:</span> <span class="hljs-string">admin-panel-detect</span><br><br><span class="hljs-attr">info:</span><br>  <span class="hljs-attr">name:</span> <span class="hljs-string">Admin</span> <span class="hljs-string">Panel</span> <span class="hljs-string">Detection</span><br>  <span class="hljs-attr">author:</span> <span class="hljs-string">yourname</span><br>  <span class="hljs-attr">severity:</span> <span class="hljs-string">medium</span><br><br><span class="hljs-attr">http:</span><br>  <span class="hljs-bullet">-</span> <span class="hljs-attr">method:</span> <span class="hljs-string">GET</span><br>    <span class="hljs-attr">path:</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-string">&quot;<span class="hljs-template-variable">&#123;&#123;BaseURL&#125;&#125;</span>/admin&quot;</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-string">&quot;<span class="hljs-template-variable">&#123;&#123;BaseURL&#125;&#125;</span>/administrator&quot;</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-string">&quot;<span class="hljs-template-variable">&#123;&#123;BaseURL&#125;&#125;</span>/wp-admin&quot;</span><br><br>    <span class="hljs-attr">matchers-condition:</span> <span class="hljs-string">and</span><br>    <span class="hljs-attr">matchers:</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-attr">type:</span> <span class="hljs-string">status</span><br>        <span class="hljs-attr">status:</span><br>          <span class="hljs-bullet">-</span> <span class="hljs-number">200</span><br><br>      <span class="hljs-bullet">-</span> <span class="hljs-attr">type:</span> <span class="hljs-string">word</span><br>        <span class="hljs-attr">words:</span><br>          <span class="hljs-bullet">-</span> <span class="hljs-string">&quot;login&quot;</span><br>          <span class="hljs-bullet">-</span> <span class="hljs-string">&quot;password&quot;</span><br>        <span class="hljs-attr">condition:</span> <span class="hljs-string">or</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="15-3-带提取器的模板"><a href="#15-3-带提取器的模板" class="headerlink" title="15.3 带提取器的模板"></a>15.3 带提取器的模板</h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">id:</span> <span class="hljs-string">version-extract</span><br><br><span class="hljs-attr">info:</span><br>  <span class="hljs-attr">name:</span> <span class="hljs-string">Version</span> <span class="hljs-string">Extractor</span><br>  <span class="hljs-attr">author:</span> <span class="hljs-string">yourname</span><br>  <span class="hljs-attr">severity:</span> <span class="hljs-string">info</span><br><br><span class="hljs-attr">http:</span><br>  <span class="hljs-bullet">-</span> <span class="hljs-attr">method:</span> <span class="hljs-string">GET</span><br>    <span class="hljs-attr">path:</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-string">&quot;<span class="hljs-template-variable">&#123;&#123;BaseURL&#125;&#125;</span>&quot;</span><br><br>    <span class="hljs-attr">extractors:</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-attr">type:</span> <span class="hljs-string">regex</span><br>        <span class="hljs-attr">regex:</span><br>          <span class="hljs-bullet">-</span> <span class="hljs-string">&quot;version: ([0-9.]+)&quot;</span><br>        <span class="hljs-attr">group:</span> <span class="hljs-number">1</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="15-4-OAST-SSRF-模板"><a href="#15-4-OAST-SSRF-模板" class="headerlink" title="15.4 OAST&#x2F;SSRF 模板"></a>15.4 OAST&#x2F;SSRF 模板</h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">id:</span> <span class="hljs-string">ssrf-basic</span><br><br><span class="hljs-attr">info:</span><br>  <span class="hljs-attr">name:</span> <span class="hljs-string">Basic</span> <span class="hljs-string">SSRF</span> <span class="hljs-string">Detection</span><br>  <span class="hljs-attr">author:</span> <span class="hljs-string">yourname</span><br>  <span class="hljs-attr">severity:</span> <span class="hljs-string">high</span><br><br><span class="hljs-attr">http:</span><br>  <span class="hljs-bullet">-</span> <span class="hljs-attr">method:</span> <span class="hljs-string">GET</span><br>    <span class="hljs-attr">path:</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-string">&quot;<span class="hljs-template-variable">&#123;&#123;BaseURL&#125;&#125;</span>/api/fetch?url=http://<span class="hljs-template-variable">&#123;&#123;interactsh-url&#125;&#125;</span>&quot;</span><br><br>    <span class="hljs-attr">matchers:</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-attr">type:</span> <span class="hljs-string">word</span><br>        <span class="hljs-attr">part:</span> <span class="hljs-string">interactsh_protocol</span><br>        <span class="hljs-attr">words:</span><br>          <span class="hljs-bullet">-</span> <span class="hljs-string">&quot;http&quot;</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="15-5-验证模板"><a href="#15-5-验证模板" class="headerlink" title="15.5 验证模板"></a>15.5 验证模板</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 验证模板语法 ───</span><br>nuclei -t my-template.yaml -validate<br><br><span class="hljs-comment"># ─── 显示模板内容 ───</span><br>nuclei -t my-template.yaml -td<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十六、实战场景速查"><a href="#十六、实战场景速查" class="headerlink" title="十六、实战场景速查"></a>十六、实战场景速查</h2><h3 id="场景-1：全面漏洞扫描"><a href="#场景-1：全面漏洞扫描" class="headerlink" title="场景 1：全面漏洞扫描"></a>场景 1：全面漏洞扫描</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">nuclei -l targets.txt -silent -o vulns.txt<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-2：仅高危-严重漏洞"><a href="#场景-2：仅高危-严重漏洞" class="headerlink" title="场景 2：仅高危 + 严重漏洞"></a>场景 2：仅高危 + 严重漏洞</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">nuclei -l targets.txt -s critical,high -silent -o critical_vulns.txt<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-3：CVE-漏洞专项"><a href="#场景-3：CVE-漏洞专项" class="headerlink" title="场景 3：CVE 漏洞专项"></a>场景 3：CVE 漏洞专项</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">nuclei -l targets.txt -tags cve -silent -o cves.txt<br>nuclei -l targets.txt -<span class="hljs-built_in">id</span> <span class="hljs-string">&quot;CVE-2024-*&quot;</span> -silent   <span class="hljs-comment"># 年度 CVE</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-4：信息泄露检测"><a href="#场景-4：信息泄露检测" class="headerlink" title="场景 4：信息泄露检测"></a>场景 4：信息泄露检测</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">nuclei -l targets.txt -t ~/.nuclei-templates/exposures/ -silent -o exposures.txt<br><span class="hljs-comment"># 或</span><br>nuclei -l targets.txt -tags exposure -silent<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-5：默认登录检测"><a href="#场景-5：默认登录检测" class="headerlink" title="场景 5：默认登录检测"></a>场景 5：默认登录检测</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">nuclei -l targets.txt -tags default-login -silent -o default_logins.txt<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-6：子域名接管检测"><a href="#场景-6：子域名接管检测" class="headerlink" title="场景 6：子域名接管检测"></a>场景 6：子域名接管检测</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">nuclei -l subdomains.txt -tags takeover -silent -o takeovers.txt<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-7：配置错误检测"><a href="#场景-7：配置错误检测" class="headerlink" title="场景 7：配置错误检测"></a>场景 7：配置错误检测</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">nuclei -l targets.txt -tags misconfig -silent -o misconfigs.txt<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-8：特定-CMS-扫描"><a href="#场景-8：特定-CMS-扫描" class="headerlink" title="场景 8：特定 CMS 扫描"></a>场景 8：特定 CMS 扫描</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash">nuclei -l targets.txt -tags wordpress -silent<br>nuclei -l targets.txt -tags joomla -silent<br>nuclei -l targets.txt -tags drupal -silent<br>nuclei -l targets.txt -tags gitlab -silent<br>nuclei -l targets.txt -tags jira -silent<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-9：SSRF-检测"><a href="#场景-9：SSRF-检测" class="headerlink" title="场景 9：SSRF 检测"></a>场景 9：SSRF 检测</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">nuclei -l targets.txt -tags ssrf -silent -o ssrf.txt<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-10：Log4Shell-CVE-2021-44228-检测"><a href="#场景-10：Log4Shell-CVE-2021-44228-检测" class="headerlink" title="场景 10：Log4Shell (CVE-2021-44228) 检测"></a>场景 10：Log4Shell (CVE-2021-44228) 检测</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">nuclei -l targets.txt -<span class="hljs-built_in">id</span> CVE-2021-44228 -silent<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-11：DAST-主动-Fuzzing"><a href="#场景-11：DAST-主动-Fuzzing" class="headerlink" title="场景 11：DAST 主动 Fuzzing"></a>场景 11：DAST 主动 Fuzzing</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">nuclei -u https://target.com -dast -fa medium -silent -o dast_results.txt<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-12：新发现漏洞快速响应"><a href="#场景-12：新发现漏洞快速响应" class="headerlink" title="场景 12：新发现漏洞快速响应"></a>场景 12：新发现漏洞快速响应</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 仅运行最新版本新增模板</span><br>nuclei -l targets.txt -nt -silent -o new_vulns.txt<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-13：与侦察工具联动"><a href="#场景-13：与侦察工具联动" class="headerlink" title="场景 13：与侦察工具联动"></a>场景 13：与侦察工具联动</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># Subfinder → httpx → nuclei</span><br>subfinder -d target.com -silent | httpx -silent | nuclei -s critical,high -silent<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-14：CI-CD-集成"><a href="#场景-14：CI-CD-集成" class="headerlink" title="场景 14：CI&#x2F;CD 集成"></a>场景 14：CI&#x2F;CD 集成</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">nuclei -u https://staging.example.com -s critical,high,medium \<br>  -je results.json -se results.sarif -silent<br><span class="hljs-comment"># SARIF 可被 GitHub Security / GitLab SAST 直接解析</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-15：被动扫描"><a href="#场景-15：被动扫描" class="headerlink" title="场景 15：被动扫描"></a>场景 15：被动扫描</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 只处理已有的 HTTP 响应，不发送新请求</span><br>nuclei -l responses.txt -passive -silent<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-16：SSL-证书问题检测"><a href="#场景-16：SSL-证书问题检测" class="headerlink" title="场景 16：SSL 证书问题检测"></a>场景 16：SSL 证书问题检测</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">nuclei -l targets.txt -pt ssl -tags ssl -silent<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-17：DNS-安全检测"><a href="#场景-17：DNS-安全检测" class="headerlink" title="场景 17：DNS 安全检测"></a>场景 17：DNS 安全检测</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">nuclei -l targets.txt -pt dns -tags dns -silent<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-18：网络服务漏洞"><a href="#场景-18：网络服务漏洞" class="headerlink" title="场景 18：网络服务漏洞"></a>场景 18：网络服务漏洞</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">nuclei -l targets.txt -pt network -tags network -silent<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十七、管道组合"><a href="#十七、管道组合" class="headerlink" title="十七、管道组合"></a>十七、管道组合</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── Subfinder → httpx → nuclei（经典侦察链）───</span><br>subfinder -d target.com -silent | httpx -silent | nuclei -s critical,high -silent<br><br><span class="hljs-comment"># ─── httpx → nuclei ───</span><br>httpx -l hosts.txt -silent | nuclei -silent<br><br><span class="hljs-comment"># ─── ffuf → nuclei ───</span><br>ffuf -w wordlist.txt -u https://target.com/FUZZ -mc 200 -o json -of json -ac | \<br>  jq -r <span class="hljs-string">&#x27;.results[].url&#x27;</span> | nuclei -silent<br><br><span class="hljs-comment"># ─── fscan 结果 → nuclei ───</span><br>grep <span class="hljs-string">&quot;WebTitle&quot;</span> fscan_result.txt | awk <span class="hljs-string">&#x27;&#123;print $3&#125;&#x27;</span> | nuclei -silent<br><br><span class="hljs-comment"># ─── nuclei JSON → jq 提取漏洞 ───</span><br>nuclei -l targets.txt -j -silent | jq -r <span class="hljs-string">&#x27;[.info.name, .matched_at, .info.severity] | @tsv&#x27;</span><br><br><span class="hljs-comment"># ─── nuclei 结果汇总统计 ───</span><br>nuclei -l targets.txt -j -silent | \<br>  jq -r <span class="hljs-string">&#x27;.info.severity&#x27;</span> | <span class="hljs-built_in">sort</span> | <span class="hljs-built_in">uniq</span> -c | <span class="hljs-built_in">sort</span> -rn<br><br><span class="hljs-comment"># ─── Uncover → nuclei ───</span><br>nuclei -uc -uq <span class="hljs-string">&#x27;http.title:&quot;admin&quot;&#x27;</span> -ue shodan -ul 100 -silent<br><br><span class="hljs-comment"># ─── masscan → nuclei ───</span><br>masscan -p80,443,8080 10.0.0.0/8 --rate 10000 -oG masscan.txt<br>grep <span class="hljs-string">&quot;open&quot;</span> masscan.txt | awk <span class="hljs-string">&#x27;&#123;print &quot;https://&quot;$4&#125;&#x27;</span> | nuclei -silent<br><br><span class="hljs-comment"># ─── nuclei → 通知（Slack/Discord）───</span><br>nuclei -l targets.txt -s critical -silent | notify -silent<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十八、常见踩坑"><a href="#十八、常见踩坑" class="headerlink" title="十八、常见踩坑"></a>十八、常见踩坑</h2><h3 id="18-1-模板未更新"><a href="#18-1-模板未更新" class="headerlink" title="18.1 模板未更新"></a>18.1 模板未更新</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ❌ 使用旧模板，遗漏新漏洞</span><br>nuclei -u https://target.com -silent<br><br><span class="hljs-comment"># ✅ 定期更新模板</span><br>nuclei -update-templates<br></code></pre></td></tr></table></figure>
+
+<h3 id="18-2-速率过高被封"><a href="#18-2-速率过高被封" class="headerlink" title="18.2 速率过高被封"></a>18.2 速率过高被封</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ❌ 默认 150 req/s 可能触发 WAF</span><br>nuclei -l targets.txt -silent<br><br><span class="hljs-comment"># ✅ 降低速率</span><br>nuclei -l targets.txt -rl 30 -c 10 -silent<br></code></pre></td></tr></table></figure>
+
+<h3 id="18-3-大规模扫描内存爆满"><a href="#18-3-大规模扫描内存爆满" class="headerlink" title="18.3 大规模扫描内存爆满"></a>18.3 大规模扫描内存爆满</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ❌ 百万目标直接扫描</span><br>nuclei -l huge_list.txt -silent<br><br><span class="hljs-comment"># ✅ 流式模式</span><br>nuclei -l huge_list.txt -stream -silent<br><br><span class="hljs-comment"># ✅ 分批扫描</span><br><span class="hljs-built_in">split</span> -l 10000 huge_list.txt batch_<br><span class="hljs-keyword">for</span> f <span class="hljs-keyword">in</span> batch_*; <span class="hljs-keyword">do</span> nuclei -l <span class="hljs-variable">$f</span> -silent -o <span class="hljs-string">&quot;results_<span class="hljs-variable">$f</span>.txt&quot;</span>; <span class="hljs-keyword">done</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="18-4-目标格式问题"><a href="#18-4-目标格式问题" class="headerlink" title="18.4 目标格式问题"></a>18.4 目标格式问题</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ❌ 目标缺少协议</span><br>nuclei -u target.com -silent   <span class="hljs-comment"># 可能识别为主机名</span><br><br><span class="hljs-comment"># ✅ 加上协议</span><br>nuclei -u https://target.com -silent<br><br><span class="hljs-comment"># ✅ 对于非 HTTP 目标</span><br>nuclei -u target.com:3306 -pt tcp -silent<br></code></pre></td></tr></table></figure>
+
+<h3 id="18-5-OAST-SSRF-模板无结果"><a href="#18-5-OAST-SSRF-模板无结果" class="headerlink" title="18.5 OAST&#x2F;SSRF 模板无结果"></a>18.5 OAST&#x2F;SSRF 模板无结果</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ❌ Interactsh 服务器被目标防火墙拦截</span><br>nuclei -u https://target.com -tags ssrf -silent<br><br><span class="hljs-comment"># ✅ 自建 Interactsh 服务器</span><br>nuclei -u https://target.com -tags ssrf -iserver your-oast.com -silent<br><br><span class="hljs-comment"># ✅ 确保网络可达</span><br>interactsh-server -domain your-oast.com<br></code></pre></td></tr></table></figure>
+
+<h3 id="18-6-Headless-模板报错"><a href="#18-6-Headless-模板报错" class="headerlink" title="18.6 Headless 模板报错"></a>18.6 Headless 模板报错</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ❌ root 用户运行 Headless（Chrome sandbox 问题）</span><br>nuclei -u https://target.com -headless -silent<br><br><span class="hljs-comment"># ✅ 非 root 用户运行</span><br><span class="hljs-comment"># ✅ 或使用 -headless-options 关闭 sandbox</span><br>nuclei -u https://target.com -headless -ho <span class="hljs-string">&quot;--no-sandbox&quot;</span> -silent<br></code></pre></td></tr></table></figure>
+
+<h3 id="18-7-输出过大"><a href="#18-7-输出过大" class="headerlink" title="18.7 输出过大"></a>18.7 输出过大</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ❌ 全量模板 + JSON 输出 = 巨大文件</span><br>nuclei -l targets.txt -j -o results.jsonl<br><br><span class="hljs-comment"># ✅ 仅高危</span><br>nuclei -l targets.txt -j -s critical,high -o results.jsonl<br><br><span class="hljs-comment"># ✅ 省略请求/响应</span><br>nuclei -l targets.txt -j -or -o results.jsonl<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十九、nuclei-vs-其他工具对比"><a href="#十九、nuclei-vs-其他工具对比" class="headerlink" title="十九、nuclei vs 其他工具对比"></a>十九、nuclei vs 其他工具对比</h2><table>
+<thead>
+<tr>
+<th>维度</th>
+<th>nuclei</th>
+<th>Nessus</th>
+<th>Xray</th>
+<th>fscan</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>定位</strong></td>
+<td>模板化漏洞扫描</td>
+<td>商业漏洞扫描</td>
+<td>被动漏洞扫描</td>
+<td>内网综合扫描</td>
+</tr>
+<tr>
+<td><strong>价格</strong></td>
+<td>免费开源</td>
+<td>商业收费</td>
+<td>社区版免费</td>
+<td>免费开源</td>
+</tr>
+<tr>
+<td><strong>模板&#x2F;POC</strong></td>
+<td>10000+ 社区模板</td>
+<td>商业插件</td>
+<td>较少</td>
+<td>内置有限</td>
+</tr>
+<tr>
+<td><strong>速度</strong></td>
+<td>⚡ 极快</td>
+<td>🟡 中等</td>
+<td>🟡 中等</td>
+<td>⚡ 快</td>
+</tr>
+<tr>
+<td><strong>误报率</strong></td>
+<td>🟢 极低</td>
+<td>🟡 中等</td>
+<td>🟡 中等</td>
+<td>🟡 中等</td>
+</tr>
+<tr>
+<td><strong>协议支持</strong></td>
+<td>HTTP&#x2F;DNS&#x2F;TCP&#x2F;SSL&#x2F;WS&#x2F;Code</td>
+<td>全协议</td>
+<td>HTTP</td>
+<td>HTTP&#x2F;端口&#x2F;服务</td>
+</tr>
+<tr>
+<td><strong>DAST</strong></td>
+<td>✅ Fuzzing 模式</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>OAST</strong></td>
+<td>✅ Interactsh</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>无头浏览器</strong></td>
+<td>✅ Headless</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>密码爆破</strong></td>
+<td>✅ default-login 模板</td>
+<td>🟡</td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><strong>资产发现</strong></td>
+<td>✅ Uncover</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>CI&#x2F;CD</strong></td>
+<td>✅ SARIF</td>
+<td>🟡</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>自定义模板</strong></td>
+<td>✅ YAML（极简）</td>
+<td>❌</td>
+<td>🟡</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>社区活跃度</strong></td>
+<td>⭐⭐⭐⭐⭐</td>
+<td>N&#x2F;A</td>
+<td>⭐⭐⭐</td>
+<td>⭐⭐⭐⭐</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="速查表"><a href="#速查表" class="headerlink" title="速查表"></a>速查表</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 基础扫描</span><br>nuclei -u https://target.com -silent<br><br><span class="hljs-comment"># 仅高危 + 严重</span><br>nuclei -u https://target.com -s critical,high -silent<br><br><span class="hljs-comment"># CVE 扫描</span><br>nuclei -l targets.txt -tags cve -silent<br><br><span class="hljs-comment"># 信息泄露</span><br>nuclei -l targets.txt -tags exposure -silent<br><br><span class="hljs-comment"># 默认登录</span><br>nuclei -l targets.txt -tags default-login -silent<br><br><span class="hljs-comment"># 配置错误</span><br>nuclei -l targets.txt -tags misconfig -silent<br><br><span class="hljs-comment"># SSRF</span><br>nuclei -l targets.txt -tags ssrf -silent<br><br><span class="hljs-comment"># WordPress</span><br>nuclei -l targets.txt -tags wordpress -silent<br><br><span class="hljs-comment"># 子域名接管</span><br>nuclei -l subdomains.txt -tags takeover -silent<br><br><span class="hljs-comment"># DAST Fuzzing</span><br>nuclei -u https://target.com -dast -fa medium -silent<br><br><span class="hljs-comment"># 新漏洞</span><br>nuclei -l targets.txt -nt -silent<br><br><span class="hljs-comment"># 自动扫描</span><br>nuclei -u https://target.com -as -silent<br><br><span class="hljs-comment"># JSON 输出</span><br>nuclei -l targets.txt -j -s critical,high -o results.jsonl -silent<br><br><span class="hljs-comment"># 更新模板</span><br>nuclei -update-templates<br><br><span class="hljs-comment"># Subfinder → httpx → nuclei</span><br>subfinder -d target.com -silent | httpx -silent | nuclei -s critical,high -silent<br><br><span class="hljs-comment"># 限速扫描</span><br>nuclei -l targets.txt -rl 30 -c 10 -silent<br><br><span class="hljs-comment"># Uncover + nuclei</span><br>nuclei -uc -uq <span class="hljs-string">&#x27;http.title:&quot;admin&quot;&#x27;</span> -ue shodan -silent<br></code></pre></td></tr></table></figure>
+
+<hr>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>fscan-使用手册</div>
+      <div>https://xiaobite-hacker.github.io/2026/04/12/nuclei-使用手册/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>xiaobite</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2026年4月12日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2026/04/12/fscan-%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/" title="fscan-使用手册">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">fscan-使用手册</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2026/04/11/CobaltStrike-%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/" title="Cobalt Strike-使用手册">
+                        <span class="hidden-mobile">Cobalt Strike-使用手册</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

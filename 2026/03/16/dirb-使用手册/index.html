@@ -1,0 +1,1132 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/admin.jpg">
+  <link rel="icon" href="/img/admin.jpg">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="xiaobite">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="dirb 实战使用手册 来源：The Dark Raver &#x2F; dirb项目地址：https:&#x2F;&#x2F;sourceforge.net&#x2F;projects&#x2F;dirb&#x2F;   目录 一、概述 二、安装 三、基本语法与参数总览 四、基础扫描 五、扩展名扫描 六、状态码与输出控制 七、请求配置 八、递归与交互式递归 九、代理与认证 十、性能控制 十一、附带工具 十二、内置字典 十三、实战场景速查 十四、">
+<meta property="og:type" content="article">
+<meta property="og:title" content="dirb-使用手册">
+<meta property="og:url" content="https://xiaobite-hacker.github.io/2026/03/16/dirb-%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/index.html">
+<meta property="og:site_name" content="xiaobite">
+<meta property="og:description" content="dirb 实战使用手册 来源：The Dark Raver &#x2F; dirb项目地址：https:&#x2F;&#x2F;sourceforge.net&#x2F;projects&#x2F;dirb&#x2F;   目录 一、概述 二、安装 三、基本语法与参数总览 四、基础扫描 五、扩展名扫描 六、状态码与输出控制 七、请求配置 八、递归与交互式递归 九、代理与认证 十、性能控制 十一、附带工具 十二、内置字典 十三、实战场景速查 十四、">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-03-16T06:09:24.000Z">
+<meta property="article:modified_time" content="2026-04-12T10:37:19.650Z">
+<meta property="article:author" content="xiaobite">
+<meta property="article:tag" content="信息收集工具">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>dirb-使用手册 - xiaobite</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"xiaobite-hacker.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>xiaobite</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/prompt/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>prompt</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="dirb-使用手册"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-03-16 14:09" pubdate>
+          2026年3月16日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          30 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">dirb-使用手册</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="dirb-实战使用手册"><a href="#dirb-实战使用手册" class="headerlink" title="dirb 实战使用手册"></a>dirb 实战使用手册</h1><blockquote>
+<p>来源：The Dark Raver &#x2F; dirb<br>项目地址：<a target="_blank" rel="noopener" href="https://sourceforge.net/projects/dirb/">https://sourceforge.net/projects/dirb/</a></p>
+</blockquote>
+<hr>
+<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
+<li><a href="#%E4%B8%80%E6%A6%82%E8%BF%B0">一、概述</a></li>
+<li><a href="#%E4%BA%8C%E5%AE%89%E8%A3%85">二、安装</a></li>
+<li><a href="#%E4%B8%89%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95%E4%B8%8E%E5%8F%82%E6%95%B0%E6%80%BB%E8%A7%88">三、基本语法与参数总览</a></li>
+<li><a href="#%E5%9B%9B%E5%9F%BA%E7%A1%80%E6%89%AB%E6%8F%8F">四、基础扫描</a></li>
+<li><a href="#%E4%BA%94%E6%89%A9%E5%B1%95%E5%90%8D%E6%89%AB%E6%8F%8F">五、扩展名扫描</a></li>
+<li><a href="#%E5%85%AD%E7%8A%B6%E6%80%81%E7%A0%81%E4%B8%8E%E8%BE%93%E5%87%BA%E6%8E%A7%E5%88%B6">六、状态码与输出控制</a></li>
+<li><a href="#%E4%B8%83%E8%AF%B7%E6%B1%82%E9%85%8D%E7%BD%AE">七、请求配置</a></li>
+<li><a href="#%E5%85%AB%E9%80%92%E5%BD%92%E4%B8%8E%E4%BA%A4%E4%BA%92%E5%BC%8F%E9%80%92%E5%BD%92">八、递归与交互式递归</a></li>
+<li><a href="#%E4%B9%9D%E4%BB%A3%E7%90%86%E4%B8%8E%E8%AE%A4%E8%AF%81">九、代理与认证</a></li>
+<li><a href="#%E5%8D%81%E6%80%A7%E8%83%BD%E6%8E%A7%E5%88%B6">十、性能控制</a></li>
+<li><a href="#%E5%8D%81%E4%B8%80%E9%99%84%E5%B8%A6%E5%B7%A5%E5%85%B7">十一、附带工具</a></li>
+<li><a href="#%E5%8D%81%E4%BA%8C%E5%86%85%E7%BD%AE%E5%AD%97%E5%85%B8">十二、内置字典</a></li>
+<li><a href="#%E5%8D%81%E4%B8%89%E5%AE%9E%E6%88%98%E5%9C%BA%E6%99%AF%E9%80%9F%E6%9F%A5">十三、实战场景速查</a></li>
+<li><a href="#%E5%8D%81%E5%9B%9B%E7%AE%A1%E9%81%93%E7%BB%84%E5%90%88">十四、管道组合</a></li>
+<li><a href="#%E5%8D%81%E4%BA%94%E5%B8%B8%E8%A7%81%E8%B8%A9%E5%9D%91">十五、常见踩坑</a></li>
+<li><a href="#%E5%8D%81%E5%85%ADdirb-vs-ffuf-vs-gobuster-%E5%AF%B9%E6%AF%94">十六、dirb vs ffuf vs gobuster 对比</a></li>
+</ul>
+<hr>
+<h2 id="一、概述"><a href="#一、概述" class="headerlink" title="一、概述"></a>一、概述</h2><p>dirb 是一款经典的 <strong>Web Content Scanner</strong>（Web 内容扫描器），通过基于字典的攻击方式扫描 Web 服务器上<strong>已存在或隐藏的 Web 对象</strong>（目录和文件），并分析响应结果。</p>
+<p><strong>核心特点：</strong></p>
+<ul>
+<li>📦 <strong>Kali 内置</strong>：预装于 Kali Linux</li>
+<li>🔍 <strong>字典驱动</strong>：自带多套字典，也支持自定义</li>
+<li>📂 <strong>递归扫描</strong>：发现目录后自动深入扫描</li>
+<li>🛠 <strong>轻量简单</strong>：参数少，上手快</li>
+<li>📊 <strong>404 智能检测</strong>：自动识别自定义 404 页面</li>
+<li>🔗 <strong>配套工具</strong>：附带 <code>dirb-gendict</code>（字典生成器）和 <code>html2dic</code>（HTML 提词器）</li>
+</ul>
+<p><strong>定位</strong>：dirb 是<strong>内容扫描器</strong>而非漏洞扫描器——它帮你找到隐藏的目录和文件，但不检测其中的漏洞。</p>
+<hr>
+<h2 id="二、安装"><a href="#二、安装" class="headerlink" title="二、安装"></a>二、安装</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── Kali Linux（已预装）───</span><br><span class="hljs-built_in">sudo</span> apt install dirb<br><br><span class="hljs-comment"># ─── Debian / Ubuntu ───</span><br><span class="hljs-built_in">sudo</span> apt install dirb<br><br><span class="hljs-comment"># ─── 从源码编译 ───</span><br><span class="hljs-built_in">sudo</span> apt install libcurl4-openssl-dev<br>git <span class="hljs-built_in">clone</span> https://gitlab.com/kalilinux/packages/dirb.git<br><span class="hljs-built_in">cd</span> dirb<br>./configure<br>make<br><span class="hljs-built_in">sudo</span> make install<br><br><span class="hljs-comment"># ─── 验证安装 ───</span><br>dirb<br><span class="hljs-comment"># 输出 DIRB v2.x By The Dark Raver 表示安装成功</span><br><br><span class="hljs-comment"># ─── 查看内置字典 ───</span><br><span class="hljs-built_in">ls</span> /usr/share/dirb/wordlists/<br><span class="hljs-built_in">ls</span> /usr/share/wordlists/dirb/<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="三、基本语法与参数总览"><a href="#三、基本语法与参数总览" class="headerlink" title="三、基本语法与参数总览"></a>三、基本语法与参数总览</h2><h3 id="3-1-基本语法"><a href="#3-1-基本语法" class="headerlink" title="3.1 基本语法"></a>3.1 基本语法</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">dirb &lt;url_base&gt; [&lt;wordlist_file(s)&gt;] [options]<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><code>&lt;url_base&gt;</code>：目标 URL（必须以 <code>/</code> 结尾，除非使用 <code>-t</code>）</li>
+<li><code>[&lt;wordlist_file(s)&gt;]</code>：字典文件路径（可选，不指定则使用默认字典）</li>
+<li><code>[options]</code>：扫描选项</li>
+</ul>
+<h3 id="3-2-参数总览"><a href="#3-2-参数总览" class="headerlink" title="3.2 参数总览"></a>3.2 参数总览</h3><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>-a &lt;agent&gt;</code></td>
+<td>自定义 User-Agent</td>
+<td><code>Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1)</code></td>
+</tr>
+<tr>
+<td><code>-b</code></td>
+<td>不压缩 URL 中的 <code>/../</code> 和 <code>/./</code> 序列</td>
+<td>压缩</td>
+</tr>
+<tr>
+<td><code>-c &lt;cookie&gt;</code></td>
+<td>设置 Cookie</td>
+<td>无</td>
+</tr>
+<tr>
+<td><code>-E &lt;cert&gt;</code></td>
+<td>使用客户端证书文件</td>
+<td>无</td>
+</tr>
+<tr>
+<td><code>-f</code></td>
+<td>微调 404 检测（更精确地识别自定义 404）</td>
+<td>关闭</td>
+</tr>
+<tr>
+<td><code>-H &lt;header&gt;</code></td>
+<td>添加自定义请求头</td>
+<td>无</td>
+</tr>
+<tr>
+<td><code>-i</code></td>
+<td>不区分大小写搜索</td>
+<td>区分大小写</td>
+</tr>
+<tr>
+<td><code>-l</code></td>
+<td>显示发现的 <code>Location</code> 重定向头</td>
+<td>不显示</td>
+</tr>
+<tr>
+<td><code>-N &lt;code&gt;</code></td>
+<td>忽略指定 HTTP 状态码的响应</td>
+<td>无</td>
+</tr>
+<tr>
+<td><code>-o &lt;file&gt;</code></td>
+<td>保存输出到文件</td>
+<td>无</td>
+</tr>
+<tr>
+<td><code>-p &lt;proxy:port&gt;</code></td>
+<td>使用代理（默认端口 1080）</td>
+<td>无</td>
+</tr>
+<tr>
+<td><code>-P &lt;user:pass&gt;</code></td>
+<td>代理认证</td>
+<td>无</td>
+</tr>
+<tr>
+<td><code>-r</code></td>
+<td><strong>不递归</strong>扫描</td>
+<td>默认递归</td>
+</tr>
+<tr>
+<td><code>-R</code></td>
+<td><strong>交互式递归</strong>（手动选择要扫描的目录）</td>
+<td>关闭</td>
+</tr>
+<tr>
+<td><code>-S</code></td>
+<td>静默模式（不显示测试的词）</td>
+<td>显示</td>
+</tr>
+<tr>
+<td><code>-t</code></td>
+<td>不强制 URL 末尾添加 <code>/</code></td>
+<td>强制添加</td>
+</tr>
+<tr>
+<td><code>-u &lt;user:pass&gt;</code></td>
+<td>HTTP Basic 认证</td>
+<td>无</td>
+</tr>
+<tr>
+<td><code>-v</code></td>
+<td>显示不存在的页面（404 也显示）</td>
+<td>不显示</td>
+</tr>
+<tr>
+<td><code>-w</code></td>
+<td>遇到警告不停止</td>
+<td>停止</td>
+</tr>
+<tr>
+<td><code>-x &lt;file&gt;</code></td>
+<td>从文件加载扩展名列表</td>
+<td>无</td>
+</tr>
+<tr>
+<td><code>-X &lt;ext&gt;</code></td>
+<td>直接指定扩展名（如 <code>.php,.html</code>）</td>
+<td>无</td>
+</tr>
+<tr>
+<td><code>-z &lt;ms&gt;</code></td>
+<td>请求间延迟（毫秒）</td>
+<td>无延迟</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="四、基础扫描"><a href="#四、基础扫描" class="headerlink" title="四、基础扫描"></a>四、基础扫描</h2><h3 id="4-1-最简用法"><a href="#4-1-最简用法" class="headerlink" title="4.1 最简用法"></a>4.1 最简用法</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 使用默认字典扫描 ───</span><br>dirb http://192.168.1.100/<br><br><span class="hljs-comment"># ─── 指定字典文件 ───</span><br>dirb http://192.168.1.100/ /usr/share/wordlists/dirb/common.txt<br><br><span class="hljs-comment"># ─── 扫描 HTTPS 站点 ───</span><br>dirb https://target.com/ /usr/share/wordlists/dirb/common.txt<br></code></pre></td></tr></table></figure>
+
+<h3 id="4-2-输出结果解读"><a href="#4-2-输出结果解读" class="headerlink" title="4.2 输出结果解读"></a>4.2 输出结果解读</h3><figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs nix"><span class="hljs-operator">+</span> http:<span class="hljs-operator">//</span><span class="hljs-number">192.168</span>.<span class="hljs-number">1.100</span><span class="hljs-operator">/</span>admin<span class="hljs-symbol">/</span>     (CODE:<span class="hljs-number">200</span>|SIZE:<span class="hljs-number">1234</span>)   ← 发现的目录<span class="hljs-operator">/</span>文件<br><span class="hljs-operator">==</span><span class="hljs-operator">&gt;</span> <span class="hljs-params">DIRECTORY:</span> http:<span class="hljs-operator">//</span><span class="hljs-number">192.168</span>.<span class="hljs-number">1.100</span><span class="hljs-operator">/</span>config<span class="hljs-symbol">/</span>               ← 发现的目录（将递归扫描）<br>(<span class="hljs-operator">!</span>) <span class="hljs-params">FATAL:</span> Too many errors connecting to host             ← 连接错误<br>(<span class="hljs-operator">!</span>) <span class="hljs-params">WARNING:</span> <span class="hljs-number">404</span> page might be a NOT_FOUND custom page    ← 疑似自定义 <span class="hljs-number">404</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><code>+</code> 前缀：发现的资源（CODE &#x3D; 状态码，SIZE &#x3D; 响应大小）</li>
+<li><code>==&gt; DIRECTORY:</code>：发现的目录（递归模式下会继续扫描）</li>
+<li><code>(!) WARNING</code> &#x2F; <code>(!) FATAL</code>：警告和错误</li>
+</ul>
+<hr>
+<h2 id="五、扩展名扫描"><a href="#五、扩展名扫描" class="headerlink" title="五、扩展名扫描"></a>五、扩展名扫描</h2><h3 id="5-1-直接指定扩展名"><a href="#5-1-直接指定扩展名" class="headerlink" title="5.1 直接指定扩展名"></a>5.1 直接指定扩展名</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 扫描 .php 文件 ───</span><br>dirb http://target.com/ -X .php<br><br><span class="hljs-comment"># ─── 扫描多个扩展名 ───</span><br>dirb http://target.com/ -X .php,.html,.txt<br><br><span class="hljs-comment"># ─── 扫描备份文件后缀 ───</span><br>dirb http://target.com/ -X .bak,.old,.orig,.swp<br></code></pre></td></tr></table></figure>
+
+<h3 id="5-2-从文件加载扩展名"><a href="#5-2-从文件加载扩展名" class="headerlink" title="5.2 从文件加载扩展名"></a>5.2 从文件加载扩展名</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── extensions.txt 内容：每行一个扩展名 ───</span><br><span class="hljs-comment"># .php</span><br><span class="hljs-comment"># .html</span><br><span class="hljs-comment"># .asp</span><br><span class="hljs-comment"># .aspx</span><br><br>dirb http://target.com/ -x extensions.txt<br></code></pre></td></tr></table></figure>
+
+<h3 id="5-3-扩展名扫描的工作原理"><a href="#5-3-扩展名扫描的工作原理" class="headerlink" title="5.3 扩展名扫描的工作原理"></a>5.3 扩展名扫描的工作原理</h3><p>对于字典中的每个词 <code>admin</code>，dirb 会生成：</p>
+<ul>
+<li><code>admin</code>（不带后缀）</li>
+<li><code>admin.php</code></li>
+<li><code>admin.html</code></li>
+<li><code>admin.txt</code></li>
+<li>…（根据指定的扩展名）</li>
+</ul>
+<hr>
+<h2 id="六、状态码与输出控制"><a href="#六、状态码与输出控制" class="headerlink" title="六、状态码与输出控制"></a>六、状态码与输出控制</h2><h3 id="6-1-忽略状态码"><a href="#6-1-忽略状态码" class="headerlink" title="6.1 忽略状态码"></a>6.1 忽略状态码</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 忽略 302 重定向 ───</span><br>dirb http://target.com/ -N 302<br><br><span class="hljs-comment"># ─── 忽略多个状态码（多次使用 -N）───</span><br><span class="hljs-comment"># 注意：dirb 的 -N 每次只能指定一个状态码</span><br><span class="hljs-comment"># 如需忽略多个，可结合管道后处理</span><br>dirb http://target.com/ -N 302 | grep -v <span class="hljs-string">&quot;CODE:403&quot;</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="6-2-显示详细信息"><a href="#6-2-显示详细信息" class="headerlink" title="6.2 显示详细信息"></a>6.2 显示详细信息</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 显示重定向的 Location 头 ───</span><br>dirb http://target.com/ -l<br><br><span class="hljs-comment"># ─── 显示不存在的页面（404）───</span><br>dirb http://target.com/ -v<br><br><span class="hljs-comment"># ─── 静默模式（不显示测试中的词，只显示结果）───</span><br>dirb http://target.com/ -S<br></code></pre></td></tr></table></figure>
+
+<h3 id="6-3-保存输出"><a href="#6-3-保存输出" class="headerlink" title="6.3 保存输出"></a>6.3 保存输出</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 保存扫描结果到文件 ───</span><br>dirb http://target.com/ -o results.txt<br><br><span class="hljs-comment"># ─── 综合使用 ───</span><br>dirb http://target.com/ -o results.txt -S<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="七、请求配置"><a href="#七、请求配置" class="headerlink" title="七、请求配置"></a>七、请求配置</h2><h3 id="7-1-User-Agent"><a href="#7-1-User-Agent" class="headerlink" title="7.1 User-Agent"></a>7.1 User-Agent</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 自定义 User-Agent ───</span><br>dirb http://target.com/ -a <span class="hljs-string">&quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36&quot;</span><br><br><span class="hljs-comment"># ─── 模拟 Google 爬虫 ───</span><br>dirb http://target.com/ -a <span class="hljs-string">&quot;Googlebot/2.1 (+http://www.google.com/bot.html)&quot;</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="7-2-Cookie"><a href="#7-2-Cookie" class="headerlink" title="7.2 Cookie"></a>7.2 Cookie</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 带 Cookie 扫描（需要登录态）───</span><br>dirb http://target.com/ -c <span class="hljs-string">&quot;PHPSESSID=abc123def456&quot;</span><br><br><span class="hljs-comment"># ─── 多个 Cookie ───</span><br>dirb http://target.com/ -c <span class="hljs-string">&quot;session=abc; token=xyz&quot;</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="7-3-自定义请求头"><a href="#7-3-自定义请求头" class="headerlink" title="7.3 自定义请求头"></a>7.3 自定义请求头</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 添加自定义 Header ───</span><br>dirb http://target.com/ -H <span class="hljs-string">&quot;X-Forwarded-For: 127.0.0.1&quot;</span><br><br><span class="hljs-comment"># ─── 添加 Authorization 头 ───</span><br>dirb http://target.com/ -H <span class="hljs-string">&quot;Authorization: Bearer eyJhbGciOi...&quot;</span><br><br><span class="hljs-comment"># ─── 注意：每次 -H 只能添加一个头</span><br><span class="hljs-comment"># 如需多个头，多次使用 -H（部分版本支持）</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="7-4-HTTP-Basic-认证"><a href="#7-4-HTTP-Basic-认证" class="headerlink" title="7.4 HTTP Basic 认证"></a>7.4 HTTP Basic 认证</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── HTTP Basic 认证扫描 ───</span><br>dirb http://target.com/ -u admin:password<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="八、递归与交互式递归"><a href="#八、递归与交互式递归" class="headerlink" title="八、递归与交互式递归"></a>八、递归与交互式递归</h2><h3 id="8-1-默认递归"><a href="#8-1-默认递归" class="headerlink" title="8.1 默认递归"></a>8.1 默认递归</h3><p>dirb 默认开启递归扫描：发现目录后，自动对该目录继续扫描。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 正常递归（默认行为）───</span><br>dirb http://target.com/<br><span class="hljs-comment"># 发现 /admin/ → 自动扫描 /admin/FUZZ</span><br><span class="hljs-comment"># 发现 /admin/panel/ → 自动扫描 /admin/panel/FUZZ</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="8-2-禁用递归"><a href="#8-2-禁用递归" class="headerlink" title="8.2 禁用递归"></a>8.2 禁用递归</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 不递归（只扫一层）───</span><br>dirb http://target.com/ -r<br><br><span class="hljs-comment"># ─── 适用场景：时间紧张、只要顶层目录 ───</span><br>dirb http://target.com/ /usr/share/dirb/wordlists/common.txt -r<br></code></pre></td></tr></table></figure>
+
+<h3 id="8-3-交互式递归（-R）"><a href="#8-3-交互式递归（-R）" class="headerlink" title="8.3 交互式递归（-R）"></a>8.3 交互式递归（-R）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 交互式递归：发现目录后手动选择是否继续 ───</span><br>dirb http://target.com/ -R<br></code></pre></td></tr></table></figure>
+
+<p>运行过程：</p>
+<figure class="highlight fortran"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs fortran">+ http://<span class="hljs-keyword">target</span>.com/admin/ (CODE:<span class="hljs-number">200</span>|<span class="hljs-built_in">SIZE</span>:<span class="hljs-number">5678</span>)<br>==&gt; DIRECTORY: http://<span class="hljs-keyword">target</span>.com/admin/<br><span class="hljs-keyword">Do</span> you want to <span class="hljs-built_in">scan</span> this directory? [Y/n] Y   ← 手动确认<br><span class="hljs-keyword">Do</span> you want to <span class="hljs-built_in">scan</span> this directory? [Y/n] n   ← 跳过<br></code></pre></td></tr></table></figure>
+
+<p><strong>适用场景</strong>：</p>
+<ul>
+<li>大型站点，不想全量递归</li>
+<li>只对特定目录深入（如 <code>/admin/</code>、<code>/api/</code>）</li>
+<li>节省时间和资源</li>
+</ul>
+<hr>
+<h2 id="九、代理与认证"><a href="#九、代理与认证" class="headerlink" title="九、代理与认证"></a>九、代理与认证</h2><h3 id="9-1-代理配置"><a href="#9-1-代理配置" class="headerlink" title="9.1 代理配置"></a>9.1 代理配置</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── HTTP 代理（默认端口 1080）───</span><br>dirb http://target.com/ -p 127.0.0.1:8080<br><br><span class="hljs-comment"># ─── 配合 Burp Suite ───</span><br>dirb http://target.com/ -p 127.0.0.1:8080<br><br><span class="hljs-comment"># ─── 代理 + 代理认证 ───</span><br>dirb http://target.com/ -p 192.168.1.108:3128 -P user:pass<br></code></pre></td></tr></table></figure>
+
+<h3 id="9-2-HTTP-Basic-认证"><a href="#9-2-HTTP-Basic-认证" class="headerlink" title="9.2 HTTP Basic 认证"></a>9.2 HTTP Basic 认证</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 目标站点需要 Basic 认证 ───</span><br>dirb http://target.com/login.php -u <span class="hljs-built_in">test</span>:<span class="hljs-built_in">test</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="9-3-客户端证书（mTLS）"><a href="#9-3-客户端证书（mTLS）" class="headerlink" title="9.3 客户端证书（mTLS）"></a>9.3 客户端证书（mTLS）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 使用客户端证书 ───</span><br>dirb https://target.com/ -E client.pem<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十、性能控制"><a href="#十、性能控制" class="headerlink" title="十、性能控制"></a>十、性能控制</h2><h3 id="10-1-请求延迟"><a href="#10-1-请求延迟" class="headerlink" title="10.1 请求延迟"></a>10.1 请求延迟</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 请求间延迟 100 毫秒（避免被封）───</span><br>dirb http://target.com/ -z 100<br><br><span class="hljs-comment"># ─── 延迟 500 毫秒（更安全）───</span><br>dirb http://target.com/ -z 500<br></code></pre></td></tr></table></figure>
+
+<h3 id="10-2-禁用递归（减少扫描量）"><a href="#10-2-禁用递归（减少扫描量）" class="headerlink" title="10.2 禁用递归（减少扫描量）"></a>10.2 禁用递归（减少扫描量）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 只扫一层，大幅减少请求数 ───</span><br>dirb http://target.com/ -r<br></code></pre></td></tr></table></figure>
+
+<h3 id="10-3-静默模式"><a href="#10-3-静默模式" class="headerlink" title="10.3 静默模式"></a>10.3 静默模式</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 静默模式减少终端输出开销 ───</span><br>dirb http://target.com/ -S<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十一、附带工具"><a href="#十一、附带工具" class="headerlink" title="十一、附带工具"></a>十一、附带工具</h2><p>dirb 附带两个实用工具：</p>
+<h3 id="11-1-dirb-gendict（字典生成器）"><a href="#11-1-dirb-gendict（字典生成器）" class="headerlink" title="11.1 dirb-gendict（字典生成器）"></a>11.1 dirb-gendict（字典生成器）</h3><p>按模式生成字典，支持数字、字母、十六进制等。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 查看帮助 ───</span><br>dirb-gendict -h<br><br><span class="hljs-comment"># ─── 用法 ───</span><br>dirb-gendict -<span class="hljs-built_in">type</span> pattern<br><span class="hljs-comment"># type：</span><br><span class="hljs-comment">#   -n  数字 [0-9]</span><br><span class="hljs-comment">#   -c  小写字母 [a-z]</span><br><span class="hljs-comment">#   -C  大写字母 [A-Z]</span><br><span class="hljs-comment">#   -h  十六进制 [0-f]</span><br><span class="hljs-comment">#   -a  字母数字 [0-9a-z]</span><br><span class="hljs-comment">#   -s  大小写敏感字母数字 [0-9a-zA-Z]</span><br><span class="hljs-comment"># pattern：X 为通配符，会被逐步替换</span><br></code></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 生成数字后缀字典 ───</span><br>dirb-gendict -n backup_X<br><span class="hljs-comment"># 输出：backup_0, backup_1, ... backup_9</span><br><br><span class="hljs-comment"># ─── 生成两位数 ───</span><br>dirb-gendict -n page_XX<br><span class="hljs-comment"># 输出：page_00, page_01, ... page_99</span><br><br><span class="hljs-comment"># ─── 生成小写字母后缀 ───</span><br>dirb-gendict -c test_X<br><span class="hljs-comment"># 输出：test_a, test_b, ... test_z</span><br><br><span class="hljs-comment"># ─── 生成十六进制字典 ───</span><br>dirb-gendict -h session_X<br><span class="hljs-comment"># 输出：session_0, session_1, ... session_f</span><br><br><span class="hljs-comment"># ─── 保存到文件 ───</span><br>dirb-gendict -n admin_X &gt; admin_numbers.txt<br></code></pre></td></tr></table></figure>
+
+<h3 id="11-2-html2dic（HTML-提词器）"><a href="#11-2-html2dic（HTML-提词器）" class="headerlink" title="11.2 html2dic（HTML 提词器）"></a>11.2 html2dic（HTML 提词器）</h3><p>从 HTML 页面中提取单词，生成字典。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 从网页源码生成字典 ───</span><br>curl -s https://target.com/ &gt; page.html<br>html2dic page.html &gt; wordlist.txt<br><br><span class="hljs-comment"># ─── 用途：收集目标网站特有词汇作为字典</span><br><span class="hljs-comment"># 适合社工字典或针对性扫描</span><br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十二、内置字典"><a href="#十二、内置字典" class="headerlink" title="十二、内置字典"></a>十二、内置字典</h2><p>dirb 自带多套字典，位于 <code>/usr/share/dirb/wordlists/</code> 或 <code>/usr/share/wordlists/dirb/</code>：</p>
+<table>
+<thead>
+<tr>
+<th>字典</th>
+<th>说明</th>
+<th>词数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>common.txt</code></td>
+<td>通用目录&#x2F;文件名</td>
+<td>~4,592</td>
+</tr>
+<tr>
+<td><code>big.txt</code></td>
+<td>大型通用字典</td>
+<td>~20,477</td>
+</tr>
+<tr>
+<td><code>small.txt</code></td>
+<td>精简字典</td>
+<td>~1,000</td>
+</tr>
+<tr>
+<td><code>cgi-bin.txt</code></td>
+<td>CGI 脚本专用</td>
+<td>~621</td>
+</tr>
+<tr>
+<td><code>mutations_common.txt</code></td>
+<td>变异字典</td>
+<td>~200</td>
+</tr>
+<tr>
+<td><code>stress.txt</code></td>
+<td>压力测试字典</td>
+<td>~300</td>
+</tr>
+<tr>
+<td><code>vulns.txt</code></td>
+<td>已知漏洞路径</td>
+<td>~150</td>
+</tr>
+</tbody></table>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 查看所有内置字典 ───</span><br><span class="hljs-built_in">ls</span> -la /usr/share/dirb/wordlists/<br><br><span class="hljs-comment"># ─── 使用大字典 ───</span><br>dirb http://target.com/ /usr/share/dirb/wordlists/big.txt<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十三、实战场景速查"><a href="#十三、实战场景速查" class="headerlink" title="十三、实战场景速查"></a>十三、实战场景速查</h2><h3 id="场景-1：标准目录扫描"><a href="#场景-1：标准目录扫描" class="headerlink" title="场景 1：标准目录扫描"></a>场景 1：标准目录扫描</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">dirb http://target.com/ /usr/share/dirb/wordlists/common.txt \<br>  -a <span class="hljs-string">&quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36&quot;</span> \<br>  -o scan_results.txt<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-2：PHP-站点扫描"><a href="#场景-2：PHP-站点扫描" class="headerlink" title="场景 2：PHP 站点扫描"></a>场景 2：PHP 站点扫描</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">dirb http://target.com/ /usr/share/dirb/wordlists/common.txt \<br>  -X .php,.php.bak,.php.old,.phps \<br>  -o php_scan.txt<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-3：后台管理发现"><a href="#场景-3：后台管理发现" class="headerlink" title="场景 3：后台管理发现"></a>场景 3：后台管理发现</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">dirb http://target.com/ /usr/share/dirb/wordlists/big.txt \<br>  -X .php,.html,.asp,.aspx \<br>  -N 302 \<br>  -o admin_scan.txt<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-4：备份文件发现"><a href="#场景-4：备份文件发现" class="headerlink" title="场景 4：备份文件发现"></a>场景 4：备份文件发现</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">dirb http://target.com/ /usr/share/dirb/wordlists/common.txt \<br>  -X .bak,.old,.orig,.swp,.save,.zip,.tar.gz,.rar,.7z \<br>  -o backups.txt<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-5：带登录态扫描"><a href="#场景-5：带登录态扫描" class="headerlink" title="场景 5：带登录态扫描"></a>场景 5：带登录态扫描</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 先用浏览器登录，获取 Cookie ───</span><br>dirb http://target.com/ /usr/share/dirb/wordlists/common.txt \<br>  -c <span class="hljs-string">&quot;PHPSESSID=your_session_id; token=your_token&quot;</span> \<br>  -o authenticated_scan.txt<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-6：隐藏子目录深入扫描"><a href="#场景-6：隐藏子目录深入扫描" class="headerlink" title="场景 6：隐藏子目录深入扫描"></a>场景 6：隐藏子目录深入扫描</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 发现 /admin/ 后深入 ───</span><br>dirb http://target.com/admin/ /usr/share/dirb/wordlists/common.txt \<br>  -X .php \<br>  -o admin_deep.txt<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-7：HTTPS-站点-代理（配合-Burp）"><a href="#场景-7：HTTPS-站点-代理（配合-Burp）" class="headerlink" title="场景 7：HTTPS 站点 + 代理（配合 Burp）"></a>场景 7：HTTPS 站点 + 代理（配合 Burp）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">dirb https://target.com/ /usr/share/dirb/wordlists/common.txt \<br>  -p 127.0.0.1:8080 \<br>  -o results.txt<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-8：自定义-404-页面处理"><a href="#场景-8：自定义-404-页面处理" class="headerlink" title="场景 8：自定义 404 页面处理"></a>场景 8：自定义 404 页面处理</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 站点有自定义 404 页面，开启 -f 微调检测 ───</span><br>dirb http://target.com/ /usr/share/dirb/wordlists/common.txt \<br>  -f \<br>  -o results.txt<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-9：HTTP-Basic-认证站点扫描"><a href="#场景-9：HTTP-Basic-认证站点扫描" class="headerlink" title="场景 9：HTTP Basic 认证站点扫描"></a>场景 9：HTTP Basic 认证站点扫描</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">dirb http://target.com/ /usr/share/dirb/wordlists/common.txt \<br>  -u admin:password \<br>  -o results.txt<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-10：IP-白名单绕过"><a href="#场景-10：IP-白名单绕过" class="headerlink" title="场景 10：IP 白名单绕过"></a>场景 10：IP 白名单绕过</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">dirb http://target.com/ /usr/share/dirb/wordlists/common.txt \<br>  -H <span class="hljs-string">&quot;X-Forwarded-For: 127.0.0.1&quot;</span> \<br>  -H <span class="hljs-string">&quot;X-Real-IP: 127.0.0.1&quot;</span> \<br>  -o results.txt<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-11：大小写不敏感扫描"><a href="#场景-11：大小写不敏感扫描" class="headerlink" title="场景 11：大小写不敏感扫描"></a>场景 11：大小写不敏感扫描</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 目标系统可能是大小写不敏感的（Windows IIS）───</span><br>dirb http://target.com/ /usr/share/dirb/wordlists/common.txt \<br>  -i \<br>  -o results.txt<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-12：交互式递归（选择性深入）"><a href="#场景-12：交互式递归（选择性深入）" class="headerlink" title="场景 12：交互式递归（选择性深入）"></a>场景 12：交互式递归（选择性深入）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 只对感兴趣的目录深入 ───</span><br>dirb http://target.com/ /usr/share/dirb/wordlists/common.txt -R<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-13：静默-延迟（反-WAF）"><a href="#场景-13：静默-延迟（反-WAF）" class="headerlink" title="场景 13：静默 + 延迟（反 WAF）"></a>场景 13：静默 + 延迟（反 WAF）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">dirb http://target.com/ /usr/share/dirb/wordlists/common.txt \<br>  -S -z 200 \<br>  -a <span class="hljs-string">&quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36&quot;</span> \<br>  -o results.txt<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-14：非标准端口"><a href="#场景-14：非标准端口" class="headerlink" title="场景 14：非标准端口"></a>场景 14：非标准端口</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash">dirb http://target.com:8080/ /usr/share/dirb/wordlists/common.txt \<br>  -o results.txt<br><br>dirb https://target.com:8443/ /usr/share/dirb/wordlists/common.txt \<br>  -o results.txt<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-15：自定义字典针对性扫描"><a href="#场景-15：自定义字典针对性扫描" class="headerlink" title="场景 15：自定义字典针对性扫描"></a>场景 15：自定义字典针对性扫描</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 用 dirb-gendict 生成针对性字典 ───</span><br>dirb-gendict -n backup_X &gt; num_dict.txt<br>dirb-gendict -c admin_X &gt;&gt; num_dict.txt<br><br>dirb http://target.com/ num_dict.txt -X .php,.bak -o results.txt<br><br><span class="hljs-comment"># ─── 用 html2dic 提取目标网站词汇 ───</span><br>curl -s http://target.com/ | html2dic &gt; target_words.txt<br>dirb http://target.com/ target_words.txt -o results.txt<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十四、管道组合"><a href="#十四、管道组合" class="headerlink" title="十四、管道组合"></a>十四、管道组合</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── dirb → grep 过滤有用结果 ───</span><br>dirb http://target.com/ -S | grep <span class="hljs-string">&quot;CODE:200&quot;</span><br><br><span class="hljs-comment"># ─── dirb → 提取发现的 URL ───</span><br>dirb http://target.com/ -S | grep <span class="hljs-string">&quot;^+&quot;</span> | awk <span class="hljs-string">&#x27;&#123;print $2&#125;&#x27;</span> &gt; found_urls.txt<br><br><span class="hljs-comment"># ─── dirb → httpx 二次验证 ───</span><br>dirb http://target.com/ -S | grep <span class="hljs-string">&quot;^+&quot;</span> | awk <span class="hljs-string">&#x27;&#123;print $2&#125;&#x27;</span> | \<br>  httpx -silent -status-code -title<br><br><span class="hljs-comment"># ─── dirb → 手动深入扫描 ───</span><br><span class="hljs-comment"># 第一步：顶层扫描</span><br>dirb http://target.com/ -r -o top.txt<br><span class="hljs-comment"># 第二步：对每个发现的目录深入</span><br>dirb http://target.com/admin/ -o admin_deep.txt<br><br><span class="hljs-comment"># ─── Subfinder → dirb ───</span><br>subfinder -d target.com -silent | \<br>  <span class="hljs-keyword">while</span> <span class="hljs-built_in">read</span> sub; <span class="hljs-keyword">do</span><br>    dirb https://<span class="hljs-variable">$sub</span>/ /usr/share/dirb/wordlists/common.txt -S -o <span class="hljs-string">&quot;scan_<span class="hljs-variable">$sub</span>.txt&quot;</span><br>  <span class="hljs-keyword">done</span><br><br><span class="hljs-comment"># ─── dirb 输出 → nuclei 扫描 ───</span><br>dirb http://target.com/ -S | grep <span class="hljs-string">&quot;^+&quot;</span> | awk <span class="hljs-string">&#x27;&#123;print $2&#125;&#x27;</span> | \<br>  nuclei -t exposures/ -o vulns.txt<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十五、常见踩坑"><a href="#十五、常见踩坑" class="headerlink" title="十五、常见踩坑"></a>十五、常见踩坑</h2><h3 id="15-1-URL-末尾缺少"><a href="#15-1-URL-末尾缺少" class="headerlink" title="15.1 URL 末尾缺少 /"></a>15.1 URL 末尾缺少 <code>/</code></h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ❌ 错误：URL 没有结尾 /</span><br>dirb http://target.com<br><br><span class="hljs-comment"># ✅ 正确：加 /</span><br>dirb http://target.com/<br><br><span class="hljs-comment"># ✅ 或使用 -t 禁用强制 /</span><br>dirb http://target.com -t<br></code></pre></td></tr></table></figure>
+
+<h3 id="15-2-自定义-404-页面误报"><a href="#15-2-自定义-404-页面误报" class="headerlink" title="15.2 自定义 404 页面误报"></a>15.2 自定义 404 页面误报</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ❌ 可能产生大量误报（自定义 404 返回 200）</span><br>dirb http://target.com/<br><br><span class="hljs-comment"># ✅ 使用 -f 微调 404 检测</span><br>dirb http://target.com/ -f<br><br><span class="hljs-comment"># ✅ 或用 -N 忽略特定状态码</span><br>dirb http://target.com/ -N 403<br></code></pre></td></tr></table></figure>
+
+<h3 id="15-3-递归扫描深度过大"><a href="#15-3-递归扫描深度过大" class="headerlink" title="15.3 递归扫描深度过大"></a>15.3 递归扫描深度过大</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ❌ 默认递归可能扫描过多（大型站点尤其明显）</span><br>dirb http://target.com/ big.txt<br><br><span class="hljs-comment"># ✅ 禁用递归</span><br>dirb http://target.com/ -r<br><br><span class="hljs-comment"># ✅ 交互式递归（手动选择）</span><br>dirb http://target.com/ -R<br><br><span class="hljs-comment"># ✅ 只扫特定子目录</span><br>dirb http://target.com/admin/ common.txt<br></code></pre></td></tr></table></figure>
+
+<h3 id="15-4-请求速度过快被封"><a href="#15-4-请求速度过快被封" class="headerlink" title="15.4 请求速度过快被封"></a>15.4 请求速度过快被封</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ❌ 默认无延迟，容易触发 WAF</span><br>dirb http://target.com/<br><br><span class="hljs-comment"># ✅ 添加延迟</span><br>dirb http://target.com/ -z 200<br><br><span class="hljs-comment"># ✅ 更换 UA</span><br>dirb http://target.com/ -a <span class="hljs-string">&quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64)&quot;</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="15-5-N-只能指定一个状态码"><a href="#15-5-N-只能指定一个状态码" class="headerlink" title="15.5 -N 只能指定一个状态码"></a>15.5 <code>-N</code> 只能指定一个状态码</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ❌ 不能一次忽略多个状态码</span><br>dirb http://target.com/ -N 404,403<br><br><span class="hljs-comment"># ✅ 用管道后处理过滤</span><br>dirb http://target.com/ -S | grep -v <span class="hljs-string">&quot;CODE:404&quot;</span> | grep -v <span class="hljs-string">&quot;CODE:403&quot;</span><br><br><span class="hljs-comment"># ✅ 或者使用 ffuf（支持多状态码过滤 -fc 404,403）</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="15-6-H-每次只能添加一个请求头"><a href="#15-6-H-每次只能添加一个请求头" class="headerlink" title="15.6 -H 每次只能添加一个请求头"></a>15.6 <code>-H</code> 每次只能添加一个请求头</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ❌ 不能在一个 -H 中添加多个头</span><br>dirb http://target.com/ -H <span class="hljs-string">&quot;Header1: val1\nHeader2: val2&quot;</span><br><br><span class="hljs-comment"># ✅ 分别使用（部分版本支持多次 -H）</span><br>dirb http://target.com/ -H <span class="hljs-string">&quot;X-Forwarded-For: 127.0.0.1&quot;</span><br><br><span class="hljs-comment"># ✅ 复杂场景建议用 ffuf（-H 可多次使用）</span><br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十六、dirb-vs-ffuf-vs-gobuster-对比"><a href="#十六、dirb-vs-ffuf-vs-gobuster-对比" class="headerlink" title="十六、dirb vs ffuf vs gobuster 对比"></a>十六、dirb vs ffuf vs gobuster 对比</h2><table>
+<thead>
+<tr>
+<th>维度</th>
+<th>dirb</th>
+<th>ffuf</th>
+<th>gobuster</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>语言</strong></td>
+<td>C</td>
+<td>Go</td>
+<td>Go</td>
+</tr>
+<tr>
+<td><strong>速度</strong></td>
+<td>🟡 中等</td>
+<td>⚡ 极快</td>
+<td>⚡ 快</td>
+</tr>
+<tr>
+<td><strong>上手难度</strong></td>
+<td>🟢 最低</td>
+<td>🟡 中</td>
+<td>🟢 低</td>
+</tr>
+<tr>
+<td><strong>参数复杂度</strong></td>
+<td>🟢 简单</td>
+<td>🔴 复杂</td>
+<td>🟡 适中</td>
+</tr>
+<tr>
+<td><strong>递归扫描</strong></td>
+<td>✅ 默认开启</td>
+<td>✅ 需 <code>-recursion</code></td>
+<td>❌ 不支持</td>
+</tr>
+<tr>
+<td><strong>交互式递归</strong></td>
+<td>✅ <code>-R</code></td>
+<td>✅ 交互模式</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>FUZZ 关键字</strong></td>
+<td>❌</td>
+<td>✅ 任意位置</td>
+<td>🟡 fuzz 模式</td>
+</tr>
+<tr>
+<td><strong>扩展名扫描</strong></td>
+<td>✅ <code>-X</code></td>
+<td>✅ <code>-e</code></td>
+<td>✅ <code>-x</code></td>
+</tr>
+<tr>
+<td><strong>自动校准 404</strong></td>
+<td>🟡 <code>-f</code>（基础）</td>
+<td>✅ <code>-ac</code>（强）</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>过滤器</strong></td>
+<td>🟡 仅 <code>-N</code></td>
+<td>✅ 6 维度</td>
+<td>✅ 丰富</td>
+</tr>
+<tr>
+<td><strong>多字典模式</strong></td>
+<td>❌</td>
+<td>✅ clusterbomb&#x2F;pitchfork</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>代理支持</strong></td>
+<td>✅ <code>-p</code></td>
+<td>✅ <code>-x</code></td>
+<td>✅ <code>-p</code></td>
+</tr>
+<tr>
+<td><strong>Cookie</strong></td>
+<td>✅ <code>-c</code></td>
+<td>✅ <code>-b</code></td>
+<td>✅ <code>-c</code></td>
+</tr>
+<tr>
+<td><strong>自定义 UA</strong></td>
+<td>✅ <code>-a</code></td>
+<td>✅ <code>-H</code></td>
+<td>✅ <code>-a</code></td>
+</tr>
+<tr>
+<td><strong>输出格式</strong></td>
+<td>🟡 纯文本</td>
+<td>✅ json&#x2F;html&#x2F;md&#x2F;csv</td>
+<td>🟡 纯文本</td>
+</tr>
+<tr>
+<td><strong>DNS 爆破</strong></td>
+<td>❌</td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><strong>VHost 发现</strong></td>
+<td>❌</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><strong>字典生成</strong></td>
+<td>✅ <code>dirb-gendict</code></td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>HTML 提词</strong></td>
+<td>✅ <code>html2dic</code></td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>内置字典</strong></td>
+<td>✅ 自带 7 套</td>
+<td>❌ 需自备</td>
+<td>❌ 需自备</td>
+</tr>
+<tr>
+<td><strong>Kali 预装</strong></td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><strong>HTTP&#x2F;2</strong></td>
+<td>❌</td>
+<td>✅</td>
+<td>❌</td>
+</tr>
+</tbody></table>
+<p><strong>选择建议：</strong></p>
+<ul>
+<li>🚀 <strong>快速入门 + 简单扫描</strong>：dirb（参数少，自带字典）</li>
+<li>🎯 <strong>灵活 Fuzzing + 复杂过滤</strong>：ffuf</li>
+<li>⚡ <strong>多协议 + DNS 爆破</strong>：gobuster</li>
+<li>🔄 <strong>深度递归 + 交互控制</strong>：dirb <code>-R</code> 或 ffuf 交互模式</li>
+</ul>
+<p><strong>典型工作流</strong>：用 dirb 做快速初筛 → 发现可疑目录 → 用 ffuf 深入测试</p>
+<hr>
+<h2 id="速查表"><a href="#速查表" class="headerlink" title="速查表"></a>速查表</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 基础扫描</span><br>dirb http://target.com/<br><br><span class="hljs-comment"># 指定字典 + 扩展名</span><br>dirb http://target.com/ /usr/share/dirb/wordlists/common.txt -X .php,.html<br><br><span class="hljs-comment"># 带 Cookie 登录态</span><br>dirb http://target.com/ -c <span class="hljs-string">&quot;PHPSESSID=abc123&quot;</span><br><br><span class="hljs-comment"># HTTP Basic 认证</span><br>dirb http://target.com/ -u admin:password<br><br><span class="hljs-comment"># 代理（Burp）</span><br>dirb http://target.com/ -p 127.0.0.1:8080<br><br><span class="hljs-comment"># 不递归</span><br>dirb http://target.com/ -r<br><br><span class="hljs-comment"># 交互式递归</span><br>dirb http://target.com/ -R<br><br><span class="hljs-comment"># 忽略 302 + 延迟 100ms</span><br>dirb http://target.com/ -N 302 -z 100<br><br><span class="hljs-comment"># 自定义 404 检测</span><br>dirb http://target.com/ -f<br><br><span class="hljs-comment"># 静默模式 + 保存输出</span><br>dirb http://target.com/ -S -o results.txt<br><br><span class="hljs-comment"># 备份文件扫描</span><br>dirb http://target.com/ -X .bak,.old,.orig,.swp,.zip,.tar.gz<br><br><span class="hljs-comment"># 生成数字字典</span><br>dirb-gendict -n admin_X &gt; nums.txt<br><br><span class="hljs-comment"># 从 HTML 提取字典</span><br>curl -s http://target.com/ | html2dic &gt; words.txt<br></code></pre></td></tr></table></figure>
+
+<hr>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86%E5%B7%A5%E5%85%B7/" class="print-no-link">#信息收集工具</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>dirb-使用手册</div>
+      <div>https://xiaobite-hacker.github.io/2026/03/16/dirb-使用手册/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>xiaobite</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2026年3月16日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2026/03/25/httpx-%E6%88%98%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/" title="httpx-使用手册">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">httpx-使用手册</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2026/03/09/rustscan-%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/" title="rustscan-使用手册">
+                        <span class="hidden-mobile">rustscan-使用手册</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

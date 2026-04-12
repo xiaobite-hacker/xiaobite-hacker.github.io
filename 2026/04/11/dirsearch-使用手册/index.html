@@ -1,0 +1,1355 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/admin.jpg">
+  <link rel="icon" href="/img/admin.jpg">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="xiaobite">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="dirsearch 实战使用手册 来源：maurosoria&#x2F;dirsearch官方仓库：https:&#x2F;&#x2F;github.com&#x2F;maurosoria&#x2F;dirsearch   目录 一、概述 二、安装 三、基本语法与参数总览 四、字典与扩展名机制 五、基础扫描 六、扩展名扫描 七、状态码与响应过滤 八、递归扫描 九、请求配置 十、代理与认证 十一、连接与性能控制 十二、输出与格式 十三、会">
+<meta property="og:type" content="article">
+<meta property="og:title" content="dirsearch-使用手册">
+<meta property="og:url" content="https://xiaobite-hacker.github.io/2026/04/11/dirsearch-%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/index.html">
+<meta property="og:site_name" content="xiaobite">
+<meta property="og:description" content="dirsearch 实战使用手册 来源：maurosoria&#x2F;dirsearch官方仓库：https:&#x2F;&#x2F;github.com&#x2F;maurosoria&#x2F;dirsearch   目录 一、概述 二、安装 三、基本语法与参数总览 四、字典与扩展名机制 五、基础扫描 六、扩展名扫描 七、状态码与响应过滤 八、递归扫描 九、请求配置 十、代理与认证 十一、连接与性能控制 十二、输出与格式 十三、会">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-04-11T03:09:24.000Z">
+<meta property="article:modified_time" content="2026-04-12T10:34:11.712Z">
+<meta property="article:author" content="xiaobite">
+<meta property="article:tag" content="信息收集工具">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>dirsearch-使用手册 - xiaobite</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"xiaobite-hacker.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>xiaobite</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/prompt/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>prompt</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="dirsearch-使用手册"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-04-11 11:09" pubdate>
+          2026年4月11日 上午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.7k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          40 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">dirsearch-使用手册</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="dirsearch-实战使用手册"><a href="#dirsearch-实战使用手册" class="headerlink" title="dirsearch 实战使用手册"></a>dirsearch 实战使用手册</h1><blockquote>
+<p>来源：maurosoria&#x2F;dirsearch<br>官方仓库：<a target="_blank" rel="noopener" href="https://github.com/maurosoria/dirsearch">https://github.com/maurosoria/dirsearch</a></p>
+</blockquote>
+<hr>
+<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
+<li><a href="#%E4%B8%80%E6%A6%82%E8%BF%B0">一、概述</a></li>
+<li><a href="#%E4%BA%8C%E5%AE%89%E8%A3%85">二、安装</a></li>
+<li><a href="#%E4%B8%89%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95%E4%B8%8E%E5%8F%82%E6%95%B0%E6%80%BB%E8%A7%88">三、基本语法与参数总览</a></li>
+<li><a href="#%E5%9B%9B%E5%AD%97%E5%85%B8%E4%B8%8E%E6%89%A9%E5%B1%95%E5%90%8D%E6%9C%BA%E5%88%B6">四、字典与扩展名机制</a></li>
+<li><a href="#%E4%BA%94%E5%9F%BA%E7%A1%80%E6%89%AB%E6%8F%8F">五、基础扫描</a></li>
+<li><a href="#%E5%85%AD%E6%89%A9%E5%B1%95%E5%90%8D%E6%89%AB%E6%8F%8F">六、扩展名扫描</a></li>
+<li><a href="#%E4%B8%83%E7%8A%B6%E6%80%81%E7%A0%81%E4%B8%8E%E5%93%8D%E5%BA%94%E8%BF%87%E6%BB%A4">七、状态码与响应过滤</a></li>
+<li><a href="#%E5%85%AB%E9%80%92%E5%BD%92%E6%89%AB%E6%8F%8F">八、递归扫描</a></li>
+<li><a href="#%E4%B9%9D%E8%AF%B7%E6%B1%82%E9%85%8D%E7%BD%AE">九、请求配置</a></li>
+<li><a href="#%E5%8D%81%E4%BB%A3%E7%90%86%E4%B8%8E%E8%AE%A4%E8%AF%81">十、代理与认证</a></li>
+<li><a href="#%E5%8D%81%E4%B8%80%E8%BF%9E%E6%8E%A5%E4%B8%8E%E6%80%A7%E8%83%BD%E6%8E%A7%E5%88%B6">十一、连接与性能控制</a></li>
+<li><a href="#%E5%8D%81%E4%BA%8C%E8%BE%93%E5%87%BA%E4%B8%8E%E6%A0%BC%E5%BC%8F">十二、输出与格式</a></li>
+<li><a href="#%E5%8D%81%E4%B8%89%E4%BC%9A%E8%AF%9D%E7%AE%A1%E7%90%86">十三、会话管理</a></li>
+<li><a href="#%E5%8D%81%E5%9B%9B%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6">十四、配置文件</a></li>
+<li><a href="#%E5%8D%81%E4%BA%94%E9%AB%98%E7%BA%A7%E5%8A%9F%E8%83%BD">十五、高级功能</a></li>
+<li><a href="#%E5%8D%81%E5%85%AD%E5%AE%9E%E6%88%98%E5%9C%BA%E6%99%AF%E9%80%9F%E6%9F%A5">十六、实战场景速查</a></li>
+<li><a href="#%E5%8D%81%E4%B8%83%E7%AE%A1%E9%81%93%E7%BB%84%E5%90%88">十七、管道组合</a></li>
+<li><a href="#%E5%8D%81%E5%85%AB%E5%B8%B8%E8%A7%81%E8%B8%A9%E5%9D%91">十八、常见踩坑</a></li>
+<li><a href="#%E5%8D%81%E4%B9%9Ddirsearch-vs-ffuf-vs-dirb-vs-gobuster-%E5%AF%B9%E6%AF%94">十九、dirsearch vs ffuf vs dirb vs gobuster 对比</a></li>
+</ul>
+<hr>
+<h2 id="一、概述"><a href="#一、概述" class="headerlink" title="一、概述"></a>一、概述</h2><p>dirsearch 是一款基于 Python 开发的<strong>高级 Web 路径暴力破解工具</strong>，用于发现 Web 服务器上隐藏的目录和文件。相比 dirb 等经典工具，dirsearch 功能更丰富、过滤更精准、输出格式更多样。</p>
+<p><strong>核心特点：</strong></p>
+<ul>
+<li>🎯 <strong>精准过滤</strong>：支持状态码、大小、文本、正则、重定向等多维度过滤</li>
+<li>📂 <strong>智能递归</strong>：普通递归 &#x2F; 深度递归 &#x2F; 强制递归，灵活控制</li>
+<li>📋 <strong>丰富输出</strong>：支持 JSON &#x2F; XML &#x2F; HTML &#x2F; CSV &#x2F; MD &#x2F; SQLite &#x2F; MySQL &#x2F; PostgreSQL</li>
+<li>🔄 <strong>会话管理</strong>：支持中断后恢复扫描</li>
+<li>🔧 <strong>扩展名机制</strong>：<code>%EXT%</code> 占位符 + 强制扩展 + 覆盖扩展</li>
+<li>🎲 <strong>随机 UA</strong>：每次请求随机 User-Agent</li>
+<li>🌐 <strong>代理池</strong>：支持多代理轮换 + Tor</li>
+<li>📦 <strong>内置字典</strong>：自带分类字典（common &#x2F; conf &#x2F; vcs &#x2F; backups &#x2F; db &#x2F; logs &#x2F; keys &#x2F; web）</li>
+</ul>
+<hr>
+<h2 id="二、安装"><a href="#二、安装" class="headerlink" title="二、安装"></a>二、安装</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── Git 安装（推荐）───</span><br>git <span class="hljs-built_in">clone</span> https://github.com/maurosoria/dirsearch.git --depth 1<br><span class="hljs-built_in">cd</span> dirsearch<br>pip3 install -r requirements.txt<br><br><span class="hljs-comment"># ─── pip 安装 ───</span><br>pip3 install dirsearch<br><br><span class="hljs-comment"># ─── Kali Linux ───</span><br><span class="hljs-built_in">sudo</span> apt install dirsearch<br><br><span class="hljs-comment"># ─── Docker ───</span><br>docker build -t <span class="hljs-string">&quot;dirsearch:v0.4.3&quot;</span> .<br><br><span class="hljs-comment"># ─── 独立二进制（无需 Python）───</span><br><span class="hljs-comment"># 从 https://github.com/maurosoria/dirsearch/releases 下载</span><br><span class="hljs-built_in">chmod</span> +x dirsearch-linux-amd64<br>./dirsearch-linux-amd64 -u https://target<br><br><span class="hljs-comment"># ─── 验证安装 ───</span><br>dirsearch --version<br>dirsearch -h<br></code></pre></td></tr></table></figure>
+
+<p><strong>依赖</strong>：Python 3.9+</p>
+<hr>
+<h2 id="三、基本语法与参数总览"><a href="#三、基本语法与参数总览" class="headerlink" title="三、基本语法与参数总览"></a>三、基本语法与参数总览</h2><h3 id="3-1-基本语法"><a href="#3-1-基本语法" class="headerlink" title="3.1 基本语法"></a>3.1 基本语法</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">dirsearch -u &lt;URL&gt; -e &lt;扩展名&gt; [选项]<br><span class="hljs-comment"># 或</span><br>python3 dirsearch.py -u &lt;URL&gt; -e &lt;扩展名&gt; [选项]<br></code></pre></td></tr></table></figure>
+
+<h3 id="3-2-参数总览"><a href="#3-2-参数总览" class="headerlink" title="3.2 参数总览"></a>3.2 参数总览</h3><h4 id="目标设置"><a href="#目标设置" class="headerlink" title="目标设置"></a>目标设置</h4><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>-u URL</code></td>
+<td>目标 URL（可多次使用）</td>
+</tr>
+<tr>
+<td><code>-l PATH</code></td>
+<td>URL 列表文件</td>
+</tr>
+<tr>
+<td><code>--stdin</code></td>
+<td>从 STDIN 读取 URL</td>
+</tr>
+<tr>
+<td><code>--cidr=CIDR</code></td>
+<td>CIDR 网段目标</td>
+</tr>
+<tr>
+<td><code>--raw=PATH</code></td>
+<td>加载原始 HTTP 请求文件</td>
+</tr>
+<tr>
+<td><code>--scheme=SCHEME</code></td>
+<td>指定协议（http&#x2F;https）</td>
+</tr>
+<tr>
+<td><code>--nmap-report=PATH</code></td>
+<td>从 nmap 报告加载目标</td>
+</tr>
+</tbody></table>
+<h4 id="字典设置"><a href="#字典设置" class="headerlink" title="字典设置"></a>字典设置</h4><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>-w WORDLISTS</code></td>
+<td>自定义字典（逗号分隔多个）</td>
+</tr>
+<tr>
+<td><code>--wordlist-categories=CATEGORIES</code></td>
+<td>内置分类字典（common,conf,vcs,backups,db,logs,keys,web,all）</td>
+</tr>
+<tr>
+<td><code>-e EXTENSIONS</code></td>
+<td>扩展名（逗号分隔，如 <code>php,asp</code>）</td>
+</tr>
+<tr>
+<td><code>-f</code></td>
+<td>强制扩展：对每个词追加扩展名 + <code>/</code></td>
+</tr>
+<tr>
+<td><code>-O</code></td>
+<td>覆盖扩展：替换已有扩展名</td>
+</tr>
+<tr>
+<td><code>--exclude-extensions=EXT</code></td>
+<td>排除扩展名</td>
+</tr>
+<tr>
+<td><code>--remove-extensions</code></td>
+<td>移除路径中的扩展名</td>
+</tr>
+<tr>
+<td><code>--prefixes=PREFIX</code></td>
+<td>添加前缀</td>
+</tr>
+<tr>
+<td><code>--suffixes=SUFFIX</code></td>
+<td>添加后缀（忽略目录）</td>
+</tr>
+<tr>
+<td><code>-U</code></td>
+<td>转大写</td>
+</tr>
+<tr>
+<td><code>-L</code></td>
+<td>转小写</td>
+</tr>
+<tr>
+<td><code>-C</code></td>
+<td>首字母大写</td>
+</tr>
+</tbody></table>
+<h4 id="通用设置"><a href="#通用设置" class="headerlink" title="通用设置"></a>通用设置</h4><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>-t THREADS</code></td>
+<td>线程数</td>
+</tr>
+<tr>
+<td><code>--async</code></td>
+<td>异步模式</td>
+</tr>
+<tr>
+<td><code>-r</code></td>
+<td>递归扫描</td>
+</tr>
+<tr>
+<td><code>--deep-recursive</code></td>
+<td>深度递归（每层目录都递归）</td>
+</tr>
+<tr>
+<td><code>--force-recursive</code></td>
+<td>对所有发现路径递归（不仅目录）</td>
+</tr>
+<tr>
+<td><code>-R DEPTH</code></td>
+<td>最大递归深度</td>
+</tr>
+<tr>
+<td><code>--recursion-status=CODES</code></td>
+<td>递归的状态码条件</td>
+</tr>
+<tr>
+<td><code>--subdirs=SUBDIRS</code></td>
+<td>扫描指定子目录</td>
+</tr>
+<tr>
+<td><code>--exclude-subdirs=SUBDIRS</code></td>
+<td>排除子目录</td>
+</tr>
+<tr>
+<td><code>--max-time=SECONDS</code></td>
+<td>最大运行时间</td>
+</tr>
+<tr>
+<td><code>--exit-on-error</code></td>
+<td>遇到错误即退出</td>
+</tr>
+</tbody></table>
+<h4 id="状态码与过滤"><a href="#状态码与过滤" class="headerlink" title="状态码与过滤"></a>状态码与过滤</h4><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>-i CODES</code></td>
+<td>包含状态码（如 <code>200,300-399</code>）</td>
+</tr>
+<tr>
+<td><code>-x CODES</code></td>
+<td>排除状态码（如 <code>404,500-599</code>）</td>
+</tr>
+<tr>
+<td><code>--exclude-sizes=SIZES</code></td>
+<td>按大小排除（如 <code>0B,4KB</code>）</td>
+</tr>
+<tr>
+<td><code>--exclude-text=TEXT</code></td>
+<td>按文本内容排除</td>
+</tr>
+<tr>
+<td><code>--exclude-regex=REGEX</code></td>
+<td>按正则排除</td>
+</tr>
+<tr>
+<td><code>--exclude-redirect=STRING</code></td>
+<td>按重定向 URL 排除</td>
+</tr>
+<tr>
+<td><code>--exclude-response=PATH</code></td>
+<td>排除与指定路径响应相似的结果</td>
+</tr>
+<tr>
+<td><code>--skip-on-status=CODES</code></td>
+<td>遇到此状态码跳过目标</td>
+</tr>
+<tr>
+<td><code>--min-response-size=LEN</code></td>
+<td>最小响应长度</td>
+</tr>
+<tr>
+<td><code>--max-response-size=LEN</code></td>
+<td>最大响应长度</td>
+</tr>
+</tbody></table>
+<h4 id="请求设置"><a href="#请求设置" class="headerlink" title="请求设置"></a>请求设置</h4><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>-m METHOD</code></td>
+<td>HTTP 方法（默认 GET）</td>
+</tr>
+<tr>
+<td><code>-d DATA</code></td>
+<td>POST 数据</td>
+</tr>
+<tr>
+<td><code>--data-file=PATH</code></td>
+<td>从文件加载 POST 数据</td>
+</tr>
+<tr>
+<td><code>-H HEADERS</code></td>
+<td>自定义 Header（可多次）</td>
+</tr>
+<tr>
+<td><code>--headers-file=PATH</code></td>
+<td>从文件加载 Header</td>
+</tr>
+<tr>
+<td><code>-F</code></td>
+<td>跟随重定向</td>
+</tr>
+<tr>
+<td><code>--random-agent</code></td>
+<td>随机 User-Agent</td>
+</tr>
+<tr>
+<td><code>--auth=CREDENTIAL</code></td>
+<td>认证凭据（user:pass 或 token）</td>
+</tr>
+<tr>
+<td><code>--auth-type=TYPE</code></td>
+<td>认证类型（basic &#x2F; digest &#x2F; bearer &#x2F; ntlm &#x2F; jwt）</td>
+</tr>
+<tr>
+<td><code>--user-agent=UA</code></td>
+<td>自定义 UA</td>
+</tr>
+<tr>
+<td><code>--cookie=COOKIE</code></td>
+<td>Cookie</td>
+</tr>
+<tr>
+<td><code>--cert-file=PATH</code></td>
+<td>客户端证书</td>
+</tr>
+<tr>
+<td><code>--key-file=PATH</code></td>
+<td>客户端证书私钥</td>
+</tr>
+</tbody></table>
+<h4 id="连接设置"><a href="#连接设置" class="headerlink" title="连接设置"></a>连接设置</h4><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>--timeout=TIMEOUT</code></td>
+<td>连接超时</td>
+</tr>
+<tr>
+<td><code>--delay=DELAY</code></td>
+<td>请求间延迟</td>
+</tr>
+<tr>
+<td><code>-p PROXY</code></td>
+<td>代理 URL（HTTP&#x2F;SOCKS，可多次）</td>
+</tr>
+<tr>
+<td><code>--proxies-file=PATH</code></td>
+<td>代理列表文件（轮换使用）</td>
+</tr>
+<tr>
+<td><code>--proxy-auth=CRED</code></td>
+<td>代理认证</td>
+</tr>
+<tr>
+<td><code>--replay-proxy=PROXY</code></td>
+<td>仅将发现路径发代理</td>
+</tr>
+<tr>
+<td><code>--tor</code></td>
+<td>使用 Tor 网络</td>
+</tr>
+<tr>
+<td><code>--max-rate=RATE</code></td>
+<td>每秒最大请求数</td>
+</tr>
+<tr>
+<td><code>--retries=N</code></td>
+<td>失败重试次数</td>
+</tr>
+<tr>
+<td><code>--ip=IP</code></td>
+<td>指定服务器 IP</td>
+</tr>
+<tr>
+<td><code>--interface=IFACE</code></td>
+<td>指定网络接口</td>
+</tr>
+</tbody></table>
+<h4 id="输出设置"><a href="#输出设置" class="headerlink" title="输出设置"></a>输出设置</h4><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>-o PATH</code></td>
+<td>输出文件路径</td>
+</tr>
+<tr>
+<td><code>--format=FORMAT</code></td>
+<td>输出格式（simple &#x2F; plain &#x2F; json &#x2F; xml &#x2F; md &#x2F; csv &#x2F; html &#x2F; sqlite &#x2F; mysql &#x2F; postgresql）</td>
+</tr>
+<tr>
+<td><code>--log=PATH</code></td>
+<td>日志文件</td>
+</tr>
+<tr>
+<td><code>-q</code></td>
+<td>静默模式</td>
+</tr>
+<tr>
+<td><code>--full-url</code></td>
+<td>输出完整 URL</td>
+</tr>
+<tr>
+<td><code>--redirects-history</code></td>
+<td>显示重定向历史</td>
+</tr>
+<tr>
+<td><code>--no-color</code></td>
+<td>无颜色输出</td>
+</tr>
+</tbody></table>
+<h4 id="高级设置"><a href="#高级设置" class="headerlink" title="高级设置"></a>高级设置</h4><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>--crawl</code></td>
+<td>从响应中爬取新路径</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="四、字典与扩展名机制"><a href="#四、字典与扩展名机制" class="headerlink" title="四、字典与扩展名机制"></a>四、字典与扩展名机制</h2><p>dirsearch 的扩展名机制与其他工具不同，理解它很关键：</p>
+<h3 id="4-1-EXT-占位符机制"><a href="#4-1-EXT-占位符机制" class="headerlink" title="4.1 %EXT% 占位符机制"></a>4.1 <code>%EXT%</code> 占位符机制</h3><p>字典中使用 <code>%EXT%</code> 作为扩展名占位符，dirsearch 会将其替换为 <code>-e</code> 指定的扩展名：</p>
+<figure class="highlight axapta"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs axapta"><span class="hljs-meta"># 字典内容</span><br><span class="hljs-keyword">index</span>.%EXT%<br>admin.%EXT%<br>config.%EXT%<br><br><span class="hljs-meta"># 运行命令</span><br>dirsearch -u https:<span class="hljs-comment">//target -e php,html -w wordlist.txt</span><br><br><span class="hljs-meta"># 实际生成的请求：</span><br><span class="hljs-keyword">index</span>            （无扩展名）<br><span class="hljs-keyword">index</span>.php<br><span class="hljs-keyword">index</span>.html<br>admin<br>admin.php<br>admin.html<br>config<br>config.php<br>config.html<br></code></pre></td></tr></table></figure>
+
+<h3 id="4-2-强制扩展（-f）"><a href="#4-2-强制扩展（-f）" class="headerlink" title="4.2 强制扩展（-f）"></a>4.2 强制扩展（-f）</h3><p>对于没有 <code>%EXT%</code> 占位符的字典（如 SecLists），使用 <code>-f</code> 对<strong>每个词</strong>追加扩展名 + <code>/</code>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 字典内容（无 %EXT%）</span><br>admin<br>login<br>dashboard<br><br><span class="hljs-comment"># 使用 -f 强制扩展</span><br>dirsearch -u https://target -e php,html -w wordlist.txt -f<br><br><span class="hljs-comment"># 实际生成：</span><br>admin            （原词）<br>admin.php<br>admin.html<br>admin/<br>login<br>login.php<br>login.html<br>login/<br>dashboard<br>dashboard.php<br>dashboard.html<br>dashboard/<br></code></pre></td></tr></table></figure>
+
+<h3 id="4-3-覆盖扩展（-O）"><a href="#4-3-覆盖扩展（-O）" class="headerlink" title="4.3 覆盖扩展（-O）"></a>4.3 覆盖扩展（-O）</h3><p>字典中已有扩展名的词，用新扩展名替换（<code>.log</code>、<code>.json</code>、<code>.xml</code>、图片格式等除外）：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 字典内容</span><br>login.html<br>admin.php<br><br><span class="hljs-comment"># 使用 -O 覆盖扩展</span><br>dirsearch -u https://target -e jsp,jspa -w wordlist.txt -O<br><br><span class="hljs-comment"># 实际生成：</span><br>login.html       （保留原扩展）<br>login.jsp<br>login.jspa<br>admin.php        （保留原扩展）<br>admin.jsp<br>admin.jspa<br></code></pre></td></tr></table></figure>
+
+<h3 id="4-4-内置分类字典"><a href="#4-4-内置分类字典" class="headerlink" title="4.4 内置分类字典"></a>4.4 内置分类字典</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 使用内置分类 ───</span><br>dirsearch -u https://target -e php --wordlist-categories common<br><br><span class="hljs-comment"># ─── 使用多个分类 ───</span><br>dirsearch -u https://target -e php --wordlist-categories common,backups,conf<br><br><span class="hljs-comment"># ─── 使用所有分类 ───</span><br>dirsearch -u https://target -e php --wordlist-categories all<br></code></pre></td></tr></table></figure>
+
+<p><strong>可用分类</strong>：<code>common</code> &#x2F; <code>conf</code> &#x2F; <code>vcs</code> &#x2F; <code>backups</code> &#x2F; <code>db</code> &#x2F; <code>logs</code> &#x2F; <code>keys</code> &#x2F; <code>web</code></p>
+<h3 id="4-5-多字典"><a href="#4-5-多字典" class="headerlink" title="4.5 多字典"></a>4.5 多字典</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 逗号分隔多个字典 ───</span><br>dirsearch -u https://target -e php -w dict1.txt,dict2.txt,dict3.txt<br></code></pre></td></tr></table></figure>
+
+<h3 id="4-6-前缀与后缀"><a href="#4-6-前缀与后缀" class="headerlink" title="4.6 前缀与后缀"></a>4.6 前缀与后缀</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 添加前缀 ───</span><br>dirsearch -u https://target -e php --prefixes <span class="hljs-string">&quot;old_,backup_,copy_&quot;</span><br><br><span class="hljs-comment"># ─── 添加后缀 ───</span><br>dirsearch -u https://target -e php --suffixes <span class="hljs-string">&quot;_old,_bak,_copy&quot;</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="4-7-大小写转换"><a href="#4-7-大小写转换" class="headerlink" title="4.7 大小写转换"></a>4.7 大小写转换</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 全部大写 ───</span><br>dirsearch -u https://target -e php -U<br><br><span class="hljs-comment"># ─── 全部小写 ───</span><br>dirsearch -u https://target -e php -L<br><br><span class="hljs-comment"># ─── 首字母大写 ───</span><br>dirsearch -u https://target -e php -C<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="五、基础扫描"><a href="#五、基础扫描" class="headerlink" title="五、基础扫描"></a>五、基础扫描</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 最简用法（必须指定扩展名）───</span><br>dirsearch -u https://target.com -e php<br><br><span class="hljs-comment"># ─── 指定字典 + 多扩展名 ───</span><br>dirsearch -u https://target.com -e php,html,txt,js -w /usr/share/dirsearch/db/dicc.txt<br><br><span class="hljs-comment"># ─── 使用内置分类字典 ───</span><br>dirsearch -u https://target.com -e php --wordlist-categories common<br><br><span class="hljs-comment"># ─── 多目标扫描 ───</span><br>dirsearch -u https://target1.com -u https://target2.com -e php<br><br><span class="hljs-comment"># ─── 从文件加载 URL 列表 ───</span><br>dirsearch -l urls.txt -e php<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="六、扩展名扫描"><a href="#六、扩展名扫描" class="headerlink" title="六、扩展名扫描"></a>六、扩展名扫描</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 单扩展名 ───</span><br>dirsearch -u https://target.com -e php<br><br><span class="hljs-comment"># ─── 多扩展名 ───</span><br>dirsearch -u https://target.com -e php,html,txt,js,json,asp,aspx,jsp<br><br><span class="hljs-comment"># ─── 强制扩展（适配 SecLists 等无 %EXT% 的字典）───</span><br>dirsearch -u https://target.com -e php,html -f -w /path/to/SecLists/common.txt<br><br><span class="hljs-comment"># ─── 覆盖扩展（替换字典中已有的扩展名）───</span><br>dirsearch -u https://target.com -e jsp,jspa -O -w wordlist.txt<br><br><span class="hljs-comment"># ─── 排除扩展名 ───</span><br>dirsearch -u https://target.com -e php,html --exclude-extensions asp,jsp<br><br><span class="hljs-comment"># ─── 移除扩展名 ───</span><br>dirsearch -u https://target.com -e php --remove-extensions<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="七、状态码与响应过滤"><a href="#七、状态码与响应过滤" class="headerlink" title="七、状态码与响应过滤"></a>七、状态码与响应过滤</h2><h3 id="7-1-状态码过滤"><a href="#7-1-状态码过滤" class="headerlink" title="7.1 状态码过滤"></a>7.1 状态码过滤</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 只包含特定状态码 ───</span><br>dirsearch -u https://target.com -e php -i 200,301,302<br><br><span class="hljs-comment"># ─── 排除状态码 ───</span><br>dirsearch -u https://target.com -e php -x 404,403<br><br><span class="hljs-comment"># ─── 排除状态码范围 ───</span><br>dirsearch -u https://target.com -e php -x 400-499,500-599<br><br><span class="hljs-comment"># ─── 包含状态码范围 ───</span><br>dirsearch -u https://target.com -e php -i 200,300-399<br></code></pre></td></tr></table></figure>
+
+<h3 id="7-2-响应内容过滤"><a href="#7-2-响应内容过滤" class="headerlink" title="7.2 响应内容过滤"></a>7.2 响应内容过滤</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 按大小排除（支持 B / KB / MB）───</span><br>dirsearch -u https://target.com -e php --exclude-sizes 0B,4KB<br><br><span class="hljs-comment"># ─── 按文本内容排除 ───</span><br>dirsearch -u https://target.com -e php --exclude-text <span class="hljs-string">&quot;Not Found&quot;</span><br>dirsearch -u https://target.com -e php --exclude-text <span class="hljs-string">&quot;404&quot;</span> --exclude-text <span class="hljs-string">&quot;Page Not Found&quot;</span><br><br><span class="hljs-comment"># ─── 按正则排除 ───</span><br>dirsearch -u https://target.com -e php --exclude-regex <span class="hljs-string">&quot;error|not found|404&quot;</span><br><br><span class="hljs-comment"># ─── 排除重定向到特定 URL 的响应 ───</span><br>dirsearch -u https://target.com -e php --exclude-redirect <span class="hljs-string">&quot;/index.html&quot;</span><br><br><span class="hljs-comment"># ─── 排除与指定页面相似的响应（类似 ffuf 的 -ac）───</span><br>dirsearch -u https://target.com -e php --exclude-response 404.html<br><br><span class="hljs-comment"># ─── 最小 / 最大响应长度 ───</span><br>dirsearch -u https://target.com -e php --min-response-size 100 --max-response-size 10000<br></code></pre></td></tr></table></figure>
+
+<h3 id="7-3-跳过条件"><a href="#7-3-跳过条件" class="headerlink" title="7.3 跳过条件"></a>7.3 跳过条件</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 遇到特定状态码跳过当前目标（多目标扫描时有用）───</span><br>dirsearch -u https://target.com -e php --skip-on-status 429,503<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="八、递归扫描"><a href="#八、递归扫描" class="headerlink" title="八、递归扫描"></a>八、递归扫描</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 基础递归 ───</span><br>dirsearch -u https://target.com -e php -r<br><br><span class="hljs-comment"># ─── 限制递归深度 ───</span><br>dirsearch -u https://target.com -e php -r -R 3<br><br><span class="hljs-comment"># ─── 深度递归（每一层目录都递归，不仅仅发现的目录）───</span><br>dirsearch -u https://target.com -e php --deep-recursive<br><br><span class="hljs-comment"># ─── 强制递归（对所有发现的路径都递归，不仅目录）───</span><br>dirsearch -u https://target.com -e php --force-recursive<br><br><span class="hljs-comment"># ─── 指定递归的状态码条件 ───</span><br>dirsearch -u https://target.com -e php -r --recursion-status 200,301<br><br><span class="hljs-comment"># ─── 扫描指定子目录 ───</span><br>dirsearch -u https://target.com -e php --subdirs admin/,api/,backup/<br><br><span class="hljs-comment"># ─── 排除子目录 ───</span><br>dirsearch -u https://target.com -e php -r --exclude-subdirs images/,static/,css/<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="九、请求配置"><a href="#九、请求配置" class="headerlink" title="九、请求配置"></a>九、请求配置</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 自定义 User-Agent ───</span><br>dirsearch -u https://target.com -e php --user-agent <span class="hljs-string">&quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36&quot;</span><br><br><span class="hljs-comment"># ─── 随机 User-Agent（每个请求不同）───</span><br>dirsearch -u https://target.com -e php --random-agent<br><br><span class="hljs-comment"># ─── Cookie ───</span><br>dirsearch -u https://target.com -e php --cookie <span class="hljs-string">&quot;session=abc123; token=xyz&quot;</span><br><br><span class="hljs-comment"># ─── 自定义 Header（可多次使用）───</span><br>dirsearch -u https://target.com -e php -H <span class="hljs-string">&quot;X-Forwarded-For: 127.0.0.1&quot;</span><br>dirsearch -u https://target.com -e php -H <span class="hljs-string">&quot;X-Forwarded-For: 127.0.0.1&quot;</span> -H <span class="hljs-string">&quot;Authorization: Bearer token&quot;</span><br><br><span class="hljs-comment"># ─── 从文件加载 Header ───</span><br>dirsearch -u https://target.com -e php --headers-file headers.txt<br><br><span class="hljs-comment"># ─── 跟随重定向 ───</span><br>dirsearch -u https://target.com -e php -F<br><br><span class="hljs-comment"># ─── POST 方法 ───</span><br>dirsearch -u https://target.com -e php -m POST<br><br><span class="hljs-comment"># ─── POST 数据 ───</span><br>dirsearch -u https://target.com -e php -m POST -d <span class="hljs-string">&quot;key=value&quot;</span><br><br><span class="hljs-comment"># ─── 从文件加载 POST 数据 ───</span><br>dirsearch -u https://target.com -e php -m POST --data-file postdata.txt<br><br><span class="hljs-comment"># ─── 自定义 HTTP 方法 ───</span><br>dirsearch -u https://target.com -e php -m PUT<br>dirsearch -u https://target.com -e php -m DELETE<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十、代理与认证"><a href="#十、代理与认证" class="headerlink" title="十、代理与认证"></a>十、代理与认证</h2><h3 id="10-1-代理"><a href="#10-1-代理" class="headerlink" title="10.1 代理"></a>10.1 代理</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── HTTP 代理 ───</span><br>dirsearch -u https://target.com -e php -p http://127.0.0.1:8080<br><br><span class="hljs-comment"># ─── SOCKS5 代理 ───</span><br>dirsearch -u https://target.com -e php -p socks5://127.0.0.1:1080<br><br><span class="hljs-comment"># ─── 多代理轮换 ───</span><br>dirsearch -u https://target.com -e php -p http://proxy1:8080 -p http://proxy2:8080<br><br><span class="hljs-comment"># ─── 从文件加载代理列表 ───</span><br>dirsearch -u https://target.com -e php --proxies-file proxies.txt<br><br><span class="hljs-comment"># ─── 代理认证 ───</span><br>dirsearch -u https://target.com -e php -p http://proxy:8080 --proxy-auth user:pass<br><br><span class="hljs-comment"># ─── 仅将发现路径发代理（配合 Burp）───</span><br>dirsearch -u https://target.com -e php --replay-proxy http://127.0.0.1:8080<br><br><span class="hljs-comment"># ─── 使用 Tor ───</span><br>dirsearch -u https://target.com -e php --tor<br></code></pre></td></tr></table></figure>
+
+<h3 id="10-2-认证"><a href="#10-2-认证" class="headerlink" title="10.2 认证"></a>10.2 认证</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── HTTP Basic 认证 ───</span><br>dirsearch -u https://target.com -e php --auth admin:password --auth-type basic<br><br><span class="hljs-comment"># ─── Bearer Token ───</span><br>dirsearch -u https://target.com -e php --auth eyJhbGciOi... --auth-type bearer<br><br><span class="hljs-comment"># ─── Digest 认证 ───</span><br>dirsearch -u https://target.com -e php --auth admin:password --auth-type digest<br><br><span class="hljs-comment"># ─── NTLM 认证 ───</span><br>dirsearch -u https://target.com -e php --auth admin:password --auth-type ntlm<br><br><span class="hljs-comment"># ─── JWT ───</span><br>dirsearch -u https://target.com -e php --auth eyJhbGciOi... --auth-type jwt<br><br><span class="hljs-comment"># ─── 客户端证书 ───</span><br>dirsearch -u https://target.com -e php --cert-file client.pem --key-file client.key<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十一、连接与性能控制"><a href="#十一、连接与性能控制" class="headerlink" title="十一、连接与性能控制"></a>十一、连接与性能控制</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 线程数（默认 25）───</span><br>dirsearch -u https://target.com -e php -t 50          <span class="hljs-comment"># 高速</span><br>dirsearch -u https://target.com -e php -t 10          <span class="hljs-comment"># 保守</span><br><br><span class="hljs-comment"># ─── 异步模式（更高性能）───</span><br>dirsearch -u https://target.com -e php --async<br><br><span class="hljs-comment"># ─── 请求延迟 ───</span><br>dirsearch -u https://target.com -e php --delay 0.5<br><br><span class="hljs-comment"># ─── 每秒最大请求数 ───</span><br>dirsearch -u https://target.com -e php --max-rate 50<br><br><span class="hljs-comment"># ─── 连接超时 ───</span><br>dirsearch -u https://target.com -e php --<span class="hljs-built_in">timeout</span> 10<br><br><span class="hljs-comment"># ─── 失败重试次数 ───</span><br>dirsearch -u https://target.com -e php --retries 3<br><br><span class="hljs-comment"># ─── 最大运行时间（秒）───</span><br>dirsearch -u https://target.com -e php --max-time 300<br><br><span class="hljs-comment"># ─── 指定服务器 IP（绕过 DNS）───</span><br>dirsearch -u https://target.com -e php --ip 192.168.1.100<br><br><span class="hljs-comment"># ─── 指定网络接口 ───</span><br>dirsearch -u https://target.com -e php --interface eth0<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十二、输出与格式"><a href="#十二、输出与格式" class="headerlink" title="十二、输出与格式"></a>十二、输出与格式</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── JSON 格式 ───</span><br>dirsearch -u https://target.com -e php -o results.json --format json<br><br><span class="hljs-comment"># ─── HTML 报告 ───</span><br>dirsearch -u https://target.com -e php -o report.html --format html<br><br><span class="hljs-comment"># ─── Markdown 格式 ───</span><br>dirsearch -u https://target.com -e php -o report.md --format md<br><br><span class="hljs-comment"># ─── CSV 格式 ───</span><br>dirsearch -u https://target.com -e php -o results.csv --format csv<br><br><span class="hljs-comment"># ─── XML 格式 ───</span><br>dirsearch -u https://target.com -e php -o results.xml --format xml<br><br><span class="hljs-comment"># ─── SQLite 数据库 ───</span><br>dirsearch -u https://target.com -e php -o results.db --format sqlite<br><br><span class="hljs-comment"># ─── 直接输出到 MySQL ───</span><br>dirsearch -u https://target.com -e php -o <span class="hljs-string">&quot;mysql://user:pass@localhost:3306/dirsearch_db&quot;</span> --format mysql<br><br><span class="hljs-comment"># ─── 直接输出到 PostgreSQL ───</span><br>dirsearch -u https://target.com -e php -o <span class="hljs-string">&quot;postgresql://user:pass@localhost:5432/dirsearch_db&quot;</span> --format postgresql<br><br><span class="hljs-comment"># ─── 静默模式 ───</span><br>dirsearch -u https://target.com -e php -q<br><br><span class="hljs-comment"># ─── 完整 URL 输出 ───</span><br>dirsearch -u https://target.com -e php --full-url<br><br><span class="hljs-comment"># ─── 显示重定向历史 ───</span><br>dirsearch -u https://target.com -e php --redirects-history<br><br><span class="hljs-comment"># ─── 日志文件 ───</span><br>dirsearch -u https://target.com -e php --<span class="hljs-built_in">log</span> debug.log<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十三、会话管理"><a href="#十三、会话管理" class="headerlink" title="十三、会话管理"></a>十三、会话管理</h2><p>dirsearch 支持会话保存与恢复，中断后可继续扫描：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 保存会话（指定会话文件）───</span><br>dirsearch -u https://target.com -e php -s session.json<br><br><span class="hljs-comment"># ─── 恢复会话 ───</span><br>dirsearch -s session.json<br><br><span class="hljs-comment"># ─── 列出可恢复的会话 ───</span><br>dirsearch --list-sessions<br><br><span class="hljs-comment"># ─── 指定会话目录 ───</span><br>dirsearch --sessions-dir /path/to/sessions<br></code></pre></td></tr></table></figure>
+
+<p><strong>工作流程</strong>：</p>
+<ol>
+<li>首次运行指定 <code>-s session.json</code> 保存会话</li>
+<li>中断后运行 <code>dirsearch -s session.json</code> 恢复</li>
+<li>使用 <code>--list-sessions</code> 查看所有可恢复会话</li>
+</ol>
+<hr>
+<h2 id="十四、配置文件"><a href="#十四、配置文件" class="headerlink" title="十四、配置文件"></a>十四、配置文件</h2><p>配置文件默认路径：<code>config.ini</code>（或通过 <code>--config</code> 指定，或 <code>DIRSEARCH_CONFIG</code> 环境变量）。</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-comment"># ─── config.ini 示例 ───</span><br><span class="hljs-section">[general]</span><br><span class="hljs-attr">threads</span> = <span class="hljs-number">25</span><br><span class="hljs-attr">recursive</span> = <span class="hljs-literal">True</span><br><span class="hljs-attr">deep-recursive</span> = <span class="hljs-literal">False</span><br><span class="hljs-attr">max-recursion-depth</span> = <span class="hljs-number">0</span><br><span class="hljs-attr">max-time</span> = <span class="hljs-number">0</span><br><span class="hljs-attr">exit-on-error</span> = <span class="hljs-literal">False</span><br><span class="hljs-attr">async</span> = <span class="hljs-literal">False</span><br><br><span class="hljs-section">[dictionary]</span><br><span class="hljs-attr">default-extensions</span> = php,asp,aspx,jsp,html,txt,js,json<br><span class="hljs-attr">force-extensions</span> = <span class="hljs-literal">False</span><br><span class="hljs-attr">overwrite-extensions</span> = <span class="hljs-literal">False</span><br><span class="hljs-attr">wordlist</span> = /usr/share/dirsearch/db/dicc.txt<br><span class="hljs-attr">uppercase</span> = <span class="hljs-literal">False</span><br><span class="hljs-attr">lowercase</span> = <span class="hljs-literal">False</span><br><span class="hljs-attr">capitalization</span> = <span class="hljs-literal">False</span><br><br><span class="hljs-section">[request]</span><br><span class="hljs-attr">http-method</span> = GET<br><span class="hljs-attr">follow-redirects</span> = <span class="hljs-literal">False</span><br><span class="hljs-attr">user-agent</span> = Mozilla/<span class="hljs-number">5.0</span> (Windows NT <span class="hljs-number">10.0</span><span class="hljs-comment">; Win64; x64)</span><br><span class="hljs-attr">random-agent</span> = <span class="hljs-literal">False</span><br><span class="hljs-attr">timeout</span> = <span class="hljs-number">10</span><br><span class="hljs-attr">delay</span> = <span class="hljs-number">0</span><br><span class="hljs-attr">max-rate</span> = <span class="hljs-number">0</span><br><span class="hljs-attr">retries</span> = <span class="hljs-number">1</span><br><br><span class="hljs-section">[connection]</span><br><span class="hljs-attr">proxy</span> =<br><span class="hljs-attr">proxies-file</span> =<br><span class="hljs-attr">tor</span> = <span class="hljs-literal">False</span><br><span class="hljs-attr">scheme</span> = auto<br><br><span class="hljs-section">[output]</span><br><span class="hljs-attr">output-file</span> =<br><span class="hljs-attr">format</span> = plain<br><span class="hljs-attr">log-file</span> =<br><span class="hljs-attr">quiet-mode</span> = <span class="hljs-literal">False</span><br><span class="hljs-attr">full-url</span> = <span class="hljs-literal">False</span><br><span class="hljs-attr">no-color</span> = <span class="hljs-literal">False</span><br></code></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 使用自定义配置文件 ───</span><br>dirsearch -u https://target.com -e php --config /path/to/my-config.ini<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十五、高级功能"><a href="#十五、高级功能" class="headerlink" title="十五、高级功能"></a>十五、高级功能</h2><h3 id="15-1-爬取模式（–crawl）"><a href="#15-1-爬取模式（–crawl）" class="headerlink" title="15.1 爬取模式（–crawl）"></a>15.1 爬取模式（–crawl）</h3><p>从扫描到的响应中自动提取新路径继续扫描：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">dirsearch -u https://target.com -e php --crawl<br></code></pre></td></tr></table></figure>
+
+<h3 id="15-2-原始-HTTP-请求"><a href="#15-2-原始-HTTP-请求" class="headerlink" title="15.2 原始 HTTP 请求"></a>15.2 原始 HTTP 请求</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 从文件加载原始请求 ───</span><br>dirsearch --raw request.txt --scheme https -e php<br></code></pre></td></tr></table></figure>
+
+<p><strong>request.txt 示例：</strong></p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-keyword">GET</span> <span class="hljs-string">/FUZZ</span> <span class="hljs-meta">HTTP/1.1</span><br><span class="hljs-attribute">Host</span><span class="hljs-punctuation">: </span>target.com<br><span class="hljs-attribute">User-Agent</span><span class="hljs-punctuation">: </span>Mozilla/5.0<br><span class="hljs-attribute">Cookie</span><span class="hljs-punctuation">: </span>session=abc123<br></code></pre></td></tr></table></figure>
+
+<h3 id="15-3-CIDR-网段扫描"><a href="#15-3-CIDR-网段扫描" class="headerlink" title="15.3 CIDR 网段扫描"></a>15.3 CIDR 网段扫描</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 扫描整个网段 ───</span><br>dirsearch --cidr 192.168.1.0/24 -e php<br></code></pre></td></tr></table></figure>
+
+<h3 id="15-4-从-nmap-报告加载目标"><a href="#15-4-从-nmap-报告加载目标" class="headerlink" title="15.4 从 nmap 报告加载目标"></a>15.4 从 nmap 报告加载目标</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── nmap 扫描后直接导入 ───</span><br>nmap -sV -oX scan.xml target.com<br>dirsearch --nmap-report scan.xml -e php<br></code></pre></td></tr></table></figure>
+
+<h3 id="15-5-STDIN-输入"><a href="#15-5-STDIN-输入" class="headerlink" title="15.5 STDIN 输入"></a>15.5 STDIN 输入</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 从管道读取 URL ───</span><br><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;https://target.com&quot;</span> | dirsearch --stdin -e php<br><br><span class="hljs-comment"># ─── 结合其他工具 ───</span><br><span class="hljs-built_in">cat</span> alive_urls.txt | dirsearch --stdin -e php<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十六、实战场景速查"><a href="#十六、实战场景速查" class="headerlink" title="十六、实战场景速查"></a>十六、实战场景速查</h2><h3 id="场景-1：标准目录扫描"><a href="#场景-1：标准目录扫描" class="headerlink" title="场景 1：标准目录扫描"></a>场景 1：标准目录扫描</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash">dirsearch -u https://target.com -e php,html,txt,js,json \<br>  --wordlist-categories common \<br>  -x 404,403 \<br>  -t 30 \<br>  -o results.json --format json<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-2：备份文件发现"><a href="#场景-2：备份文件发现" class="headerlink" title="场景 2：备份文件发现"></a>场景 2：备份文件发现</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash">dirsearch -u https://target.com \<br>  -e bak,old,orig,swp,save,zip,tar.gz,rar,7z \<br>  --wordlist-categories backups,common \<br>  --exclude-response 404.html \<br>  -o backups.json --format json<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-3：配置文件发现"><a href="#场景-3：配置文件发现" class="headerlink" title="场景 3：配置文件发现"></a>场景 3：配置文件发现</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash">dirsearch -u https://target.com \<br>  --wordlist-categories conf \<br>  -e xml,json,yml,yaml,ini,conf,cfg,config,<span class="hljs-built_in">env</span> \<br>  --exclude-sizes 0B \<br>  -o configs.json --format json<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-4：后台管理发现"><a href="#场景-4：后台管理发现" class="headerlink" title="场景 4：后台管理发现"></a>场景 4：后台管理发现</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash">dirsearch -u https://target.com \<br>  -e php,html,asp,aspx,jsp \<br>  --wordlist-categories common,web \<br>  -i 200,301,302,403 \<br>  -t 30 \<br>  -o admin_panels.json --format json<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-5：带-Cookie-登录态扫描"><a href="#场景-5：带-Cookie-登录态扫描" class="headerlink" title="场景 5：带 Cookie 登录态扫描"></a>场景 5：带 Cookie 登录态扫描</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">dirsearch -u https://target.com -e php \<br>  --cookie <span class="hljs-string">&quot;PHPSESSID=your_session; token=your_token&quot;</span> \<br>  --wordlist-categories common \<br>  -o authenticated.json --format json<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-6：递归深度扫描"><a href="#场景-6：递归深度扫描" class="headerlink" title="场景 6：递归深度扫描"></a>场景 6：递归深度扫描</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash">dirsearch -u https://target.com -e php \<br>  --wordlist-categories common \<br>  -r -R 3 \<br>  --exclude-subdirs images/,static/,css/,js/ \<br>  -max-time 600 \<br>  -o recursive.json --format json<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-7：反-WAF-扫描"><a href="#场景-7：反-WAF-扫描" class="headerlink" title="场景 7：反 WAF 扫描"></a>场景 7：反 WAF 扫描</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash">dirsearch -u https://target.com -e php \<br>  --wordlist-categories common \<br>  --random-agent \<br>  --delay 0.3 \<br>  --max-rate 30 \<br>  -H <span class="hljs-string">&quot;X-Forwarded-For: 127.0.0.1&quot;</span> \<br>  -t 10 \<br>  -o results.json --format json<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-8：代理扫描（配合-Burp）"><a href="#场景-8：代理扫描（配合-Burp）" class="headerlink" title="场景 8：代理扫描（配合 Burp）"></a>场景 8：代理扫描（配合 Burp）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs bash">dirsearch -u https://target.com -e php \<br>  --wordlist-categories common \<br>  -p http://127.0.0.1:8080 \<br>  -o results.json --format json<br><br><span class="hljs-comment"># ─── 仅将发现路径发代理 ───</span><br>dirsearch -u https://target.com -e php \<br>  --replay-proxy http://127.0.0.1:8080 \<br>  -o results.json --format json<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-9：Tor-匿名扫描"><a href="#场景-9：Tor-匿名扫描" class="headerlink" title="场景 9：Tor 匿名扫描"></a>场景 9：Tor 匿名扫描</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash">dirsearch -u https://target.com -e php \<br>  --tor \<br>  --wordlist-categories common \<br>  --delay 1.0 \<br>  -t 5 \<br>  -o results.json --format json<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-10：API-端点发现"><a href="#场景-10：API-端点发现" class="headerlink" title="场景 10：API 端点发现"></a>场景 10：API 端点发现</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash">dirsearch -u https://api.target.com -e json \<br>  --wordlist-categories common,web \<br>  -H <span class="hljs-string">&quot;Authorization: Bearer &lt;token&gt;&quot;</span> \<br>  -H <span class="hljs-string">&quot;Content-Type: application/json&quot;</span> \<br>  -i 200,301,401,403 \<br>  -o api_endpoints.json --format json<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-11：多目标批量扫描"><a href="#场景-11：多目标批量扫描" class="headerlink" title="场景 11：多目标批量扫描"></a>场景 11：多目标批量扫描</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 目标列表文件（urls.txt）───</span><br><span class="hljs-comment"># https://target1.com</span><br><span class="hljs-comment"># https://target2.com</span><br><span class="hljs-comment"># https://target3.com</span><br><br>dirsearch -l urls.txt -e php \<br>  --wordlist-categories common \<br>  -t 20 \<br>  --skip-on-status 429 \<br>  -o results.json --format json<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-12：自定义-404-页面处理"><a href="#场景-12：自定义-404-页面处理" class="headerlink" title="场景 12：自定义 404 页面处理"></a>场景 12：自定义 404 页面处理</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 先访问一个不存在的页面获取响应，然后排除相似响应 ───</span><br>dirsearch -u https://target.com -e php \<br>  --exclude-response 404.html \<br>  --exclude-text <span class="hljs-string">&quot;Page Not Found&quot;</span> \<br>  --exclude-text <span class="hljs-string">&quot;does not exist&quot;</span> \<br>  -o results.json --format json<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-13：Git-SVN-泄露检测"><a href="#场景-13：Git-SVN-泄露检测" class="headerlink" title="场景 13：Git &#x2F; SVN 泄露检测"></a>场景 13：Git &#x2F; SVN 泄露检测</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">dirsearch -u https://target.com \<br>  --wordlist-categories vcs \<br>  -i 200,301,403 \<br>  -o vcs_results.json --format json<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-14：日志文件泄露"><a href="#场景-14：日志文件泄露" class="headerlink" title="场景 14：日志文件泄露"></a>场景 14：日志文件泄露</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash">dirsearch -u https://target.com \<br>  --wordlist-categories logs \<br>  -e <span class="hljs-built_in">log</span>,txt \<br>  --exclude-sizes 0B \<br>  -o logs.json --format json<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-15：密钥文件泄露"><a href="#场景-15：密钥文件泄露" class="headerlink" title="场景 15：密钥文件泄露"></a>场景 15：密钥文件泄露</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash">dirsearch -u https://target.com \<br>  --wordlist-categories keys \<br>  -e pem,key,p12,jks \<br>  --exclude-sizes 0B \<br>  -o keys.json --format json<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-16：大小写不敏感扫描"><a href="#场景-16：大小写不敏感扫描" class="headerlink" title="场景 16：大小写不敏感扫描"></a>场景 16：大小写不敏感扫描</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── Windows IIS 等大小写不敏感服务器 ───</span><br>dirsearch -u https://target.com -e asp,aspx -U<br>dirsearch -u https://target.com -e asp,aspx -L<br>dirsearch -u https://target.com -e asp,aspx -C<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十七、管道组合"><a href="#十七、管道组合" class="headerlink" title="十七、管道组合"></a>十七、管道组合</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── Subfinder → dirsearch ───</span><br>subfinder -d target.com -silent | \<br>  <span class="hljs-keyword">while</span> <span class="hljs-built_in">read</span> sub; <span class="hljs-keyword">do</span><br>    dirsearch -u https://<span class="hljs-variable">$sub</span> -e php --wordlist-categories common -q -o <span class="hljs-string">&quot;scan_<span class="hljs-variable">$sub</span>.json&quot;</span> --format json<br>  <span class="hljs-keyword">done</span><br><br><span class="hljs-comment"># ─── httpx → dirsearch ───</span><br>httpx -l alive.txt -silent | \<br>  dirsearch --stdin -e php --wordlist-categories common -q<br><br><span class="hljs-comment"># ─── dirsearch → httpx 二次验证 ───</span><br>dirsearch -u https://target.com -e php -q | \<br>  httpx -silent -status-code -title<br><br><span class="hljs-comment"># ─── dirsearch → nuclei ───</span><br>dirsearch -u https://target.com -e php -q | \<br>  nuclei -t exposures/ -o vulns.txt<br><br><span class="hljs-comment"># ─── dirsearch → Burp（仅匹配结果）───</span><br>dirsearch -u https://target.com -e php \<br>  --replay-proxy http://127.0.0.1:8080 -q<br><br><span class="hljs-comment"># ─── nmap → dirsearch ───</span><br>nmap -sV -oX scan.xml target.com<br>dirsearch --nmap-report scan.xml -e php --wordlist-categories common<br><br><span class="hljs-comment"># ─── dirsearch 输出 JSON → jq 提取 URL ───</span><br>dirsearch -u https://target.com -e php -o results.json --format json -q<br><span class="hljs-built_in">cat</span> results.json | jq -r <span class="hljs-string">&#x27;.results[].url&#x27;</span><br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十八、常见踩坑"><a href="#十八、常见踩坑" class="headerlink" title="十八、常见踩坑"></a>十八、常见踩坑</h2><h3 id="18-1-必须指定扩展名"><a href="#18-1-必须指定扩展名" class="headerlink" title="18.1 必须指定扩展名"></a>18.1 必须指定扩展名</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ❌ 错误：不指定 -e 会报错或扫不出东西</span><br>dirsearch -u https://target.com<br><br><span class="hljs-comment"># ✅ 正确：必须指定扩展名</span><br>dirsearch -u https://target.com -e php<br></code></pre></td></tr></table></figure>
+
+<h3 id="18-2-SecLists-字典需要-f"><a href="#18-2-SecLists-字典需要-f" class="headerlink" title="18.2 SecLists 字典需要 -f"></a>18.2 SecLists 字典需要 -f</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ❌ SecLists 字典没有 %EXT%，不用 -f 不会追加扩展名</span><br>dirsearch -u https://target.com -e php -w /path/to/SecLists/common.txt<br><br><span class="hljs-comment"># ✅ 使用 -f 强制扩展</span><br>dirsearch -u https://target.com -e php -f -w /path/to/SecLists/common.txt<br></code></pre></td></tr></table></figure>
+
+<h3 id="18-3-自定义-404-页面大量误报"><a href="#18-3-自定义-404-页面大量误报" class="headerlink" title="18.3 自定义 404 页面大量误报"></a>18.3 自定义 404 页面大量误报</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ❌ 自定义 404 返回 200 状态码</span><br>dirsearch -u https://target.com -e php -i 200<br><br><span class="hljs-comment"># ✅ 排除与 404 页面相似的响应</span><br>dirsearch -u https://target.com -e php --exclude-response 404.html<br>dirsearch -u https://target.com -e php --exclude-text <span class="hljs-string">&quot;Not Found&quot;</span><br>dirsearch -u https://target.com -e php --exclude-sizes 1234B<br></code></pre></td></tr></table></figure>
+
+<h3 id="18-4-速度过快被封"><a href="#18-4-速度过快被封" class="headerlink" title="18.4 速度过快被封"></a>18.4 速度过快被封</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ❌ 高线程 + 无延迟</span><br>dirsearch -u https://target.com -e php -t 100<br><br><span class="hljs-comment"># ✅ 控制速率</span><br>dirsearch -u https://target.com -e php -t 10 --delay 0.3 --max-rate 30 --random-agent<br></code></pre></td></tr></table></figure>
+
+<h3 id="18-5-递归扫描耗时过长"><a href="#18-5-递归扫描耗时过长" class="headerlink" title="18.5 递归扫描耗时过长"></a>18.5 递归扫描耗时过长</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ❌ 无限制递归（大型站点可能跑几小时）</span><br>dirsearch -u https://target.com -e php -r<br><br><span class="hljs-comment"># ✅ 限制递归深度 + 时间</span><br>dirsearch -u https://target.com -e php -r -R 3 --max-time 600<br><br><span class="hljs-comment"># ✅ 排除无关子目录</span><br>dirsearch -u https://target.com -e php -r --exclude-subdirs images/,static/,css/<br></code></pre></td></tr></table></figure>
+
+<h3 id="18-6-Kali-旧版本差异"><a href="#18-6-Kali-旧版本差异" class="headerlink" title="18.6 Kali 旧版本差异"></a>18.6 Kali 旧版本差异</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── Kali 通过 apt 安装的版本可能较旧 ───</span><br><span class="hljs-comment"># ─── 建议用 git 安装最新版 ───</span><br>git <span class="hljs-built_in">clone</span> https://github.com/maurosoria/dirsearch.git --depth 1<br><span class="hljs-built_in">cd</span> dirsearch<br>pip3 install -r requirements.txt<br>python3 dirsearch.py -u https://target -e php<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十九、dirsearch-vs-ffuf-vs-dirb-vs-gobuster-对比"><a href="#十九、dirsearch-vs-ffuf-vs-dirb-vs-gobuster-对比" class="headerlink" title="十九、dirsearch vs ffuf vs dirb vs gobuster 对比"></a>十九、dirsearch vs ffuf vs dirb vs gobuster 对比</h2><table>
+<thead>
+<tr>
+<th>维度</th>
+<th>dirsearch</th>
+<th>ffuf</th>
+<th>dirb</th>
+<th>gobuster</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>语言</strong></td>
+<td>Python</td>
+<td>Go</td>
+<td>C</td>
+<td>Go</td>
+</tr>
+<tr>
+<td><strong>速度</strong></td>
+<td>🟡 中等</td>
+<td>⚡ 极快</td>
+<td>🟡 中等</td>
+<td>⚡ 快</td>
+</tr>
+<tr>
+<td><strong>上手难度</strong></td>
+<td>🟡 中</td>
+<td>🔴 较高</td>
+<td>🟢 最低</td>
+<td>🟢 低</td>
+</tr>
+<tr>
+<td><strong>扩展名机制</strong></td>
+<td>✅ <code>%EXT%</code> 占位符</td>
+<td>✅ <code>-e</code></td>
+<td>✅ <code>-X</code></td>
+<td>✅ <code>-x</code></td>
+</tr>
+<tr>
+<td><strong>强制扩展</strong></td>
+<td>✅ <code>-f</code></td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>覆盖扩展</strong></td>
+<td>✅ <code>-O</code></td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>递归扫描</strong></td>
+<td>✅ 多种模式</td>
+<td>✅ <code>-recursion</code></td>
+<td>✅ 默认开启</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>深度递归</strong></td>
+<td>✅ <code>--deep-recursive</code></td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>过滤器</strong></td>
+<td>✅ 多维度</td>
+<td>✅ 6 维度</td>
+<td>🟡 仅 <code>-N</code></td>
+<td>✅ 丰富</td>
+</tr>
+<tr>
+<td><strong>排除相似响应</strong></td>
+<td>✅ <code>--exclude-response</code></td>
+<td>✅ <code>-ac</code></td>
+<td>🟡 <code>-f</code></td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>会话管理</strong></td>
+<td>✅ 保存&#x2F;恢复</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>输出格式</strong></td>
+<td>✅ 8 种 + 数据库</td>
+<td>✅ 5 种</td>
+<td>🟡 纯文本</td>
+<td>🟡 纯文本</td>
+</tr>
+<tr>
+<td><strong>代理池</strong></td>
+<td>✅ 多代理轮换</td>
+<td>🟡 单代理</td>
+<td>🟡 单代理</td>
+<td>🟡 单代理</td>
+</tr>
+<tr>
+<td><strong>随机 UA</strong></td>
+<td>✅ <code>--random-agent</code></td>
+<td>❌ 需手配</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>Tor</strong></td>
+<td>✅ <code>--tor</code></td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>认证类型</strong></td>
+<td>✅ 5 种</td>
+<td>❌</td>
+<td>🟡 Basic</td>
+<td>🟡 Basic</td>
+</tr>
+<tr>
+<td><strong>DNS 爆破</strong></td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><strong>VHost</strong></td>
+<td>❌</td>
+<td>✅</td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><strong>FUZZ 关键字</strong></td>
+<td>❌</td>
+<td>✅ 任意位置</td>
+<td>❌</td>
+<td>🟡</td>
+</tr>
+<tr>
+<td><strong>爬取模式</strong></td>
+<td>✅ <code>--crawl</code></td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>内置字典</strong></td>
+<td>✅ 分类字典</td>
+<td>❌</td>
+<td>✅ 多套</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>异步模式</strong></td>
+<td>✅ <code>--async</code></td>
+<td>❌（Go 原生并发）</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>nmap 集成</strong></td>
+<td>✅ <code>--nmap-report</code></td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+</tbody></table>
+<p><strong>选择建议：</strong></p>
+<ul>
+<li>🚀 <strong>快速入门 + 简单扫描</strong>：dirb（最简单）</li>
+<li>🎯 <strong>灵活 Fuzzing + 任意位置</strong>：ffuf</li>
+<li>📋 <strong>丰富输出 + 精准过滤 + 会话管理</strong>：dirsearch</li>
+<li>⚡ <strong>DNS 爆破 + 多协议</strong>：gobuster</li>
+<li>🔄 <strong>深度递归 + 分类字典</strong>：dirsearch</li>
+</ul>
+<hr>
+<h2 id="速查表"><a href="#速查表" class="headerlink" title="速查表"></a>速查表</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 基础扫描</span><br>dirsearch -u https://target.com -e php<br><br><span class="hljs-comment"># 多扩展名 + 分类字典</span><br>dirsearch -u https://target.com -e php,html,txt --wordlist-categories common<br><br><span class="hljs-comment"># 强制扩展（适配 SecLists）</span><br>dirsearch -u https://target.com -e php,html -f -w /path/to/SecLists/common.txt<br><br><span class="hljs-comment"># 排除状态码 + 响应大小</span><br>dirsearch -u https://target.com -e php -x 404,403 --exclude-sizes 0B<br><br><span class="hljs-comment"># 排除相似响应（自动校准）</span><br>dirsearch -u https://target.com -e php --exclude-response 404.html<br><br><span class="hljs-comment"># 递归 + 深度限制</span><br>dirsearch -u https://target.com -e php -r -R 3<br><br><span class="hljs-comment"># Cookie 登录态</span><br>dirsearch -u https://target.com -e php --cookie <span class="hljs-string">&quot;session=abc123&quot;</span><br><br><span class="hljs-comment"># 随机 UA + 限速</span><br>dirsearch -u https://target.com -e php --random-agent --max-rate 30 --delay 0.3<br><br><span class="hljs-comment"># 代理（Burp）</span><br>dirsearch -u https://target.com -e php -p http://127.0.0.1:8080<br><br><span class="hljs-comment"># 仅发现结果发代理</span><br>dirsearch -u https://target.com -e php --replay-proxy http://127.0.0.1:8080<br><br><span class="hljs-comment"># HTML 报告</span><br>dirsearch -u https://target.com -e php -o report.html --format html<br><br><span class="hljs-comment"># 备份文件</span><br>dirsearch -u https://target.com -e bak,old,orig,swp --wordlist-categories backups<br><br><span class="hljs-comment"># 所有分类字典</span><br>dirsearch -u https://target.com -e php --wordlist-categories all<br><br><span class="hljs-comment"># 保存/恢复会话</span><br>dirsearch -u https://target.com -e php -s session.json<br>dirsearch -s session.json<br></code></pre></td></tr></table></figure>
+
+<hr>
+<blockquote>
+<p><strong>免责声明</strong>：本手册仅用于授权安全测试和学习目的。未经授权对目标系统进行扫描属于违法行为。请务必在合法授权范围内使用 dirsearch。</p>
+</blockquote>
+<hr>
+<p><em>整理时间：2026-04-12</em><br><em>参考来源：dirsearch GitHub README、Kali Linux Tools 官方文档、渗透测试实战</em></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86%E5%B7%A5%E5%85%B7/" class="print-no-link">#信息收集工具</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>dirsearch-使用手册</div>
+      <div>https://xiaobite-hacker.github.io/2026/04/11/dirsearch-使用手册/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>xiaobite</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2026年4月11日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2026/04/11/Github%E6%90%9C%E7%B4%A2%E6%B3%84%E9%9C%B2%E4%BF%A1%E6%81%AF/" title="Github搜索泄露信息">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Github搜索泄露信息</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2026/04/09/Cobalt%20Strike/" title="Cobalt Strike">
+                        <span class="hidden-mobile">Cobalt Strike</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

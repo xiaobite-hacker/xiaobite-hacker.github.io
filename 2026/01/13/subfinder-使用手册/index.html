@@ -1,0 +1,1117 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/admin.jpg">
+  <link rel="icon" href="/img/admin.jpg">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="xiaobite">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Subfinder 实战使用手册 来源：ProjectDiscovery官方仓库：https:&#x2F;&#x2F;github.com&#x2F;projectdiscovery&#x2F;subfinder官方文档：https:&#x2F;&#x2F;docs.projectdiscovery.io&#x2F;tools&#x2F;subfinder   目录 Subfinder 实战使用手册 目录 一、概述 二、安装 三、命令行参数全解 3.1 输入参数 3.2 数据">
+<meta property="og:type" content="article">
+<meta property="og:title" content="subfinder-使用手册">
+<meta property="og:url" content="https://xiaobite-hacker.github.io/2026/01/13/subfinder-%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/index.html">
+<meta property="og:site_name" content="xiaobite">
+<meta property="og:description" content="Subfinder 实战使用手册 来源：ProjectDiscovery官方仓库：https:&#x2F;&#x2F;github.com&#x2F;projectdiscovery&#x2F;subfinder官方文档：https:&#x2F;&#x2F;docs.projectdiscovery.io&#x2F;tools&#x2F;subfinder   目录 Subfinder 实战使用手册 目录 一、概述 二、安装 三、命令行参数全解 3.1 输入参数 3.2 数据">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-01-13T08:09:24.000Z">
+<meta property="article:modified_time" content="2026-04-12T07:05:17.606Z">
+<meta property="article:author" content="xiaobite">
+<meta property="article:tag" content="信息收集工具">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>subfinder-使用手册 - xiaobite</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"xiaobite-hacker.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>xiaobite</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/prompt/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>prompt</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="subfinder-使用手册"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-01-13 16:09" pubdate>
+          2026年1月13日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          26 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">subfinder-使用手册</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="Subfinder-实战使用手册"><a href="#Subfinder-实战使用手册" class="headerlink" title="Subfinder 实战使用手册"></a>Subfinder 实战使用手册</h1><blockquote>
+<p>来源：ProjectDiscovery<br>官方仓库：<a target="_blank" rel="noopener" href="https://github.com/projectdiscovery/subfinder">https://github.com/projectdiscovery/subfinder</a><br>官方文档：<a target="_blank" rel="noopener" href="https://docs.projectdiscovery.io/tools/subfinder">https://docs.projectdiscovery.io/tools/subfinder</a></p>
+</blockquote>
+<hr>
+<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
+<li><a href="#subfinder-%E5%AE%9E%E6%88%98%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C">Subfinder 实战使用手册</a><ul>
+<li><a href="#%E7%9B%AE%E5%BD%95">目录</a></li>
+<li><a href="#%E4%B8%80%E6%A6%82%E8%BF%B0">一、概述</a></li>
+<li><a href="#%E4%BA%8C%E5%AE%89%E8%A3%85">二、安装</a></li>
+<li><a href="#%E4%B8%89%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%8F%82%E6%95%B0%E5%85%A8%E8%A7%A3">三、命令行参数全解</a><ul>
+<li><a href="#31-%E8%BE%93%E5%85%A5%E5%8F%82%E6%95%B0">3.1 输入参数</a></li>
+<li><a href="#32-%E6%95%B0%E6%8D%AE%E6%BA%90%E6%8E%A7%E5%88%B6">3.2 数据源控制</a></li>
+<li><a href="#33-%E8%BF%87%E6%BB%A4%E4%B8%8E%E5%8C%B9%E9%85%8D">3.3 过滤与匹配</a></li>
+<li><a href="#34-%E9%80%9F%E7%8E%87%E9%99%90%E5%88%B6">3.4 速率限制</a></li>
+<li><a href="#35-%E8%BE%93%E5%87%BA%E6%8E%A7%E5%88%B6">3.5 输出控制</a></li>
+<li><a href="#36-%E9%85%8D%E7%BD%AE%E4%B8%8E%E4%BB%A3%E7%90%86">3.6 配置与代理</a></li>
+<li><a href="#37-%E8%B0%83%E8%AF%95%E5%8F%82%E6%95%B0">3.7 调试参数</a></li>
+<li><a href="#38-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96">3.8 性能优化</a></li>
+</ul>
+</li>
+<li><a href="#%E5%9B%9B%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E8%AF%A6%E8%A7%A3">四、配置文件详解</a><ul>
+<li><a href="#41-configyaml">4.1 config.yaml</a></li>
+<li><a href="#42-provider-configyamlapi-key">4.2 provider-config.yaml（API Key）</a></li>
+</ul>
+</li>
+<li><a href="#%E4%BA%94%E5%AE%9E%E6%88%98%E5%9C%BA%E6%99%AF%E9%80%9F%E6%9F%A5">五、实战场景速查</a><ul>
+<li><a href="#51-%E5%BF%AB%E9%80%9F%E5%AD%90%E5%9F%9F%E5%8F%91%E7%8E%B0">5.1 快速子域发现</a></li>
+<li><a href="#52-%E6%89%B9%E9%87%8F%E5%9F%9F%E5%90%8D%E6%9E%9A%E4%B8%BE">5.2 批量域名枚举</a></li>
+<li><a href="#53-%E6%8C%87%E5%AE%9A%E6%95%B0%E6%8D%AE%E6%BA%90%E6%9E%9A%E4%B8%BE">5.3 指定数据源枚举</a></li>
+<li><a href="#54-%E8%BF%87%E6%BB%A4%E5%B7%B2%E6%9C%89%E5%AD%90%E5%9F%9F">5.4 过滤已有子域</a></li>
+<li><a href="#55-%E9%85%8D%E5%90%88%E4%BB%A3%E7%90%86%E6%89%AB%E6%8F%8F">5.5 配合代理扫描</a></li>
+<li><a href="#56-%E5%8F%AA%E8%A6%81%E6%B4%BB%E8%B7%83%E5%AD%90%E5%9F%9F">5.6 只要活跃子域</a></li>
+<li><a href="#57-bug-bounty-%E5%BF%AB%E9%80%9F%E4%BE%A6%E5%AF%9F">5.7 Bug Bounty 快速侦察</a></li>
+<li><a href="#58-%E5%A4%9A%E5%9F%9F%E5%90%8D%E5%88%86%E7%9B%AE%E5%BD%95%E8%BE%93%E5%87%BA">5.8 多域名分目录输出</a></li>
+</ul>
+</li>
+<li><a href="#%E5%85%AD%E7%AE%A1%E9%81%93%E7%BB%84%E5%90%88%E5%AE%9E%E6%88%98%E6%A0%B8%E5%BF%83">六、管道组合（实战核心）</a><ul>
+<li><a href="#61-%E5%AD%98%E6%B4%BB%E9%AA%8C%E8%AF%81">6.1 存活验证</a></li>
+<li><a href="#62-%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F">6.2 端口扫描</a></li>
+<li><a href="#63-%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F">6.3 漏洞扫描</a></li>
+<li><a href="#64-%E5%8E%BB%E9%87%8D%E4%B8%8E%E5%A2%9E%E9%87%8F">6.4 去重与增量</a></li>
+<li><a href="#65-%E5%AE%8C%E6%95%B4%E6%B5%81%E6%B0%B4%E7%BA%BF">6.5 完整流水线</a></li>
+</ul>
+</li>
+<li><a href="#%E4%B8%83docker-%E7%94%A8%E6%B3%95">七、Docker 用法</a></li>
+<li><a href="#%E5%85%ABgo-sdk-%E8%B0%83%E7%94%A8">八、Go SDK 调用</a></li>
+<li><a href="#%E4%B9%9Dsubfinder-vs-amass-%E5%AF%B9%E6%AF%94">九、Subfinder vs Amass 对比</a></li>
+<li><a href="#%E5%8D%81%E6%95%B0%E6%8D%AE%E6%BA%90%E5%88%97%E8%A1%A8%E4%B8%8E-api-key-%E8%8E%B7%E5%8F%96">十、数据源列表与 API Key 获取</a><ul>
+<li><a href="#%E5%85%8D%E8%B4%B9%E5%8F%AF%E7%94%A8%E6%97%A0%E9%9C%80-api-key">免费可用（无需 API Key）</a></li>
+<li><a href="#%E9%9C%80%E8%A6%81-api-key">需要 API Key</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="一、概述"><a href="#一、概述" class="headerlink" title="一、概述"></a>一、概述</h2><p>Subfinder 是 ProjectDiscovery 出品的<strong>被动子域枚举工具</strong>，专注于一件事：从被动在线数据源快速发现有效子域名。</p>
+<p><strong>核心特点：</strong></p>
+<ul>
+<li>纯被动枚举，不发送任何探测请求，速度快且隐蔽</li>
+<li>支持 40+ 数据源</li>
+<li>管道友好（STDIN&#x2F;STDOUT），可无缝集成到自动化流水线</li>
+<li>轻量级，资源占用极低</li>
+<li>支持 JSON、文本等多种输出格式</li>
+<li>可作为 Go 库嵌入自定义程序</li>
+</ul>
+<p><strong>适用场景：</strong></p>
+<ul>
+<li>渗透测试 &#x2F; Bug Bounty 资产发现</li>
+<li>安全评估中的子域收集</li>
+<li>持续资产监控</li>
+<li>与其他工具联合的自动化流水线</li>
+</ul>
+<hr>
+<h2 id="二、安装"><a href="#二、安装" class="headerlink" title="二、安装"></a>二、安装</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── Go 安装（推荐）───</span><br>go install -v github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest<br><br><span class="hljs-comment"># ─── Homebrew ───</span><br>brew install subfinder<br><br><span class="hljs-comment"># ─── Docker ───</span><br>docker pull projectdiscovery/subfinder:latest<br><br><span class="hljs-comment"># ─── 从源码编译 ───</span><br>git <span class="hljs-built_in">clone</span> https://github.com/projectdiscovery/subfinder.git<br><span class="hljs-built_in">cd</span> subfinder/v2/cmd/subfinder<br>go build<br><span class="hljs-built_in">mv</span> subfinder /usr/local/bin/<br>subfinder -version<br><br><span class="hljs-comment"># ─── 下载预编译二进制 ───</span><br><span class="hljs-comment"># https://github.com/projectdiscovery/subfinder/releases</span><br><br><span class="hljs-comment"># ─── 设置 Go 路径 ───</span><br><span class="hljs-built_in">echo</span> <span class="hljs-string">&#x27;export PATH=$PATH:$HOME/go/bin&#x27;</span> &gt;&gt; <span class="hljs-variable">$HOME</span>/.bashrc<br><span class="hljs-built_in">source</span> <span class="hljs-variable">$HOME</span>/.bashrc<br><br><span class="hljs-comment"># ─── 验证安装 ───</span><br>subfinder -version<br>subfinder -h<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="三、命令行参数全解"><a href="#三、命令行参数全解" class="headerlink" title="三、命令行参数全解"></a>三、命令行参数全解</h2><h3 id="3-1-输入参数"><a href="#3-1-输入参数" class="headerlink" title="3.1 输入参数"></a>3.1 输入参数</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 单域名 ───</span><br>subfinder -d example.com<br><br><span class="hljs-comment"># ─── 多域名（逗号分隔）───</span><br>subfinder -d example.com,example.org,example.net<br><br><span class="hljs-comment"># ─── 从文件读取域名列表 ───</span><br>subfinder -dL domains.txt<br><br><span class="hljs-comment"># ─── 从 STDIN 读取（管道输入）───</span><br><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;example.com&quot;</span> | subfinder<br><span class="hljs-built_in">cat</span> domains.txt | subfinder<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="3-2-数据源控制"><a href="#3-2-数据源控制" class="headerlink" title="3.2 数据源控制"></a>3.2 数据源控制</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 列出所有可用数据源 ───</span><br>subfinder -<span class="hljs-built_in">ls</span><br><br><span class="hljs-comment"># ─── 只使用指定数据源 ───</span><br>subfinder -d example.com -s crtsh,github<br>subfinder -d example.com -s shodan,virustotal,certspotter<br><br><span class="hljs-comment"># ─── 使用所有数据源（最慢但最全）───</span><br>subfinder -d example.com -all<br><br><span class="hljs-comment"># ─── 排除指定数据源 ───</span><br>subfinder -d example.com -es alienvault,zoomeyeapi<br>subfinder -d example.com -exclude-sources chinaz,fofa<br><br><span class="hljs-comment"># ─── 只使用支持递归的源 ───</span><br><span class="hljs-comment"># 递归源可以发现 subdomain.domain.tld 这种多级子域</span><br>subfinder -d example.com -recursive<br></code></pre></td></tr></table></figure>
+
+<p><strong>数据源选择建议：</strong></p>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>推荐</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>快速获取（默认）</td>
+<td>不指定，使用内置默认源</td>
+</tr>
+<tr>
+<td>最大覆盖</td>
+<td><code>-all</code></td>
+</tr>
+<tr>
+<td>隐蔽性要求高</td>
+<td>指定被动 API 源（crtsh, certspotter）</td>
+</tr>
+<tr>
+<td>需要多级子域</td>
+<td><code>-recursive</code></td>
+</tr>
+<tr>
+<td>某源不可用&#x2F;被封</td>
+<td><code>-es</code> 排除</td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="3-3-过滤与匹配"><a href="#3-3-过滤与匹配" class="headerlink" title="3.3 过滤与匹配"></a>3.3 过滤与匹配</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 匹配（只保留指定子域）───</span><br>subfinder -d example.com -m <span class="hljs-string">&quot;api.example.com,dev.example.com&quot;</span><br>subfinder -d example.com -m match_list.txt         <span class="hljs-comment"># 从文件加载</span><br><br><span class="hljs-comment"># ─── 过滤（排除指定子域）───</span><br>subfinder -d example.com -f <span class="hljs-string">&quot;test.example.com,staging.example.com&quot;</span><br>subfinder -d example.com -f filter_list.txt          <span class="hljs-comment"># 从文件加载</span><br><br><span class="hljs-comment"># ─── 排除 IP ───</span><br>subfinder -d example.com -ei                          <span class="hljs-comment"># 排除域名列表中的 IP</span><br></code></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="3-4-速率限制"><a href="#3-4-速率限制" class="headerlink" title="3.4 速率限制"></a>3.4 速率限制</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 全局 HTTP 限速（每秒请求数）───</span><br>subfinder -d example.com -rl 10<br><br><span class="hljs-comment"># ─── 按数据源限速 ───</span><br>subfinder -d example.com -rls <span class="hljs-string">&quot;hackertarget=10/s,shodan=15/s&quot;</span><br><br><span class="hljs-comment"># ─── 并发 goroutine 数（仅 active 模式）───</span><br>subfinder -d example.com -nW -t 20<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="3-5-输出控制"><a href="#3-5-输出控制" class="headerlink" title="3.5 输出控制"></a>3.5 输出控制</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 输出到文件 ───</span><br>subfinder -d example.com -o subs.txt<br><br><span class="hljs-comment"># ─── 静默模式（只输出子域名，适合管道）───</span><br>subfinder -d example.com -silent<br><br><span class="hljs-comment"># ─── JSON 格式输出 ───</span><br>subfinder -d example.com -oJ -o results.json<br><br><span class="hljs-comment"># ─── JSON 含数据源信息 ───</span><br>subfinder -d example.com -oJ -cs -o results.json<br><span class="hljs-comment"># 输出示例：</span><br><span class="hljs-comment"># &#123;&quot;host&quot;:&quot;www.example.com&quot;,&quot;sources&quot;:[&quot;crtsh&quot;,&quot;virustotal&quot;]&#125;</span><br><br><span class="hljs-comment"># ─── 批量扫描，每个域名单独输出文件 ───</span><br>subfinder -dL domains.txt -oD output_dir/<br><br><span class="hljs-comment"># ─── 含 IP 信息（仅 active 模式）───</span><br>subfinder -d example.com -nW -oI -o subs_with_ip.txt<br><br><span class="hljs-comment"># ─── 禁用颜色输出 ───</span><br>subfinder -d example.com -nc<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="3-6-配置与代理"><a href="#3-6-配置与代理" class="headerlink" title="3.6 配置与代理"></a>3.6 配置与代理</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 指定配置文件 ───</span><br>subfinder -d example.com -config /path/to/config.yaml<br><br><span class="hljs-comment"># ─── 指定 Provider 配置（API Keys）───</span><br>subfinder -d example.com -pc /path/to/provider-config.yaml<br><br><span class="hljs-comment"># ─── 自定义 DNS 解析器 ───</span><br>subfinder -d example.com -r 8.8.8.8,1.1.1.1<br>subfinder -d example.com -r 223.5.5.5,114.114.114.114  <span class="hljs-comment"># 国内 DNS</span><br><br><span class="hljs-comment"># ─── 从文件加载 DNS 解析器 ───</span><br>subfinder -d example.com -rL resolvers.txt<br><br><span class="hljs-comment"># ─── 使用代理 ───</span><br>subfinder -d example.com -proxy http://127.0.0.1:8080<br>subfinder -d example.com -proxy socks5://127.0.0.1:1080<br><br><span class="hljs-comment"># ─── 只显示活跃子域（DNS 解析验证）───</span><br>subfinder -d example.com -nW<br>subfinder -d example.com -active    <span class="hljs-comment"># 同 -nW</span><br></code></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="3-7-调试参数"><a href="#3-7-调试参数" class="headerlink" title="3.7 调试参数"></a>3.7 调试参数</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 查看版本 ───</span><br>subfinder -version<br><br><span class="hljs-comment"># ─── 详细输出（显示每个数据源的状态）───</span><br>subfinder -d example.com -v<br><br><span class="hljs-comment"># ─── 禁用颜色 ───</span><br>subfinder -d example.com -nc<br><br><span class="hljs-comment"># ─── 列出所有可用数据源 ───</span><br>subfinder -<span class="hljs-built_in">ls</span><br><br><span class="hljs-comment"># ─── 帮助信息 ───</span><br>subfinder -h<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="3-8-性能优化"><a href="#3-8-性能优化" class="headerlink" title="3.8 性能优化"></a>3.8 性能优化</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 超时时间（秒，默认 30）───</span><br>subfinder -d example.com -<span class="hljs-built_in">timeout</span> 60<br><br><span class="hljs-comment"># ─── 最大枚举等待时间（分钟，默认 10）───</span><br>subfinder -d example.com -max-time 15<br><br><span class="hljs-comment"># ─── 禁用自动更新检查 ───</span><br>subfinder -d example.com -duc<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="四、配置文件详解"><a href="#四、配置文件详解" class="headerlink" title="四、配置文件详解"></a>四、配置文件详解</h2><h3 id="4-1-config-yaml"><a href="#4-1-config-yaml" class="headerlink" title="4.1 config.yaml"></a>4.1 config.yaml</h3><p>配置文件路径：<code>~/.config/subfinder/config.yaml</code></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-comment"># 全局配置</span><br><span class="hljs-comment"># 可通过 SUBFINDER_CONFIG 环境变量覆盖路径</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="4-2-provider-config-yaml（API-Key）"><a href="#4-2-provider-config-yaml（API-Key）" class="headerlink" title="4.2 provider-config.yaml（API Key）"></a>4.2 provider-config.yaml（API Key）</h3><p>配置文件路径：<code>~/.config/subfinder/provider-config.yaml</code></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-comment"># ─── 示例配置 ───</span><br><br><span class="hljs-attr">binaryedge:</span><br>  <span class="hljs-bullet">-</span> <span class="hljs-string">0bf8919b-aab9-42e4-9574-d3b639324597</span><br>  <span class="hljs-bullet">-</span> <span class="hljs-string">ac244e2f-b635-4581-878a-33f4e79a2c13</span><br><br><span class="hljs-attr">censys:</span><br>  <span class="hljs-bullet">-</span> <span class="hljs-string">API_ID:API_SECRET</span><br><br><span class="hljs-attr">certspotter:</span> []           <span class="hljs-comment"># 空数组 = 使用免费配额</span><br><br><span class="hljs-attr">shodan:</span><br>  <span class="hljs-bullet">-</span> <span class="hljs-string">AAAAClP1bJJSRMEYJazgwhJKrggRwKA</span><br><br><span class="hljs-attr">virustotal:</span><br>  <span class="hljs-bullet">-</span> <span class="hljs-string">YOUR_VT_API_KEY</span><br><br><span class="hljs-attr">securitytrails:</span> []        <span class="hljs-comment"># 空数组 = 使用免费配额</span><br><br><span class="hljs-attr">github:</span><br>  <span class="hljs-bullet">-</span> <span class="hljs-string">ghp_lkyJGU3jv1xmwk4SDXavrLDJ4dl2pSJMzj4X</span><br>  <span class="hljs-bullet">-</span> <span class="hljs-string">ghp_gkUuhkIYdQPj13ifH4KA3cXRn8JD2lqir2d4</span><br><br><span class="hljs-attr">passivetotal:</span><br>  <span class="hljs-bullet">-</span> <span class="hljs-string">user@email.com:password</span><br><br><span class="hljs-attr">intelx:</span><br>  <span class="hljs-bullet">-</span> <span class="hljs-string">HOST:API_KEY</span><br>  <span class="hljs-bullet">-</span> <span class="hljs-number">2.</span><span class="hljs-string">intelx.io:s4324-b98b-41b2-220e8-3320f6a1284d</span><br><br><span class="hljs-attr">zoomeyeapi:</span><br>  <span class="hljs-bullet">-</span> <span class="hljs-string">zoomeye.hk:4f73021d-ff95-4f53-937f-83d6db719eec</span><br><br><span class="hljs-attr">quake:</span><br>  <span class="hljs-bullet">-</span> <span class="hljs-string">0cb9030c-0a40-48a3-b8c4-fca28e466ba3</span><br><br><span class="hljs-attr">facebook:</span><br>  <span class="hljs-bullet">-</span> <span class="hljs-string">APP_ID:APP_SECRET</span><br><br><span class="hljs-attr">redhuntlabs:</span><br>  <span class="hljs-bullet">-</span> <span class="hljs-string">https://reconapi.redhuntlabs.com/community/v1/domains/subdomains:YOUR_API_TOKEN</span><br><br><span class="hljs-comment"># 无需 API Key 的源（安装即可用）：</span><br><span class="hljs-comment"># AlienVault, Anubis, Archive.org, Ask, Baidu, Bing,</span><br><span class="hljs-comment"># CommonCrawl, DNSDumpster, DNSSpy, DuckDuckGo,</span><br><span class="hljs-comment"># FullHunt, Google, HackerTarget, Mnemonic,</span><br><span class="hljs-comment"># Netlas, PassiveDNS, Riddler, SiteDossier,</span><br><span class="hljs-comment"># SubdomainCenter, Sublist3rAPI, ThreatBook, ThreatMiner,</span><br><span class="hljs-comment"># Wayback, Yahoo ...</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>环境变量（覆盖配置路径）：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">export</span> SUBFINDER_CONFIG=/path/to/config.yaml<br><span class="hljs-built_in">export</span> SUBFINDER_PROVIDER_CONFIG=/path/to/provider-config.yaml<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="五、实战场景速查"><a href="#五、实战场景速查" class="headerlink" title="五、实战场景速查"></a>五、实战场景速查</h2><h3 id="5-1-快速子域发现"><a href="#5-1-快速子域发现" class="headerlink" title="5.1 快速子域发现"></a>5.1 快速子域发现</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 最简用法</span><br>subfinder -d example.com<br><br><span class="hljs-comment"># 静默输出到文件</span><br>subfinder -d example.com -silent -o subs.txt<br><br><span class="hljs-comment"># 查看发现数量</span><br>subfinder -d example.com -silent | <span class="hljs-built_in">wc</span> -l<br></code></pre></td></tr></table></figure>
+
+<h3 id="5-2-批量域名枚举"><a href="#5-2-批量域名枚举" class="headerlink" title="5.2 批量域名枚举"></a>5.2 批量域名枚举</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 从文件读取</span><br>subfinder -dL domains.txt -silent -o all_subs.txt<br><br><span class="hljs-comment"># 去重</span><br>subfinder -dL domains.txt -silent | <span class="hljs-built_in">sort</span> -u &gt; all_subs_unique.txt<br><br><span class="hljs-comment"># 每个域名单独输出文件</span><br>subfinder -dL domains.txt -oD results/<br></code></pre></td></tr></table></figure>
+
+<h3 id="5-3-指定数据源枚举"><a href="#5-3-指定数据源枚举" class="headerlink" title="5.3 指定数据源枚举"></a>5.3 指定数据源枚举</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 只用证书透明度日志源（最可靠、无需 Key）</span><br>subfinder -d example.com -s crtsh,certspotter -silent<br><br><span class="hljs-comment"># 只用 API 源（需要 Key，结果更丰富）</span><br>subfinder -d example.com -s shodan,virustotal,securitytrails -silent<br><br><span class="hljs-comment"># 全部数据源</span><br>subfinder -d example.com -all -silent<br><br><span class="hljs-comment"># 排除慢/不可用的源</span><br>subfinder -d example.com -es alienvault,zoomeyeapi,chinaz -silent<br></code></pre></td></tr></table></figure>
+
+<h3 id="5-4-过滤已有子域"><a href="#5-4-过滤已有子域" class="headerlink" title="5.4 过滤已有子域"></a>5.4 过滤已有子域</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 已有旧结果，只保留新发现的子域</span><br>subfinder -d example.com -silent | grep -vFf old_subs.txt &gt; new_subs.txt<br><br><span class="hljs-comment"># 配合 anew（去重增量工具）</span><br>subfinder -d example.com -silent | anew existing_subs.txt<br><br><span class="hljs-comment"># 匹配特定关键词的子域</span><br>subfinder -d example.com -m <span class="hljs-string">&quot;api,admin,dev,staging&quot;</span> -silent<br><br><span class="hljs-comment"># 排除不需要的子域</span><br>subfinder -d example.com -f <span class="hljs-string">&quot;test,dev-old,deprecated&quot;</span> -silent<br></code></pre></td></tr></table></figure>
+
+<h3 id="5-5-配合代理扫描"><a href="#5-5-配合代理扫描" class="headerlink" title="5.5 配合代理扫描"></a>5.5 配合代理扫描</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># HTTP 代理</span><br>subfinder -d example.com -proxy http://127.0.0.1:8080 -silent<br><br><span class="hljs-comment"># SOCKS5 代理</span><br>subfinder -d example.com -proxy socks5://127.0.0.1:1080 -silent<br><br><span class="hljs-comment"># 配合 Burp Suite 抓包分析</span><br>subfinder -d example.com -proxy http://127.0.0.1:8080 -v<br></code></pre></td></tr></table></figure>
+
+<h3 id="5-6-只要活跃子域"><a href="#5-6-只要活跃子域" class="headerlink" title="5.6 只要活跃子域"></a>5.6 只要活跃子域</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># Subfinder 内置 DNS 验证</span><br>subfinder -d example.com -nW -silent<br><br><span class="hljs-comment"># 等同于</span><br>subfinder -d example.com -active -silent<br><br><span class="hljs-comment"># 带 IP 信息</span><br>subfinder -d example.com -active -oI -silent<br></code></pre></td></tr></table></figure>
+
+<h3 id="5-7-Bug-Bounty-快速侦察"><a href="#5-7-Bug-Bounty-快速侦察" class="headerlink" title="5.7 Bug Bounty 快速侦察"></a>5.7 Bug Bounty 快速侦察</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 一键：子域名 → 存活 → 输出</span><br>subfinder -d target.com -silent | httpx -silent -title -status-code | <span class="hljs-built_in">tee</span> recon.txt<br><br><span class="hljs-comment"># 深度版：子域名 → 去重 → 存活 → 端口 → 漏洞</span><br>subfinder -d target.com -all -silent | <span class="hljs-built_in">sort</span> -u | \<br>  httpx -silent -title -status-code -tech-detect | \<br>  <span class="hljs-built_in">tee</span> alive.txt | \<br>  naabu -silent | \<br>  nuclei -t cves/ -severity critical,high -o vulns.txt<br></code></pre></td></tr></table></figure>
+
+<h3 id="5-8-多域名分目录输出"><a href="#5-8-多域名分目录输出" class="headerlink" title="5.8 多域名分目录输出"></a>5.8 多域名分目录输出</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 每个域名输出到单独文件</span><br>subfinder -dL domains.txt -oD scan_results/<br><br><span class="hljs-comment"># 目录结构：</span><br><span class="hljs-comment"># scan_results/</span><br><span class="hljs-comment"># ├── example.com.txt</span><br><span class="hljs-comment"># ├── example.org.txt</span><br><span class="hljs-comment"># └── example.net.txt</span><br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="六、管道组合（实战核心）"><a href="#六、管道组合（实战核心）" class="headerlink" title="六、管道组合（实战核心）"></a>六、管道组合（实战核心）</h2><h3 id="6-1-存活验证"><a href="#6-1-存活验证" class="headerlink" title="6.1 存活验证"></a>6.1 存活验证</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># Subfinder → httpx（最常用组合）</span><br>subfinder -d example.com -silent | httpx -silent -o alive.txt<br><br><span class="hljs-comment"># 带标题和状态码</span><br>subfinder -d example.com -silent | httpx -silent -title -status-code<br><br><span class="hljs-comment"># 带技术栈识别</span><br>subfinder -d example.com -silent | httpx -silent -title -status-code -tech-detect<br><br><span class="hljs-comment"># 只要 200</span><br>subfinder -d example.com -silent | httpx -silent -mc 200<br><br><span class="hljs-comment"># Subfinder → httprobe（轻量替代）</span><br>subfinder -d example.com -silent | httprobe<br><br><span class="hljs-comment"># Subfinder → dnsx（DNS 解析验证）</span><br>subfinder -d example.com -silent | dnsx -silent -a -resp -o resolved.txt<br></code></pre></td></tr></table></figure>
+
+<h3 id="6-2-端口扫描"><a href="#6-2-端口扫描" class="headerlink" title="6.2 端口扫描"></a>6.2 端口扫描</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># Subfinder → naabu</span><br>subfinder -d example.com -silent | naabu -silent -o ports.txt<br><br><span class="hljs-comment"># 指定端口</span><br>subfinder -d example.com -silent | naabu -silent -p 80,443,8080,8443<br><br><span class="hljs-comment"># 全端口</span><br>subfinder -d example.com -silent | naabu -silent -p -<br><br><span class="hljs-comment"># Subfinder → httpx → naabu</span><br>subfinder -d example.com -silent | httpx -silent | naabu -silent<br></code></pre></td></tr></table></figure>
+
+<h3 id="6-3-漏洞扫描"><a href="#6-3-漏洞扫描" class="headerlink" title="6.3 漏洞扫描"></a>6.3 漏洞扫描</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># Subfinder → httpx → nuclei</span><br>subfinder -d example.com -silent | httpx -silent | nuclei -t cves/<br><br><span class="hljs-comment"># 只扫高危</span><br>subfinder -d example.com -silent | httpx -silent | nuclei -t cves/ -severity critical,high<br><br><span class="hljs-comment"># 信息泄露检测</span><br>subfinder -d example.com -silent | httpx -silent | nuclei -t exposures/ -o leaks.txt<br><br><span class="hljs-comment"># 错误配置检测</span><br>subfinder -d example.com -silent | httpx -silent | nuclei -t misconfiguration/<br></code></pre></td></tr></table></figure>
+
+<h3 id="6-4-去重与增量"><a href="#6-4-去重与增量" class="headerlink" title="6.4 去重与增量"></a>6.4 去重与增量</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 去重</span><br>subfinder -d example.com -silent | <span class="hljs-built_in">sort</span> -u<br><br><span class="hljs-comment"># 增量（只保留新发现的）</span><br>subfinder -d example.com -silent | anew old_subs.txt<br><br><span class="hljs-comment"># 合并多个工具结果并去重</span><br>&#123;<br>  subfinder -d example.com -silent<br>  amass enum -passive -d example.com -silent<br>  assetfinder --subs-only example.com<br>&#125; | <span class="hljs-built_in">sort</span> -u &gt; all_subs.txt<br></code></pre></td></tr></table></figure>
+
+<h3 id="6-5-完整流水线"><a href="#6-5-完整流水线" class="headerlink" title="6.5 完整流水线"></a>6.5 完整流水线</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 流水线 1：标准资产发现 ───</span><br>subfinder -d example.com -silent | \<br>  httpx -silent -title -status-code -tech-detect -ip | \<br>  <span class="hljs-built_in">tee</span> alive_web.txt | \<br>  naabu -silent -rate 10000 | \<br>  nuclei -t cves/ -severity critical,high -o vulns.txt<br><br><span class="hljs-comment"># ─── 流水线 2：批量域名自动化 ───</span><br><span class="hljs-built_in">cat</span> domains.txt | <span class="hljs-keyword">while</span> <span class="hljs-built_in">read</span> domain; <span class="hljs-keyword">do</span><br>  <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;[*] Scanning: <span class="hljs-variable">$domain</span>&quot;</span><br>  subfinder -d <span class="hljs-string">&quot;<span class="hljs-variable">$domain</span>&quot;</span> -silent | \<br>    httpx -silent -title -status-code | \<br>    <span class="hljs-built_in">tee</span> -a all_alive.txt<br><span class="hljs-keyword">done</span><br><span class="hljs-built_in">cat</span> all_alive.txt | <span class="hljs-built_in">cut</span> -d<span class="hljs-string">&#x27; &#x27;</span> -f1 | nuclei -t exposures/ -o leaks.txt<br><br><span class="hljs-comment"># ─── 流水线 3：持续监控（每小时运行）───</span><br><span class="hljs-keyword">while</span> <span class="hljs-literal">true</span>; <span class="hljs-keyword">do</span><br>  subfinder -d example.com -all -silent | \<br>    anew existing_subs.txt | \<br>    httpx -silent -title | \<br>    nuclei -t cves/ -severity critical,high | \<br>    notify<br>  <span class="hljs-built_in">sleep</span> 3600<br><span class="hljs-keyword">done</span><br><br><span class="hljs-comment"># ─── 流水线 4：子域名 → 爬虫 → 漏洞 ───</span><br>subfinder -d example.com -silent | \<br>  httpx -silent | \<br>  katana -silent -d 3 | \<br>  nuclei -t vulnerabilities/ -o web_vulns.txt<br><br><span class="hljs-comment"># ─── 流水线 5：信息收集全链路 ───</span><br>subfinder -d example.com -silent | <span class="hljs-built_in">tee</span> raw_subs.txt | \<br>  dnsx -silent -a -resp | <span class="hljs-built_in">tee</span> resolved.txt | \<br>  awk <span class="hljs-string">&#x27;&#123;print $2&#125;&#x27;</span> | <span class="hljs-built_in">sort</span> -u | <span class="hljs-built_in">tee</span> ips.txt | \<br>  naabu -silent -rate 5000 | <span class="hljs-built_in">tee</span> open_ports.txt<br><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;Subs: <span class="hljs-subst">$(wc -l &lt; raw_subs.txt)</span>, IPs: <span class="hljs-subst">$(wc -l &lt; ips.txt)</span>, Ports: <span class="hljs-subst">$(wc -l &lt; open_ports.txt)</span>&quot;</span><br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="七、Docker-用法"><a href="#七、Docker-用法" class="headerlink" title="七、Docker 用法"></a>七、Docker 用法</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 基础扫描 ───</span><br>docker run projectdiscovery/subfinder:latest -d example.com<br><br><span class="hljs-comment"># ─── 静默输出 ───</span><br>docker run projectdiscovery/subfinder:latest -d example.com -silent<br><br><span class="hljs-comment"># ─── 挂载配置目录（保留 API Key 配置）───</span><br>docker run -v <span class="hljs-variable">$HOME</span>/.config/subfinder:/root/.config/subfinder \<br>  projectdiscovery/subfinder:latest -d example.com<br><br><span class="hljs-comment"># ─── 输出到本地文件 ───</span><br>docker run -v $(<span class="hljs-built_in">pwd</span>):/output projectdiscovery/subfinder:latest \<br>  -d example.com -o /output/subs.txt<br><br><span class="hljs-comment"># ─── 管道组合 ───</span><br>docker run -i projectdiscovery/subfinder:latest -d example.com -silent | \<br>  docker run -i projectdiscovery/httpx:latest -silent<br><br><span class="hljs-comment"># ─── 批量扫描 ───</span><br>docker run -v $(<span class="hljs-built_in">pwd</span>):/data -v <span class="hljs-variable">$HOME</span>/.config/subfinder:/root/.config/subfinder \<br>  projectdiscovery/subfinder:latest -dL /data/domains.txt -oD /data/results/<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="八、Go-SDK-调用"><a href="#八、Go-SDK-调用" class="headerlink" title="八、Go SDK 调用"></a>八、Go SDK 调用</h2><p>Subfinder 可以作为 Go 库嵌入自定义程序：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> main<br><br><span class="hljs-keyword">import</span> (<br>    <span class="hljs-string">&quot;context&quot;</span><br>    <span class="hljs-string">&quot;fmt&quot;</span><br>    <span class="hljs-string">&quot;log&quot;</span><br><br>    <span class="hljs-string">&quot;github.com/projectdiscovery/subfinder/v2/pkg/runner&quot;</span><br>)<br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>    subfinderRunner, err := runner.NewRunner(&amp;runner.Options&#123;<br>        Threads:            <span class="hljs-number">10</span>,<br>        Timeout:            <span class="hljs-number">30</span>,<br>        MaxEnumerationTime: <span class="hljs-number">10</span>,<br>        Resolvers:          []<span class="hljs-type">string</span>&#123;<span class="hljs-string">&quot;8.8.8.8&quot;</span>, <span class="hljs-string">&quot;1.1.1.1&quot;</span>&#125;,<br>        ProviderConfig: &amp;runner.ProviderConfig&#123;<br>            <span class="hljs-comment">// ProviderConfigPath: &quot;/path/to/provider-config.yaml&quot;,</span><br>        &#125;,<br>    &#125;)<br>    <span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> &#123;<br>        log.Fatal(err)<br>    &#125;<br><br>    output := <span class="hljs-built_in">make</span>(<span class="hljs-keyword">chan</span> <span class="hljs-type">string</span>)<br>    <span class="hljs-keyword">go</span> <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">()</span></span> &#123;<br>        err := subfinderRunner.EnumerateSingleDomain(<br>            context.Background(),<br>            <span class="hljs-string">&quot;example.com&quot;</span>,<br>            output,<br>        )<br>        <span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> &#123;<br>            log.Fatal(err)<br>        &#125;<br>    &#125;()<br><br>    <span class="hljs-keyword">for</span> subdomain := <span class="hljs-keyword">range</span> output &#123;<br>        fmt.Println(subdomain)<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="九、Subfinder-vs-Amass-对比"><a href="#九、Subfinder-vs-Amass-对比" class="headerlink" title="九、Subfinder vs Amass 对比"></a>九、Subfinder vs Amass 对比</h2><table>
+<thead>
+<tr>
+<th>维度</th>
+<th>Subfinder</th>
+<th>Amass</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>类型</strong></td>
+<td>纯被动枚举</td>
+<td>被动 + 主动 + 爆破</td>
+</tr>
+<tr>
+<td><strong>速度</strong></td>
+<td>⚡ 极快（几秒）</td>
+<td>🐢 较慢（几分钟到几十分钟）</td>
+</tr>
+<tr>
+<td><strong>数据源</strong></td>
+<td>40+ 被动源</td>
+<td>80+ 混合源</td>
+</tr>
+<tr>
+<td><strong>隐蔽性</strong></td>
+<td>🟢 高（不发探测）</td>
+<td>🟡 中（主动模式会发请求）</td>
+</tr>
+<tr>
+<td><strong>爆破能力</strong></td>
+<td>❌ 无</td>
+<td>✅ 有（hashcat 掩码）</td>
+</tr>
+<tr>
+<td><strong>数据持久化</strong></td>
+<td>❌ 无</td>
+<td>✅ 图数据库</td>
+</tr>
+<tr>
+<td><strong>可视化</strong></td>
+<td>❌ 无</td>
+<td>✅ D3.js &#x2F; Graphviz</td>
+</tr>
+<tr>
+<td><strong>管道集成</strong></td>
+<td>⚡ 极佳</td>
+<td>🟡 可用</td>
+</tr>
+<tr>
+<td><strong>资源占用</strong></td>
+<td>🟢 极低</td>
+<td>🔴 较高</td>
+</tr>
+<tr>
+<td><strong>学习曲线</strong></td>
+<td>🟢 低</td>
+<td>🟡 中</td>
+</tr>
+<tr>
+<td><strong>适用场景</strong></td>
+<td>自动化流水线</td>
+<td>深度资产发现</td>
+</tr>
+</tbody></table>
+<p><strong>最佳实践：两者联合使用</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">&#123;<br>  subfinder -d example.com -silent<br>  amass enum -passive -d example.com -silent<br>&#125; | <span class="hljs-built_in">sort</span> -u | httpx -silent -o complete_alive.txt<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十、数据源列表与-API-Key-获取"><a href="#十、数据源列表与-API-Key-获取" class="headerlink" title="十、数据源列表与 API Key 获取"></a>十、数据源列表与 API Key 获取</h2><h3 id="免费可用（无需-API-Key）"><a href="#免费可用（无需-API-Key）" class="headerlink" title="免费可用（无需 API Key）"></a>免费可用（无需 API Key）</h3><table>
+<thead>
+<tr>
+<th>数据源</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>AlienVault</td>
+<td>OTX 威胁情报</td>
+</tr>
+<tr>
+<td>Anubis</td>
+<td>子域数据库</td>
+</tr>
+<tr>
+<td>Archive.org</td>
+<td>网页存档</td>
+</tr>
+<tr>
+<td>Ask</td>
+<td>搜索引擎</td>
+</tr>
+<tr>
+<td>Baidu</td>
+<td>搜索引擎</td>
+</tr>
+<tr>
+<td>Bing</td>
+<td>搜索引擎</td>
+</tr>
+<tr>
+<td>CommonCrawl</td>
+<td>网页抓取存档</td>
+</tr>
+<tr>
+<td>crtsh</td>
+<td>证书透明度日志</td>
+</tr>
+<tr>
+<td>DNSDumpster</td>
+<td>DNS 枚举</td>
+</tr>
+<tr>
+<td>DNSSpy</td>
+<td>DNS 分析</td>
+</tr>
+<tr>
+<td>DuckDuckGo</td>
+<td>搜索引擎</td>
+</tr>
+<tr>
+<td>Google</td>
+<td>搜索引擎</td>
+</tr>
+<tr>
+<td>HackerTarget</td>
+<td>安全扫描</td>
+</tr>
+<tr>
+<td>Mnemonic</td>
+<td>被动 DNS</td>
+</tr>
+<tr>
+<td>Netlas</td>
+<td>互联网扫描</td>
+</tr>
+<tr>
+<td>PassiveDNS</td>
+<td>被动 DNS</td>
+</tr>
+<tr>
+<td>Riddler</td>
+<td>搜索引擎</td>
+</tr>
+<tr>
+<td>SiteDossier</td>
+<td>子域收集</td>
+</tr>
+<tr>
+<td>SubdomainCenter</td>
+<td>子域数据</td>
+</tr>
+<tr>
+<td>Sublist3rAPI</td>
+<td>子域 API</td>
+</tr>
+<tr>
+<td>ThreatBook</td>
+<td>微步在线</td>
+</tr>
+<tr>
+<td>Wayback</td>
+<td>网页存档</td>
+</tr>
+<tr>
+<td>Yahoo</td>
+<td>搜索引擎</td>
+</tr>
+</tbody></table>
+<h3 id="需要-API-Key"><a href="#需要-API-Key" class="headerlink" title="需要 API Key"></a>需要 API Key</h3><table>
+<thead>
+<tr>
+<th>数据源</th>
+<th>获取地址</th>
+<th>免费额度</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>BeVigil</td>
+<td>bevigil.com&#x2F;osint-api</td>
+<td>有限</td>
+</tr>
+<tr>
+<td>BinaryEdge</td>
+<td>binaryedge.io</td>
+<td>有限</td>
+</tr>
+<tr>
+<td>BufferOver</td>
+<td>tls.bufferover.run</td>
+<td>有限</td>
+</tr>
+<tr>
+<td>C99</td>
+<td>api.c99.nl</td>
+<td>付费</td>
+</tr>
+<tr>
+<td>Censys</td>
+<td>censys.io</td>
+<td>免费注册</td>
+</tr>
+<tr>
+<td>CertSpotter</td>
+<td>sslmate.com&#x2F;certspotter&#x2F;api</td>
+<td>100&#x2F;小时</td>
+</tr>
+<tr>
+<td>Chaos</td>
+<td>chaos.projectdiscovery.io</td>
+<td>需邀请</td>
+</tr>
+<tr>
+<td>DNSDB</td>
+<td>api.dnsdb.info</td>
+<td>社区版免费</td>
+</tr>
+<tr>
+<td>Fofa</td>
+<td>fofa.info</td>
+<td>有限</td>
+</tr>
+<tr>
+<td>FullHunt</td>
+<td>fullhunt.io</td>
+<td>有限</td>
+</tr>
+<tr>
+<td>GitHub</td>
+<td>github.com&#x2F;settings&#x2F;tokens</td>
+<td>免费</td>
+</tr>
+<tr>
+<td>Intelx</td>
+<td>intelx.io</td>
+<td>试用 1 周</td>
+</tr>
+<tr>
+<td>PassiveTotal</td>
+<td>passivetotal.org</td>
+<td>免费注册</td>
+</tr>
+<tr>
+<td>Quake</td>
+<td>quake.360.cn</td>
+<td>有限</td>
+</tr>
+<tr>
+<td>Robtex</td>
+<td>robtex.com&#x2F;api</td>
+<td>有限</td>
+</tr>
+<tr>
+<td>SecurityTrails</td>
+<td>securitytrails.com</td>
+<td>50&#x2F;月</td>
+</tr>
+<tr>
+<td>Shodan</td>
+<td>shodan.io</td>
+<td>免费注册</td>
+</tr>
+<tr>
+<td>VirusTotal</td>
+<td>virustotal.com</td>
+<td>有限</td>
+</tr>
+<tr>
+<td>WhoisXML</td>
+<td>whoisxmlapi.com</td>
+<td>有限</td>
+</tr>
+<tr>
+<td>ZoomEye</td>
+<td>zoomeye.org (中国) &#x2F; zoomeye.hk (海外)</td>
+<td>有限</td>
+</tr>
+<tr>
+<td>Facebook</td>
+<td>developers.facebook.com</td>
+<td>免费</td>
+</tr>
+<tr>
+<td>Hunter</td>
+<td>hunter.qianxin.com</td>
+<td>有限</td>
+</tr>
+<tr>
+<td>BuiltWith</td>
+<td>api.builtwith.com</td>
+<td>付费</td>
+</tr>
+</tbody></table>
+<p><strong>推荐优先配置（免费且结果好）：</strong></p>
+<ol>
+<li>GitHub（免费 Token，大量 GitHub Dork 结果）</li>
+<li>Shodan（免费注册即可）</li>
+<li>VirusTotal（免费注册即可）</li>
+<li>CertSpotter（100 次&#x2F;小时免费）</li>
+<li>SecurityTrails（50 次&#x2F;月免费）</li>
+</ol>
+<hr>
+<blockquote>
+<p><strong>总结</strong>：Subfinder 是信息收集流水线的<strong>第一个环节</strong>。它的核心优势是”快”和”管道友好”。90% 的实战场景只需要一行命令：<code>subfinder -d example.com -silent | httpx -silent</code>。配好 API Key 后，结果量会显著提升。</p>
+</blockquote>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86%E5%B7%A5%E5%85%B7/" class="print-no-link">#信息收集工具</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>subfinder-使用手册</div>
+      <div>https://xiaobite-hacker.github.io/2026/01/13/subfinder-使用手册/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>xiaobite</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2026年1月13日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2026/02/01/oneforall-%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/" title="OneForall-使用手册">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">OneForall-使用手册</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2026/01/09/amass-%E5%91%BD%E4%BB%A4%E6%89%8B%E5%86%8C/" title="amass-使用手册">
+                        <span class="hidden-mobile">amass-使用手册</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

@@ -1,0 +1,926 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/admin.jpg">
+  <link rel="icon" href="/img/admin.jpg">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="xiaobite">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Feroxbuster 实战使用手册 来源：epi052&#x2F;feroxbuster官方仓库：https:&#x2F;&#x2F;github.com&#x2F;epi052&#x2F;feroxbuster官方文档：https:&#x2F;&#x2F;epi052.github.io&#x2F;feroxbuster-docs&#x2F;overview   目录 Feroxbuster 实战使用手册 目录 一、概述 二、安装 三、基本语法 四、目标指定 五、扩展名扫">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Feroxbuster-使用手册">
+<meta property="og:url" content="https://xiaobite-hacker.github.io/2026/04/01/feroxbuster-%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/index.html">
+<meta property="og:site_name" content="xiaobite">
+<meta property="og:description" content="Feroxbuster 实战使用手册 来源：epi052&#x2F;feroxbuster官方仓库：https:&#x2F;&#x2F;github.com&#x2F;epi052&#x2F;feroxbuster官方文档：https:&#x2F;&#x2F;epi052.github.io&#x2F;feroxbuster-docs&#x2F;overview   目录 Feroxbuster 实战使用手册 目录 一、概述 二、安装 三、基本语法 四、目标指定 五、扩展名扫">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-04-01T06:25:00.000Z">
+<meta property="article:modified_time" content="2026-04-12T10:06:39.106Z">
+<meta property="article:author" content="xiaobite">
+<meta property="article:tag" content="信息收集工具">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Feroxbuster-使用手册 - xiaobite</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"xiaobite-hacker.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>xiaobite</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/prompt/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>prompt</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Feroxbuster-使用手册"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-04-01 14:25" pubdate>
+          2026年4月1日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.8k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          24 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Feroxbuster-使用手册</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="Feroxbuster-实战使用手册"><a href="#Feroxbuster-实战使用手册" class="headerlink" title="Feroxbuster 实战使用手册"></a>Feroxbuster 实战使用手册</h1><blockquote>
+<p>来源：epi052&#x2F;feroxbuster<br>官方仓库：<a target="_blank" rel="noopener" href="https://github.com/epi052/feroxbuster">https://github.com/epi052/feroxbuster</a><br>官方文档：<a target="_blank" rel="noopener" href="https://epi052.github.io/feroxbuster-docs/overview">https://epi052.github.io/feroxbuster-docs/overview</a></p>
+</blockquote>
+<hr>
+<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
+<li><a href="#feroxbuster-%E5%AE%9E%E6%88%98%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C">Feroxbuster 实战使用手册</a><ul>
+<li><a href="#%E7%9B%AE%E5%BD%95">目录</a></li>
+<li><a href="#%E4%B8%80%E6%A6%82%E8%BF%B0">一、概述</a></li>
+<li><a href="#%E4%BA%8C%E5%AE%89%E8%A3%85">二、安装</a></li>
+<li><a href="#%E4%B8%89%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95">三、基本语法</a></li>
+<li><a href="#%E5%9B%9B%E7%9B%AE%E6%A0%87%E6%8C%87%E5%AE%9A">四、目标指定</a></li>
+<li><a href="#%E4%BA%94%E6%89%A9%E5%B1%95%E5%90%8D%E6%89%AB%E6%8F%8F">五、扩展名扫描</a></li>
+<li><a href="#%E5%85%AD%E8%BF%87%E6%BB%A4%E5%99%A8%E8%AF%A6%E8%A7%A3">六、过滤器详解</a></li>
+<li><a href="#%E4%B8%83%E9%80%92%E5%BD%92%E6%89%AB%E6%8F%8F%E6%A0%B8%E5%BF%83%E4%BC%98%E5%8A%BF">七、递归扫描（核心优势）</a></li>
+<li><a href="#%E5%85%AB%E9%93%BE%E6%8E%A5%E6%8F%90%E5%8F%96">八、链接提取</a></li>
+<li><a href="#%E4%B9%9Dhttp-%E8%AF%B7%E6%B1%82%E9%85%8D%E7%BD%AE">九、HTTP 请求配置</a></li>
+<li><a href="#%E5%8D%81%E8%AE%A4%E8%AF%81%E4%B8%8E%E4%BB%A3%E7%90%86">十、认证与代理</a></li>
+<li><a href="#%E5%8D%81%E4%B8%80%E9%80%9F%E7%8E%87%E4%B8%8E%E6%80%A7%E8%83%BD%E6%8E%A7%E5%88%B6">十一、速率与性能控制</a></li>
+<li><a href="#%E5%8D%81%E4%BA%8C%E8%BE%93%E5%87%BA%E6%8E%A7%E5%88%B6">十二、输出控制</a></li>
+<li><a href="#%E5%8D%81%E4%B8%89%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6">十三、配置文件</a></li>
+<li><a href="#%E5%8D%81%E5%9B%9B%E8%87%AA%E6%9B%B4%E6%96%B0">十四、自更新</a></li>
+<li><a href="#%E5%8D%81%E4%BA%94%E5%AE%9E%E6%88%98%E5%9C%BA%E6%99%AF%E9%80%9F%E6%9F%A5">十五、实战场景速查</a><ul>
+<li><a href="#%E5%9C%BA%E6%99%AF-1%E6%A0%87%E5%87%86%E7%9B%AE%E5%BD%95%E6%89%AB%E6%8F%8F">场景 1：标准目录扫描</a></li>
+<li><a href="#%E5%9C%BA%E6%99%AF-2%E6%B7%B1%E5%BA%A6%E9%80%92%E5%BD%92%E6%89%AB%E6%8F%8F">场景 2：深度递归扫描</a></li>
+<li><a href="#%E5%9C%BA%E6%99%AF-3%E9%93%BE%E6%8E%A5%E6%8F%90%E5%8F%96%E6%89%AB%E6%8F%8F%E6%A8%A1%E6%8B%9F%E7%88%AC%E8%99%AB">场景 3：链接提取扫描（模拟爬虫）</a></li>
+<li><a href="#%E5%9C%BA%E6%99%AF-4api-%E7%AB%AF%E7%82%B9%E5%8F%91%E7%8E%B0">场景 4：API 端点发现</a></li>
+<li><a href="#%E5%9C%BA%E6%99%AF-5%E5%AD%90%E5%9F%9F%E5%90%8D%E7%9B%AE%E5%BD%95%E6%89%B9%E9%87%8F%E6%89%AB%E6%8F%8F">场景 5：子域名目录批量扫描</a></li>
+<li><a href="#%E5%9C%BA%E6%99%AF-6%E5%B8%A6-cookie-%E8%AE%A4%E8%AF%81%E7%9A%84%E6%89%AB%E6%8F%8F">场景 6：带 Cookie 认证的扫描</a></li>
+<li><a href="#%E5%9C%BA%E6%99%AF-7%E9%80%9A%E8%BF%87-burp-%E4%BB%A3%E7%90%86">场景 7：通过 Burp 代理</a></li>
+<li><a href="#%E5%9C%BA%E6%99%AF-8%E5%A4%87%E4%BB%BD%E6%96%87%E4%BB%B6%E5%8F%91%E7%8E%B0">场景 8：备份文件发现</a></li>
+<li><a href="#%E5%9C%BA%E6%99%AF-9%E4%BD%8E%E9%80%9F%E9%9A%90%E8%94%BD%E6%89%AB%E6%8F%8F">场景 9：低速隐蔽扫描</a></li>
+<li><a href="#%E5%9C%BA%E6%99%AF-10json-post-%E6%89%AB%E6%8F%8F">场景 10：JSON POST 扫描</a></li>
+</ul>
+</li>
+<li><a href="#%E5%8D%81%E5%85%AD%E7%AE%A1%E9%81%93%E7%BB%84%E5%90%88">十六、管道组合</a></li>
+<li><a href="#%E5%8D%81%E4%B8%83%E5%AD%97%E5%85%B8%E6%8E%A8%E8%8D%90">十七、字典推荐</a></li>
+<li><a href="#%E5%8D%81%E5%85%ABferoxbuster-vs-ffuf-vs-gobuster-%E5%AF%B9%E6%AF%94">十八、Feroxbuster vs ffuf vs Gobuster 对比</a></li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="一、概述"><a href="#一、概述" class="headerlink" title="一、概述"></a>一、概述</h2><p>Feroxbuster 是用 Rust 编写的<strong>快速递归内容发现工具</strong>，专为强制浏览攻击（Forced Browsing）设计。它的核心优势是<strong>智能递归扫描</strong> —— 自动提取响应中的链接，发现新的子目录后自动递归深入。</p>
+<p><strong>核心特点：</strong></p>
+<ul>
+<li>🔄 <strong>智能递归</strong>：自动发现目录并深入扫描，递归能力最强</li>
+<li>🔗 <strong>链接提取</strong>：从响应体中提取 URL 继续扫描</li>
+<li>🚀 <strong>极速</strong>：Rust 编写，异步高并发</li>
+<li>📝 <strong>多值参数</strong>：扩展名&#x2F;Header&#x2F;URL&#x2F;状态码都支持多种写法</li>
+<li>⚙️ <strong>配置文件</strong>：<code>ferox-config.toml</code> 统一管理</li>
+<li>🔄 <strong>自更新</strong>：<code>--update</code> 一键更新</li>
+</ul>
+<hr>
+<h2 id="二、安装"><a href="#二、安装" class="headerlink" title="二、安装"></a>二、安装</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── Kali Linux（推荐）───</span><br><span class="hljs-built_in">sudo</span> apt update &amp;&amp; <span class="hljs-built_in">sudo</span> apt install -y feroxbuster<br><br><span class="hljs-comment"># ─── Homebrew（macOS/Linux）───</span><br>brew install feroxbuster<br><br><span class="hljs-comment"># ─── 一键安装脚本 ───</span><br>curl -sL https://raw.githubusercontent.com/epi052/feroxbuster/main/install-nix.sh | bash -s <span class="hljs-variable">$HOME</span>/.local/bin<br><br><span class="hljs-comment"># ─── 安装到当前目录 ───</span><br>curl -sL https://raw.githubusercontent.com/epi052/feroxbuster/main/install-nix.sh | bash<br><br><span class="hljs-comment"># ─── Windows (Winget) ───</span><br>winget install epi052.feroxbuster<br><br><span class="hljs-comment"># ─── Windows (Chocolatey) ───</span><br>choco install feroxbuster<br><br><span class="hljs-comment"># ─── Cargo ───</span><br>cargo install feroxbuster<br><br><span class="hljs-comment"># ─── Docker ───</span><br>docker pull feroxbuster/feroxbuster<br><br><span class="hljs-comment"># ─── 验证安装 ───</span><br>feroxbuster -V<br><br><span class="hljs-comment"># ─── 自更新 ───</span><br>./feroxbuster --update<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="三、基本语法"><a href="#三、基本语法" class="headerlink" title="三、基本语法"></a>三、基本语法</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">feroxbuster [选项] -u &lt;URL&gt; -w &lt;字典&gt;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 最简用法</span><br>feroxbuster -u https://target.com -w wordlist.txt<br><br><span class="hljs-comment"># 带扩展名</span><br>feroxbuster -u https://target.com -w wordlist.txt -x php,html,txt<br><br><span class="hljs-comment"># 静默输出 + 只看 200</span><br>feroxbuster -u https://target.com -w wordlist.txt --silent --filter-status 200<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="四、目标指定"><a href="#四、目标指定" class="headerlink" title="四、目标指定"></a>四、目标指定</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 单个 URL ───</span><br>feroxbuster -u https://target.com -w wordlist.txt<br><br><span class="hljs-comment"># ─── 从 STDIN 读取 ───</span><br><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;https://target.com&quot;</span> | feroxbuster --stdin -w wordlist.txt<br><span class="hljs-built_in">cat</span> urls.txt | feroxbuster --stdin -w wordlist.txt<br><br><span class="hljs-comment"># ─── 从文件读取 URL ───</span><br>feroxbuster -u https://target.com -w wordlist.txt<br><span class="hljs-comment"># 多 URL 可配合管道或脚本循环</span><br><br><span class="hljs-comment"># ─── 配合 httpx 从存活列表扫描 ───</span><br>httpx -l subs.txt -silent | feroxbuster --stdin -w wordlist.txt<br><br><span class="hljs-comment"># ─── 从 Burp Suite 导出的文件 ───</span><br>feroxbuster -u https://target.com -w wordlist.txt \<br>  -H <span class="hljs-string">&quot;Cookie: <span class="hljs-subst">$(cat cookies.txt)</span>&quot;</span><br><br><span class="hljs-comment"># ─── IPv6 ───</span><br>feroxbuster -u http://[::1] -w wordlist.txt<br><br><span class="hljs-comment"># ─── 自定义端口 ───</span><br>feroxbuster -u https://target.com:8443 -w wordlist.txt<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="五、扩展名扫描"><a href="#五、扩展名扫描" class="headerlink" title="五、扩展名扫描"></a>五、扩展名扫描</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 单扩展名 ───</span><br>feroxbuster -u https://target.com -w wordlist.txt -x php<br><br><span class="hljs-comment"># ─── 多扩展名（多种写法）───</span><br>feroxbuster -u https://target.com -w wordlist.txt -x php -x html,js<br>feroxbuster -u https://target.com -w wordlist.txt -x php html txt json,docx<br>feroxbuster -u https://target.com -w wordlist.txt -x php,html,txt,js,json,bak,old<br><br><span class="hljs-comment"># ─── 常用扩展名组合 ───</span><br>feroxbuster -u https://target.com -w wordlist.txt \<br>  -x php,html,htm,txt,js,json,xml,asp,aspx,jsp,bak,old,orig,swp,conf,config,<span class="hljs-built_in">log</span>,sql,db,tar.gz,zip<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="六、过滤器详解"><a href="#六、过滤器详解" class="headerlink" title="六、过滤器详解"></a>六、过滤器详解</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 按状态码过滤 ───</span><br>--filter-status 404                  <span class="hljs-comment"># 过滤掉 404</span><br>--filter-status 400,404,500          <span class="hljs-comment"># 过滤掉多个状态码</span><br>--filter-status 400-499              <span class="hljs-comment"># 过滤掉范围</span><br>--filter-status 404,500-599          <span class="hljs-comment"># 混合</span><br><br><span class="hljs-comment"># ─── 只显示特定状态码（相反逻辑）───</span><br>--status-codes 200                   <span class="hljs-comment"># 只显示 200</span><br>--status-codes 200,301,302,403       <span class="hljs-comment"># 显示多个</span><br>--status-codes 200-299,301           <span class="hljs-comment"># 范围</span><br><br><span class="hljs-comment"># ─── 按响应大小过滤 ───</span><br>--filter-size 4242                   <span class="hljs-comment"># 过滤大小 4242</span><br>--filter-size 0                      <span class="hljs-comment"># 过滤空响应</span><br>--filter-size 4242,5678              <span class="hljs-comment"># 多个大小</span><br>--filter-size 4000-5000              <span class="hljs-comment"># 范围</span><br><br><span class="hljs-comment"># ─── 按响应行数过滤 ───</span><br>--filter-words 100                   <span class="hljs-comment"># 过滤 100 字的响应</span><br>--filter-lines 10                    <span class="hljs-comment"># 过滤 10 行的响应</span><br>--filter-regex <span class="hljs-string">&quot;Not Found&quot;</span>           <span class="hljs-comment"># 正则过滤</span><br>--filter-similar-to https://target.com/404  <span class="hljs-comment"># 过滤与 404 页面相似的</span><br><br><span class="hljs-comment"># ─── 按响应时间过滤 ───</span><br>--filter-status 200                  <span class="hljs-comment"># 用状态码过滤</span><br><br><span class="hljs-comment"># ─── 按子域名长度动态排除（通配符场景）───</span><br>--exclude-length 4242                <span class="hljs-comment"># 排除特定大小</span><br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="七、递归扫描（核心优势）"><a href="#七、递归扫描（核心优势）" class="headerlink" title="七、递归扫描（核心优势）"></a>七、递归扫描（核心优势）</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 递归扫描（默认开启）───</span><br>feroxbuster -u https://target.com -w wordlist.txt<br><br><span class="hljs-comment"># ─── 限制递归深度 ───</span><br>feroxbuster -u https://target.com -w wordlist.txt -d 2     <span class="hljs-comment"># 深度 2</span><br>feroxbuster -u https://target.com -w wordlist.txt -d 3     <span class="hljs-comment"># 深度 3</span><br>feroxbuster -u https://target.com -w wordlist.txt -d 5     <span class="hljs-comment"># 深度 5</span><br><br><span class="hljs-comment"># ─── 禁用递归 ───</span><br>feroxbuster -u https://target.com -w wordlist.txt --no-recursion<br><br><span class="hljs-comment"># ─── 递归白名单（只递归扫描指定路径）───</span><br>feroxbuster -u https://target.com -w wordlist.txt \<br>  --scan-limit-list allowed_paths.txt<br><br><span class="hljs-comment"># ─── 递归 + 链接提取（最全面）───</span><br>feroxbuster -u https://target.com -w wordlist.txt --extract-links -d 3<br><br><span class="hljs-comment"># ─── 递归排除（不扫描特定目录）───</span><br>feroxbuster -u https://target.com -w wordlist.txt \<br>  --dont-extract-links               <span class="hljs-comment"># 不从响应体提取链接</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>递归工作原理：</strong></p>
+<ol>
+<li>扫描 <code>https://target.com/FUZZ</code></li>
+<li>发现 <code>https://target.com/admin/</code>（301 重定向）</li>
+<li>自动将 <code>admin/</code> 加入扫描队列</li>
+<li>递归扫描 <code>https://target.com/admin/FUZZ</code></li>
+<li>重复直到达到最大深度</li>
+</ol>
+<hr>
+<h2 id="八、链接提取"><a href="#八、链接提取" class="headerlink" title="八、链接提取"></a>八、链接提取</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 启用链接提取（从响应体找 URL）───</span><br>feroxbuster -u https://target.com -w wordlist.txt --extract-links<br><br><span class="hljs-comment"># ─── 链接提取 + 递归（最全面的扫描）───</span><br>feroxbuster -u https://target.com -w wordlist.txt --extract-links -d 3<br><br><span class="hljs-comment"># ─── 不提取链接（纯字典扫描）───</span><br>feroxbuster -u https://target.com -w wordlist.txt --dont-extract-links<br></code></pre></td></tr></table></figure>
+
+<p>链接提取功能：</p>
+<ul>
+<li>从 HTML 响应体中提取所有绝对和相对 URL</li>
+<li>自动请求 <code>/robots.txt</code> 并解析 Allow&#x2F;Disallow 条目</li>
+<li>发现的目录自动加入递归队列</li>
+<li>发现的文件直接请求并报告</li>
+</ul>
+<p><strong>模拟爬虫行为：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 使用只含根路径的字典 → 模拟爬虫</span><br><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;/&quot;</span> &gt; root.txt<br>feroxbuster -u https://target.com -w root.txt --extract-links -d 5<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="九、HTTP-请求配置"><a href="#九、HTTP-请求配置" class="headerlink" title="九、HTTP 请求配置"></a>九、HTTP 请求配置</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 自定义 Header（多值灵活写法）───</span><br>feroxbuster -u https://target.com -w wordlist.txt \<br>  -H <span class="hljs-string">&quot;Accept: application/json&quot;</span> \<br>  -H <span class="hljs-string">&quot;Authorization: Bearer TOKEN&quot;</span><br><br><span class="hljs-comment"># ─── Cookie ───</span><br>feroxbuster -u https://target.com -w wordlist.txt \<br>  -b <span class="hljs-string">&quot;session=abc123; token=xyz&quot;</span><br><br><span class="hljs-comment"># ─── HTTP 方法 ───</span><br>feroxbuster -u https://target.com -w wordlist.txt --method GET<br>feroxbuster -u https://target.com -w wordlist.txt --method POST<br><br><span class="hljs-comment"># ─── POST 数据 ───</span><br>feroxbuster -u https://target.com -w wordlist.txt \<br>  --data-urlencoded <span class="hljs-string">&#x27;key=value&amp;name=FUZZ&#x27;</span><br>feroxbuster -u https://target.com -w wordlist.txt \<br>  --data-urlencoded @payload.txt<br><br><span class="hljs-comment"># ─── JSON 数据 ───</span><br>feroxbuster -u https://target.com -w wordlist.txt \<br>  --data-json <span class="hljs-string">&#x27;&#123;&quot;user&quot;:&quot;admin&quot;,&quot;pass&quot;:&quot;FUZZ&quot;&#125;&#x27;</span><br>feroxbuster -u https://target.com -w wordlist.txt \<br>  --data-json @payload.json<br><br><span class="hljs-comment"># ─── Query 参数 ───</span><br>feroxbuster -u https://target.com -w wordlist.txt \<br>  --query <span class="hljs-string">&quot;token=0123456789ABCDEF&quot;</span><br>feroxbuster -u https://target.com -w wordlist.txt \<br>  --query <span class="hljs-string">&quot;api_key=xxx&amp;page=1&quot;</span><br><br><span class="hljs-comment"># ─── 跟随重定向 ───</span><br>feroxbuster -u https://target.com -w wordlist.txt --redirects<br><br><span class="hljs-comment"># ─── HTTP/2 ───</span><br>feroxbuster -u https://target.com -w wordlist.txt --http2<br><br><span class="hljs-comment"># ─── 跳过 TLS 验证 ───</span><br>feroxbuster -u https://target.com -w wordlist.txt --insecure<br><br><span class="hljs-comment"># ─── 自定义超时 ───</span><br>feroxbuster -u https://target.com -w wordlist.txt --<span class="hljs-built_in">timeout</span> 30<br><br><span class="hljs-comment"># ─── 自定义 SNI ───</span><br>feroxbuster -u https://target.com -w wordlist.txt --sni target.com<br><br><span class="hljs-comment"># ─── 不自动添加尾部 / ───</span><br>feroxbuster -u https://target.com -w wordlist.txt --add-slash<br><br><span class="hljs-comment"># ─── 自动添加尾部 / ───</span><br>feroxbuster -u https://target.com -w wordlist.txt --slash<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十、认证与代理"><a href="#十、认证与代理" class="headerlink" title="十、认证与代理"></a>十、认证与代理</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── HTTP 代理 ───</span><br>feroxbuster -u https://target.com -w wordlist.txt --proxy http://127.0.0.1:8080<br><br><span class="hljs-comment"># ─── SOCKS5 代理 ───</span><br>feroxbuster -u https://target.com -w wordlist.txt --proxy socks5://127.0.0.1:1080<br><br><span class="hljs-comment"># ─── SOCKS5 代理（含 DNS 解析）───</span><br>feroxbuster -u https://target.com -w wordlist.txt --proxy socks5h://127.0.0.1:9050<br><br><span class="hljs-comment"># ─── 客户端证书（mTLS）───</span><br>feroxbuster -u https://target.com -w wordlist.txt \<br>  --client-cert client.pem --client-key client.key<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十一、速率与性能控制"><a href="#十一、速率与性能控制" class="headerlink" title="十一、速率与性能控制"></a>十一、速率与性能控制</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 并发线程数（默认 50）───</span><br>feroxbuster -u https://target.com -w wordlist.txt -t 10     <span class="hljs-comment"># 低并发</span><br>feroxbuster -u https://target.com -w wordlist.txt -t 200    <span class="hljs-comment"># 高并发</span><br><br><span class="hljs-comment"># ─── 每秒请求速率 ───</span><br>feroxbuster -u https://target.com -w wordlist.txt --rate-limit 100<br><br><span class="hljs-comment"># ─── 请求延迟 ───</span><br>feroxbuster -u https://target.com -w wordlist.txt --time-limit 500ms<br><br><span class="hljs-comment"># ─── 最大扫描时间（整个任务）───</span><br>feroxbuster -u https://target.com -w wordlist.txt --scan-limit 300   <span class="hljs-comment"># 秒</span><br><br><span class="hljs-comment"># ─── 最大请求数 ───</span><br>feroxbuster -u https://target.com -w wordlist.txt --auto-tune<br>feroxbuster -u https://target.com -w wordlist.txt --no-auto-tune<br><br><span class="hljs-comment"># ─── 自动调优（根据响应自动调整速率）───</span><br>feroxbuster -u https://target.com -w wordlist.txt --auto-tune<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十二、输出控制"><a href="#十二、输出控制" class="headerlink" title="十二、输出控制"></a>十二、输出控制</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 输出到文件 ───</span><br>feroxbuster -u https://target.com -w wordlist.txt -o results.txt<br><br><span class="hljs-comment"># ─── 静默模式（只输出 URL）───</span><br>feroxbuster -u https://target.com -w wordlist.txt --silent<br><br><span class="hljs-comment"># ─── 详细输出 ───</span><br>feroxbuster -u https://target.com -w wordlist.txt -v       <span class="hljs-comment"># INFO 级别</span><br>feroxbuster -u https://target.com -w wordlist.txt -vv      <span class="hljs-comment"># DEBUG 级别</span><br>feroxbuster -u https://target.com -w wordlist.txt -vvv     <span class="hljs-comment"># TRACE 级别</span><br><br><span class="hljs-comment"># ─── JSON 输出 ───</span><br>feroxbuster -u https://target.com -w wordlist.txt --json -o results.json<br><br><span class="hljs-comment"># ─── 禁用进度条 ───</span><br>feroxbuster -u https://target.com -w wordlist.txt --no-progress<br><br><span class="hljs-comment"># ─── 输出状态码 ───</span><br>feroxbuster -u https://target.com -w wordlist.txt --output-state<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十三、配置文件"><a href="#十三、配置文件" class="headerlink" title="十三、配置文件"></a>十三、配置文件</h2><p>配置文件路径：<code>/etc/feroxbuster/ferox-config.toml</code>（Kali 安装时自动创建）<br>或 <code>~/.config/feroxbuster/ferox-config.toml</code></p>
+<figure class="highlight toml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><code class="hljs toml"><span class="hljs-comment"># ─── ferox-config.toml 示例 ───</span><br><br><span class="hljs-comment"># 目标 URL</span><br><span class="hljs-comment"># url = &quot;https://target.com&quot;</span><br><br><span class="hljs-comment"># 字典</span><br><span class="hljs-attr">wordlist</span> = <span class="hljs-string">&quot;/usr/share/seclists/Discovery/Web-Content/raft-large-directories.txt&quot;</span><br><br><span class="hljs-comment"># 扩展名</span><br><span class="hljs-attr">extensions</span> = [<span class="hljs-string">&quot;php&quot;</span>, <span class="hljs-string">&quot;html&quot;</span>, <span class="hljs-string">&quot;txt&quot;</span>, <span class="hljs-string">&quot;js&quot;</span>, <span class="hljs-string">&quot;json&quot;</span>, <span class="hljs-string">&quot;bak&quot;</span>, <span class="hljs-string">&quot;old&quot;</span>]<br><br><span class="hljs-comment"># 过滤器</span><br><span class="hljs-attr">filter_status</span> = [<span class="hljs-number">404</span>, <span class="hljs-number">400</span>, <span class="hljs-number">500</span>]<br><span class="hljs-attr">filter_size</span> = [<span class="hljs-number">4242</span>]<br><span class="hljs-comment"># filter_words = [100]</span><br><span class="hljs-comment"># filter_lines = [10]</span><br><span class="hljs-comment"># filter_regex = &quot;Not Found&quot;</span><br><br><span class="hljs-comment"># 状态码（只显示）</span><br><span class="hljs-comment"># status_codes = [200, 301, 302, 403]</span><br><br><span class="hljs-comment"># 递归</span><br><span class="hljs-attr">depth</span> = <span class="hljs-number">3</span><br><span class="hljs-comment"># no_recursion = false</span><br><span class="hljs-comment"># extract_links = true</span><br><br><span class="hljs-comment"># 性能</span><br><span class="hljs-attr">threads</span> = <span class="hljs-number">50</span><br><span class="hljs-comment"># rate_limit = 100</span><br><span class="hljs-comment"># timeout = 10</span><br><br><span class="hljs-comment"># 输出</span><br><span class="hljs-comment"># output = &quot;results.txt&quot;</span><br><span class="hljs-comment"># json = false</span><br><span class="hljs-comment"># silent = false</span><br><span class="hljs-comment"># verbosity = 1</span><br><br><span class="hljs-comment"># HTTP 配置</span><br><span class="hljs-comment"># redirects = false</span><br><span class="hljs-comment"># insecure = false</span><br><span class="hljs-comment"># http2 = false</span><br><br><span class="hljs-comment"># Header</span><br><span class="hljs-attr">headers</span> = [<br>    <span class="hljs-string">&quot;Accept: application/json&quot;</span>,<br>    <span class="hljs-string">&quot;X-Forwarded-For: 127.0.0.1&quot;</span><br>]<br><br><span class="hljs-comment"># 代理</span><br><span class="hljs-comment"># proxy = &quot;http://127.0.0.1:8080&quot;</span><br><br><span class="hljs-comment"># 自动调优</span><br><span class="hljs-comment"># auto_tune = true</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>使用自定义配置：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">feroxbuster -u https://target.com --config /path/to/custom.toml<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十四、自更新"><a href="#十四、自更新" class="headerlink" title="十四、自更新"></a>十四、自更新</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 一键更新 ───</span><br>./feroxbuster --update<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十五、实战场景速查"><a href="#十五、实战场景速查" class="headerlink" title="十五、实战场景速查"></a>十五、实战场景速查</h2><h3 id="场景-1：标准目录扫描"><a href="#场景-1：标准目录扫描" class="headerlink" title="场景 1：标准目录扫描"></a>场景 1：标准目录扫描</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash">feroxbuster -u https://target.com \<br>  -w /usr/share/seclists/Discovery/Web-Content/raft-large-directories.txt \<br>  -x php,html,txt,js,json \<br>  --filter-status 404 -d 2 -t 100 \<br>  -o directories.txt<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-2：深度递归扫描"><a href="#场景-2：深度递归扫描" class="headerlink" title="场景 2：深度递归扫描"></a>场景 2：深度递归扫描</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash">feroxbuster -u https://target.com \<br>  -w /usr/share/seclists/Discovery/Web-Content/raft-large-directories.txt \<br>  -x php,html,txt,bak,old,conf,<span class="hljs-built_in">log</span> \<br>  --filter-status 404,400 --extract-links \<br>  -d 3 -t 80 -o deep_scan.txt<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-3：链接提取扫描（模拟爬虫）"><a href="#场景-3：链接提取扫描（模拟爬虫）" class="headerlink" title="场景 3：链接提取扫描（模拟爬虫）"></a>场景 3：链接提取扫描（模拟爬虫）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;/&quot;</span> &gt; root.txt<br>feroxbuster -u https://target.com \<br>  -w root.txt --extract-links -d 5 \<br>  --filter-status 404 -o crawl_results.txt<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-4：API-端点发现"><a href="#场景-4：API-端点发现" class="headerlink" title="场景 4：API 端点发现"></a>场景 4：API 端点发现</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash">feroxbuster -u https://api.target.com \<br>  -w /usr/share/seclists/Discovery/Web-Content/api-endpoints.txt \<br>  -x json \<br>  -H <span class="hljs-string">&quot;Authorization: Bearer TOKEN&quot;</span> \<br>  -H <span class="hljs-string">&quot;Content-Type: application/json&quot;</span> \<br>  --filter-status 404 -o api_results.txt<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-5：子域名目录批量扫描"><a href="#场景-5：子域名目录批量扫描" class="headerlink" title="场景 5：子域名目录批量扫描"></a>场景 5：子域名目录批量扫描</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">httpx -l subs.txt -silent | \<br>  feroxbuster --stdin \<br>  -w /usr/share/seclists/Discovery/Web-Content/common.txt \<br>  -x php,html --filter-status 404 --silent<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-6：带-Cookie-认证的扫描"><a href="#场景-6：带-Cookie-认证的扫描" class="headerlink" title="场景 6：带 Cookie 认证的扫描"></a>场景 6：带 Cookie 认证的扫描</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">feroxbuster -u https://target.com \<br>  -w wordlist.txt \<br>  -b <span class="hljs-string">&quot;session=<span class="hljs-subst">$(cat cookie.txt)</span>&quot;</span> \<br>  --filter-status 404 -d 2<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-7：通过-Burp-代理"><a href="#场景-7：通过-Burp-代理" class="headerlink" title="场景 7：通过 Burp 代理"></a>场景 7：通过 Burp 代理</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash">feroxbuster -u https://target.com \<br>  -w wordlist.txt \<br>  --proxy http://127.0.0.1:8080 \<br>  --insecure \<br>  --filter-status 404<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-8：备份文件发现"><a href="#场景-8：备份文件发现" class="headerlink" title="场景 8：备份文件发现"></a>场景 8：备份文件发现</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash">feroxbuster -u https://target.com \<br>  -w /usr/share/seclists/Discovery/Web-Content/raft-large-files.txt \<br>  -x zip,tar.gz,bak,old,orig,swp,save,sql,db,conf \<br>  --filter-status 404 --no-recursion \<br>  -o backups.txt<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-9：低速隐蔽扫描"><a href="#场景-9：低速隐蔽扫描" class="headerlink" title="场景 9：低速隐蔽扫描"></a>场景 9：低速隐蔽扫描</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash">feroxbuster -u https://target.com \<br>  -w wordlist.txt \<br>  -t 10 --rate-limit 50 \<br>  --filter-status 404 -d 2 \<br>  -o stealth_scan.txt<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-10：JSON-POST-扫描"><a href="#场景-10：JSON-POST-扫描" class="headerlink" title="场景 10：JSON POST 扫描"></a>场景 10：JSON POST 扫描</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash">feroxbuster -u https://target.com/api \<br>  -w wordlist.txt \<br>  --data-json <span class="hljs-string">&#x27;&#123;&quot;action&quot;:&quot;FUZZ&quot;&#125;&#x27;</span> \<br>  --filter-status 404,400 \<br>  -o json_scan.txt<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十六、管道组合"><a href="#十六、管道组合" class="headerlink" title="十六、管道组合"></a>十六、管道组合</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── Subfinder → httpx → Feroxbuster ───</span><br>subfinder -d target.com -silent | \<br>  httpx -silent | \<br>  feroxbuster --stdin -w wordlist.txt -x php,html --filter-status 404 --silent<br><br><span class="hljs-comment"># ─── Feroxbuster → httpx 验证 ───</span><br>feroxbuster -u https://target.com -w wordlist.txt --silent --filter-status 404 | \<br>  httpx -silent -title<br><br><span class="hljs-comment"># ─── Feroxbuster → nuclei ───</span><br>feroxbuster -u https://target.com -w wordlist.txt --silent --filter-status 404 | \<br>  nuclei -t exposures/ -o leaks.txt<br><br><span class="hljs-comment"># ─── Feroxbuster → Katana 爬取 ───</span><br>feroxbuster -u https://target.com -w wordlist.txt --silent | \<br>  katana -silent -d 2<br><br><span class="hljs-comment"># ─── httpx → Feroxbuster → nuclei 全链路 ───</span><br>httpx -l alive.txt -silent | \<br>  feroxbuster --stdin -w wordlist.txt -x php,html --filter-status 404 --silent | \<br>  nuclei -t cves/ -severity critical,high -o vulns.txt<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十七、字典推荐"><a href="#十七、字典推荐" class="headerlink" title="十七、字典推荐"></a>十七、字典推荐</h2><table>
+<thead>
+<tr>
+<th>字典</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>raft-large-directories.txt</code></td>
+<td>大型目录字典（推荐）</td>
+</tr>
+<tr>
+<td><code>raft-small-directories.txt</code></td>
+<td>小型快速目录</td>
+</tr>
+<tr>
+<td><code>raft-large-files.txt</code></td>
+<td>大型文件字典</td>
+</tr>
+<tr>
+<td><code>common.txt</code></td>
+<td>经典通用字典</td>
+</tr>
+<tr>
+<td><code>big.txt</code></td>
+<td>大型通用字典</td>
+</tr>
+<tr>
+<td><code>api-endpoints.txt</code></td>
+<td>API 专用</td>
+</tr>
+<tr>
+<td><code>directory-list-2.3-medium.txt</code></td>
+<td>DirBuster 中型</td>
+</tr>
+<tr>
+<td><code>burp-parameter-names.txt</code></td>
+<td>参数名</td>
+</tr>
+</tbody></table>
+<p><strong>安装 SecLists：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">apt install seclists<br><span class="hljs-built_in">ls</span> /usr/share/seclists/Discovery/Web-Content/<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十八、Feroxbuster-vs-ffuf-vs-Gobuster-对比"><a href="#十八、Feroxbuster-vs-ffuf-vs-Gobuster-对比" class="headerlink" title="十八、Feroxbuster vs ffuf vs Gobuster 对比"></a>十八、Feroxbuster vs ffuf vs Gobuster 对比</h2><table>
+<thead>
+<tr>
+<th>维度</th>
+<th>Feroxbuster</th>
+<th>ffuf</th>
+<th>Gobuster</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>语言</strong></td>
+<td>Rust</td>
+<td>Go</td>
+<td>Go</td>
+</tr>
+<tr>
+<td><strong>递归能力</strong></td>
+<td>⭐ 最强（自动提取链接）</td>
+<td>✅ 基础递归</td>
+<td>❌ 无递归</td>
+</tr>
+<tr>
+<td><strong>链接提取</strong></td>
+<td>✅ 从响应体找 URL</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>FUZZ 关键字</strong></td>
+<td>❌</td>
+<td>✅ 任意位置</td>
+<td>🟡 fuzz 模式</td>
+</tr>
+<tr>
+<td><strong>多字典模式</strong></td>
+<td>❌</td>
+<td>✅ 3 种模式</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>过滤器</strong></td>
+<td>✅ 丰富</td>
+<td>✅ 6 种维度</td>
+<td>🟡 基础</td>
+</tr>
+<tr>
+<td><strong>自动校准</strong></td>
+<td>❌</td>
+<td>✅</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>配置文件</strong></td>
+<td>✅ toml</td>
+<td>✅ ffufrc</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>速度</strong></td>
+<td>⚡ 极快</td>
+<td>⚡ 极快</td>
+<td>⚡ 快</td>
+</tr>
+<tr>
+<td><strong>DNS 爆破</strong></td>
+<td>❌</td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><strong>VHost 发现</strong></td>
+<td>❌</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><strong>云存储</strong></td>
+<td>❌</td>
+<td>❌</td>
+<td>✅ S3&#x2F;GCS</td>
+</tr>
+<tr>
+<td><strong>学习曲线</strong></td>
+<td>🟢 低</td>
+<td>🟡 中</td>
+<td>🟢 最低</td>
+</tr>
+<tr>
+<td><strong>自更新</strong></td>
+<td>✅</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+</tbody></table>
+<p><strong>选择建议：</strong></p>
+<ul>
+<li>🔄 <strong>递归深度扫描</strong>：Feroxbuster（链接提取 + 递归最强）</li>
+<li>🎯 <strong>灵活 Fuzzing</strong>：ffuf（FUZZ 关键字万能）</li>
+<li>🚀 <strong>简单快速 + 多协议</strong>：Gobuster</li>
+<li>🏆 <strong>Web 渗透首选组合</strong>：Feroxbuster 递归扫描 → ffuf 参数&#x2F;目录精扫</li>
+</ul>
+<hr>
+<blockquote>
+<p><strong>总结</strong>：Feroxbuster 的核心优势是<strong>递归 + 链接提取</strong>，它不只是字典爆破，还能从响应中发现新的入口。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 日常最常用</span><br>feroxbuster -u https://target.com -w wordlist.txt -x php,html -d 2 --filter-status 404<br><br><span class="hljs-comment"># 带链接提取（最全面）</span><br>feroxbuster -u https://target.com -w wordlist.txt --extract-links -d 3<br><br><span class="hljs-comment"># 批量目标</span><br>httpx -l alive.txt -silent | feroxbuster --stdin -w wordlist.txt --silent<br><br><span class="hljs-comment"># 配置文件</span><br>feroxbuster -u https://target.com --config /etc/feroxbuster/ferox-config.toml<br></code></pre></td></tr></table></figure></blockquote>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86%E5%B7%A5%E5%85%B7/" class="print-no-link">#信息收集工具</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Feroxbuster-使用手册</div>
+      <div>https://xiaobite-hacker.github.io/2026/04/01/feroxbuster-使用手册/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>xiaobite</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2026年4月1日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2026/04/05/CVE-2026-35616%20-%20FortiClient%20EMS%20%E8%AE%A4%E8%AF%81%E7%BB%95%E8%BF%87/" title="CVE-2026-35616 - FortiClient EMS 认证绕过">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">CVE-2026-35616 - FortiClient EMS 认证绕过</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2026/03/25/httpx-%E6%88%98%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/" title="httpx-使用手册">
+                        <span class="hidden-mobile">httpx-使用手册</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

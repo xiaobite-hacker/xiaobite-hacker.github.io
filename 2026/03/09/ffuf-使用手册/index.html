@@ -1,0 +1,1309 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/admin.jpg">
+  <link rel="icon" href="/img/admin.jpg">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="xiaobite">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="ffuf 实战使用手册 来源：ffuf&#x2F;ffuf官方仓库：https:&#x2F;&#x2F;github.com&#x2F;ffuf&#x2F;ffuf   目录 一、概述 二、安装 三、核心概念与语法 四、目录&#x2F;文件扫描（dir） 五、文件后缀名爆破 六、子域名与虚拟主机发现 七、参数 Fuzzing（GET&#x2F;POST） 八、参数值 Fuzzing 九、POST 数据 Fuzzing 十、Header">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ffuf-使用手册">
+<meta property="og:url" content="https://xiaobite-hacker.github.io/2026/03/09/ffuf-%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/index.html">
+<meta property="og:site_name" content="xiaobite">
+<meta property="og:description" content="ffuf 实战使用手册 来源：ffuf&#x2F;ffuf官方仓库：https:&#x2F;&#x2F;github.com&#x2F;ffuf&#x2F;ffuf   目录 一、概述 二、安装 三、核心概念与语法 四、目录&#x2F;文件扫描（dir） 五、文件后缀名爆破 六、子域名与虚拟主机发现 七、参数 Fuzzing（GET&#x2F;POST） 八、参数值 Fuzzing 九、POST 数据 Fuzzing 十、Header">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-03-09T06:09:24.000Z">
+<meta property="article:modified_time" content="2026-04-12T10:30:48.433Z">
+<meta property="article:author" content="xiaobite">
+<meta property="article:tag" content="信息收集工具">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>ffuf-使用手册 - xiaobite</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"xiaobite-hacker.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>xiaobite</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/prompt/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>prompt</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="ffuf-使用手册"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-03-09 14:09" pubdate>
+          2026年3月9日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          5.8k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          48 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">ffuf-使用手册</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="ffuf-实战使用手册"><a href="#ffuf-实战使用手册" class="headerlink" title="ffuf 实战使用手册"></a>ffuf 实战使用手册</h1><blockquote>
+<p>来源：ffuf&#x2F;ffuf<br>官方仓库：<a target="_blank" rel="noopener" href="https://github.com/ffuf/ffuf">https://github.com/ffuf/ffuf</a></p>
+</blockquote>
+<hr>
+<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
+<li><a href="#%E4%B8%80%E6%A6%82%E8%BF%B0">一、概述</a></li>
+<li><a href="#%E4%BA%8C%E5%AE%89%E8%A3%85">二、安装</a></li>
+<li><a href="#%E4%B8%89%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5%E4%B8%8E%E8%AF%AD%E6%B3%95">三、核心概念与语法</a></li>
+<li><a href="#%E5%9B%9B%E7%9B%AE%E5%BD%95%E6%96%87%E4%BB%B6%E6%89%AB%E6%8F%8Fdir">四、目录&#x2F;文件扫描（dir）</a></li>
+<li><a href="#%E4%BA%94%E6%96%87%E4%BB%B6%E5%90%8E%E7%BC%80%E5%90%8D%E7%88%86%E7%A0%B4">五、文件后缀名爆破</a></li>
+<li><a href="#%E5%85%AD%E5%AD%90%E5%9F%9F%E5%90%8D%E4%B8%8E%E8%99%9A%E6%8B%9F%E4%B8%BB%E6%9C%BA%E5%8F%91%E7%8E%B0">六、子域名与虚拟主机发现</a></li>
+<li><a href="#%E4%B8%83%E5%8F%82%E6%95%B0-fuzzinggetpost">七、参数 Fuzzing（GET&#x2F;POST）</a></li>
+<li><a href="#%E5%85%AB%E5%8F%82%E6%95%B0%E5%80%BC-fuzzing">八、参数值 Fuzzing</a></li>
+<li><a href="#%E4%B9%9Dpost-%E6%95%B0%E6%8D%AE-fuzzing">九、POST 数据 Fuzzing</a></li>
+<li><a href="#%E5%8D%81header-fuzzing">十、Header Fuzzing</a></li>
+<li><a href="#%E5%8D%81%E4%B8%80%E5%8C%B9%E9%85%8D%E5%99%A8%E4%B8%8E%E8%BF%87%E6%BB%A4%E5%99%A8%E8%AF%A6%E8%A7%A3">十一、匹配器与过滤器详解</a></li>
+<li><a href="#%E5%8D%81%E4%BA%8C%E9%AB%98%E7%BA%A7%E7%94%A8%E6%B3%95">十二、高级用法</a></li>
+<li><a href="#%E5%8D%81%E4%B8%89%E8%BE%93%E5%87%BA%E6%8E%A7%E5%88%B6">十三、输出控制</a></li>
+<li><a href="#%E5%8D%81%E5%9B%9B%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6">十四、配置文件</a></li>
+<li><a href="#%E5%8D%81%E4%BA%94%E4%BA%A4%E4%BA%92%E6%A8%A1%E5%BC%8F">十五、交互模式</a></li>
+<li><a href="#%E5%8D%81%E5%85%AD%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95-fuzzing-%E6%96%B9%E6%B3%95%E8%AE%BA">十六、渗透测试 Fuzzing 方法论</a></li>
+<li><a href="#%E5%8D%81%E4%B8%83%E5%AE%9E%E6%88%98%E5%9C%BA%E6%99%AF%E9%80%9F%E6%9F%A5">十七、实战场景速查</a></li>
+<li><a href="#%E5%8D%81%E5%85%AB%E7%AE%A1%E9%81%93%E7%BB%84%E5%90%88">十八、管道组合</a></li>
+<li><a href="#%E5%8D%81%E4%B9%9D%E5%AD%97%E5%85%B8%E6%8E%A8%E8%8D%90">十九、字典推荐</a></li>
+<li><a href="#%E4%BA%8C%E5%8D%81%E6%80%A7%E8%83%BD%E8%B0%83%E4%BC%98%E4%B8%8E%E5%8F%8D-waf">二十、性能调优与反 WAF</a></li>
+<li><a href="#%E4%BA%8C%E5%8D%81%E4%B8%80%E5%B8%B8%E8%A7%81%E8%B8%A9%E5%9D%91">二十一、常见踩坑</a></li>
+</ul>
+<hr>
+<h2 id="一、概述"><a href="#一、概述" class="headerlink" title="一、概述"></a>一、概述</h2><p>ffuf (Fuzz Faster U Fool) 是用 Go 编写的<strong>高性能 Web Fuzzing 工具</strong>，通过 FUZZ 关键字可在 HTTP 请求的任意位置进行模糊测试。在渗透测试中，ffuf 用于发现隐藏目录、文件、参数、子域名等攻击面。</p>
+<p><strong>核心特点：</strong></p>
+<ul>
+<li>⚡ <strong>极快</strong>：高并发协程，远超 gobuster &#x2F; wfuzz</li>
+<li>🎯 <strong>万能关键字</strong>：URL &#x2F; Header &#x2F; POST 数据任意位置放置 FUZZ</li>
+<li>🔍 <strong>6 维度过滤</strong>：状态码、大小、行数、单词数、正则、响应时间</li>
+<li>🤖 <strong>自动校准</strong>：<code>-ac</code> 自动检测并排除噪声响应（自定义 404 页面等）</li>
+<li>📦 <strong>递归扫描</strong>：自动发现子目录并继续深入</li>
+<li>🔧 <strong>外部编码器</strong>：支持 URL 编码、Base64 编码等</li>
+<li>🎛 <strong>多字典模式</strong>：clusterbomb &#x2F; pitchfork 组合测试</li>
+</ul>
+<hr>
+<h2 id="二、安装"><a href="#二、安装" class="headerlink" title="二、安装"></a>二、安装</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── Go 安装（推荐）───</span><br>go install github.com/ffuf/ffuf/v2@latest<br><br><span class="hljs-comment"># ─── Kali Linux ───</span><br>apt install ffuf<br><br><span class="hljs-comment"># ─── macOS Homebrew ───</span><br>brew install ffuf<br><br><span class="hljs-comment"># ─── Docker ───</span><br>docker pull ffuf/ffuf<br><br><span class="hljs-comment"># ─── 从源码编译 ───</span><br>git <span class="hljs-built_in">clone</span> https://github.com/ffuf/ffuf<br><span class="hljs-built_in">cd</span> ffuf<br>go get &amp;&amp; go build<br><span class="hljs-built_in">cp</span> ffuf /usr/local/bin/<br><br><span class="hljs-comment"># ─── 验证安装 ───</span><br>ffuf -V<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="三、核心概念与语法"><a href="#三、核心概念与语法" class="headerlink" title="三、核心概念与语法"></a>三、核心概念与语法</h2><h3 id="3-1-基本语法"><a href="#3-1-基本语法" class="headerlink" title="3.1 基本语法"></a>3.1 基本语法</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">ffuf -w &lt;字典文件&gt; -u &lt;目标URL含FUZZ&gt; [选项]<br></code></pre></td></tr></table></figure>
+
+<h3 id="3-2-FUZZ-关键字"><a href="#3-2-FUZZ-关键字" class="headerlink" title="3.2 FUZZ 关键字"></a>3.2 FUZZ 关键字</h3><p>ffuf 的核心：在请求的任意位置放置 <code>FUZZ</code>，ffuf 会逐个替换为字典条目进行请求。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── FUZZ 在 URL 路径 ───</span><br>ffuf -w wordlist.txt -u https://target.com/FUZZ<br><br><span class="hljs-comment"># ─── FUZZ 在 GET 参数名 ───</span><br>ffuf -w params.txt -u https://target.com/page?FUZZ=value<br><br><span class="hljs-comment"># ─── FUZZ 在 GET 参数值 ───</span><br>ffuf -w values.txt -u https://target.com/page?<span class="hljs-built_in">id</span>=FUZZ<br><br><span class="hljs-comment"># ─── FUZZ 在 Host 头 ───</span><br>ffuf -w hosts.txt -u https://target.com -H <span class="hljs-string">&quot;Host: FUZZ&quot;</span><br><br><span class="hljs-comment"># ─── FUZZ 在 POST 数据 ───</span><br>ffuf -w pass.txt -u https://target.com/login -X POST -d <span class="hljs-string">&quot;user=admin&amp;pass=FUZZ&quot;</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="3-3-自定义关键字"><a href="#3-3-自定义关键字" class="headerlink" title="3.3 自定义关键字"></a>3.3 自定义关键字</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 用 MYWORD 代替默认 FUZZ ───</span><br>ffuf -w wordlist.txt:MYWORD -u https://target.com/MYWORD<br><br><span class="hljs-comment"># ─── 多字典多关键字 ───</span><br>ffuf -w domains.txt:DOMAIN -w paths.txt:PATH -u https://DOMAIN/PATH<br></code></pre></td></tr></table></figure>
+
+<h3 id="3-4-多字典模式"><a href="#3-4-多字典模式" class="headerlink" title="3.4 多字典模式"></a>3.4 多字典模式</h3><table>
+<thead>
+<tr>
+<th>模式</th>
+<th>行为</th>
+<th>命令</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>clusterbomb</strong>（默认）</td>
+<td>笛卡尔积，测试所有组合</td>
+<td><code>-mode clusterbomb</code></td>
+</tr>
+<tr>
+<td><strong>pitchfork</strong></td>
+<td>并行步进，每字典取第 N 个词配对</td>
+<td><code>-mode pitchfork</code></td>
+</tr>
+</tbody></table>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── clusterbomb：所有域名 × 所有路径 ───</span><br>ffuf -w domains.txt:DOMAIN -w paths.txt:PATH -u https://DOMAIN/PATH<br><br><span class="hljs-comment"># ─── pitchfork：第一个用户配第一个 ID ───</span><br>ffuf -mode pitchfork -w users.txt:USER -w ids.txt:ID \<br>  -u https://example.com/user/ID/profile/USER<br></code></pre></td></tr></table></figure>
+
+<h3 id="3-5-参数总览"><a href="#3-5-参数总览" class="headerlink" title="3.5 参数总览"></a>3.5 参数总览</h3><table>
+<thead>
+<tr>
+<th>类别</th>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>输入</strong></td>
+<td><code>-w</code></td>
+<td>字典文件（<code>路径:关键字</code>）</td>
+</tr>
+<tr>
+<td></td>
+<td><code>-e</code></td>
+<td>扩展名（<code>.php,.html,.bak</code>）</td>
+</tr>
+<tr>
+<td></td>
+<td><code>-enc</code></td>
+<td>编码器（<code>FUZZ:urlencode</code>）</td>
+</tr>
+<tr>
+<td></td>
+<td><code>-ic</code></td>
+<td>忽略字典注释</td>
+</tr>
+<tr>
+<td></td>
+<td><code>-input-cmd</code></td>
+<td>外部命令生成输入</td>
+</tr>
+<tr>
+<td><strong>请求</strong></td>
+<td><code>-u</code></td>
+<td>目标 URL</td>
+</tr>
+<tr>
+<td></td>
+<td><code>-X</code></td>
+<td>HTTP 方法</td>
+</tr>
+<tr>
+<td></td>
+<td><code>-H</code></td>
+<td>自定义 Header（可多次）</td>
+</tr>
+<tr>
+<td></td>
+<td><code>-d</code></td>
+<td>POST 数据</td>
+</tr>
+<tr>
+<td></td>
+<td><code>-b</code></td>
+<td>Cookie</td>
+</tr>
+<tr>
+<td></td>
+<td><code>-r</code></td>
+<td>跟随重定向</td>
+</tr>
+<tr>
+<td></td>
+<td><code>-raw</code></td>
+<td>不编码 URI</td>
+</tr>
+<tr>
+<td></td>
+<td><code>-http2</code></td>
+<td>使用 HTTP&#x2F;2</td>
+</tr>
+<tr>
+<td></td>
+<td><code>-request</code></td>
+<td>原始 HTTP 请求文件</td>
+</tr>
+<tr>
+<td></td>
+<td><code>-request-proto</code></td>
+<td>原始请求协议（默认 https）</td>
+</tr>
+<tr>
+<td></td>
+<td><code>-x</code></td>
+<td>代理（HTTP&#x2F;SOCKS5）</td>
+</tr>
+<tr>
+<td></td>
+<td><code>-replay-proxy</code></td>
+<td>仅匹配结果发代理</td>
+</tr>
+<tr>
+<td></td>
+<td><code>-recursion</code></td>
+<td>递归扫描</td>
+</tr>
+<tr>
+<td></td>
+<td><code>-recursion-depth</code></td>
+<td>最大递归深度</td>
+</tr>
+<tr>
+<td></td>
+<td><code>-recursion-strategy</code></td>
+<td>递归策略（default&#x2F;greedy）</td>
+</tr>
+<tr>
+<td><strong>匹配</strong></td>
+<td><code>-mc</code></td>
+<td>匹配状态码（<code>-mc all</code> 匹配全部）</td>
+</tr>
+<tr>
+<td></td>
+<td><code>-ms</code></td>
+<td>匹配响应大小</td>
+</tr>
+<tr>
+<td></td>
+<td><code>-mw</code></td>
+<td>匹配单词数</td>
+</tr>
+<tr>
+<td></td>
+<td><code>-ml</code></td>
+<td>匹配行数</td>
+</tr>
+<tr>
+<td></td>
+<td><code>-mr</code></td>
+<td>匹配正则</td>
+</tr>
+<tr>
+<td></td>
+<td><code>-mt</code></td>
+<td>匹配响应时间（<code>&gt;5000</code>）</td>
+</tr>
+<tr>
+<td></td>
+<td><code>-mmode</code></td>
+<td>匹配逻辑（and&#x2F;or）</td>
+</tr>
+<tr>
+<td><strong>过滤</strong></td>
+<td><code>-fc</code></td>
+<td>过滤状态码</td>
+</tr>
+<tr>
+<td></td>
+<td><code>-fs</code></td>
+<td>过滤响应大小</td>
+</tr>
+<tr>
+<td></td>
+<td><code>-fw</code></td>
+<td>过滤单词数</td>
+</tr>
+<tr>
+<td></td>
+<td><code>-fl</code></td>
+<td>过滤行数</td>
+</tr>
+<tr>
+<td></td>
+<td><code>-fr</code></td>
+<td>过滤正则</td>
+</tr>
+<tr>
+<td></td>
+<td><code>-ft</code></td>
+<td>过滤响应时间</td>
+</tr>
+<tr>
+<td></td>
+<td><code>-fmode</code></td>
+<td>过滤逻辑（and&#x2F;or）</td>
+</tr>
+<tr>
+<td><strong>控制</strong></td>
+<td><code>-t</code></td>
+<td>并发线程（默认 40）</td>
+</tr>
+<tr>
+<td></td>
+<td><code>-p</code></td>
+<td>请求延迟（<code>0.1</code> 或 <code>0.1-2.0</code>）</td>
+</tr>
+<tr>
+<td></td>
+<td><code>-rate</code></td>
+<td>每秒请求数上限</td>
+</tr>
+<tr>
+<td></td>
+<td><code>-ac</code></td>
+<td>自动校准</td>
+</tr>
+<tr>
+<td></td>
+<td><code>-c</code></td>
+<td>彩色输出</td>
+</tr>
+<tr>
+<td></td>
+<td><code>-v</code></td>
+<td>详细输出</td>
+</tr>
+<tr>
+<td></td>
+<td><code>-s</code></td>
+<td>静默模式</td>
+</tr>
+<tr>
+<td></td>
+<td><code>-maxtime</code></td>
+<td>总运行时间（秒）</td>
+</tr>
+<tr>
+<td></td>
+<td><code>-maxtime-job</code></td>
+<td>单任务时间（秒）</td>
+</tr>
+<tr>
+<td></td>
+<td><code>-sf</code></td>
+<td>95% 返回 403 时停止</td>
+</tr>
+<tr>
+<td></td>
+<td><code>-sa</code></td>
+<td>任何错误即停止</td>
+</tr>
+<tr>
+<td><strong>输出</strong></td>
+<td><code>-o</code></td>
+<td>输出文件路径</td>
+</tr>
+<tr>
+<td></td>
+<td><code>-of</code></td>
+<td>输出格式（json&#x2F;html&#x2F;md&#x2F;csv&#x2F;ecsv&#x2F;all）</td>
+</tr>
+<tr>
+<td></td>
+<td><code>-or</code></td>
+<td>无结果不创建文件</td>
+</tr>
+<tr>
+<td></td>
+<td><code>-json</code></td>
+<td>JSON 输出到 stdout</td>
+</tr>
+<tr>
+<td></td>
+<td><code>-debug-log</code></td>
+<td>调试日志</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="四、目录-文件扫描（dir）"><a href="#四、目录-文件扫描（dir）" class="headerlink" title="四、目录&#x2F;文件扫描（dir）"></a>四、目录&#x2F;文件扫描（dir）</h2><h3 id="4-1-基础用法"><a href="#4-1-基础用法" class="headerlink" title="4.1 基础用法"></a>4.1 基础用法</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 最简用法 ───</span><br>ffuf -w wordlist.txt -u https://target.com/FUZZ<br><br><span class="hljs-comment"># ─── 自动校准 + 彩色输出（强烈推荐）───</span><br>ffuf -w wordlist.txt -u https://target.com/FUZZ -ac -c<br><br><span class="hljs-comment"># ─── 详细输出（显示完整 URL 和重定向）───</span><br>ffuf -w wordlist.txt -u https://target.com/FUZZ -ac -c -v<br><br><span class="hljs-comment"># ─── 过滤 404 ───</span><br>ffuf -w wordlist.txt -u https://target.com/FUZZ -<span class="hljs-built_in">fc</span> 404<br><br><span class="hljs-comment"># ─── 输出到文件 ───</span><br>ffuf -w wordlist.txt -u https://target.com/FUZZ -o results.json -of json<br></code></pre></td></tr></table></figure>
+
+<h3 id="4-2-扩展名扫描"><a href="#4-2-扩展名扫描" class="headerlink" title="4.2 扩展名扫描"></a>4.2 扩展名扫描</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 单扩展名 ───</span><br>ffuf -w wordlist.txt -u https://target.com/FUZZ -e .php<br><br><span class="hljs-comment"># ─── 多扩展名 ───</span><br>ffuf -w wordlist.txt -u https://target.com/FUZZ -e .php,.html,.txt,.js,.json,.bak,.old,.asp,.aspx,.jsp<br><br><span class="hljs-comment"># ─── 扩展名 + 自动校准 ───</span><br>ffuf -w wordlist.txt -u https://target.com/FUZZ \<br>  -e .php,.html,.txt,.bak,.old,.zip,.tar.gz \<br>  -ac -c -o results.json -of json<br></code></pre></td></tr></table></figure>
+
+<h3 id="4-3-递归扫描"><a href="#4-3-递归扫描" class="headerlink" title="4.3 递归扫描"></a>4.3 递归扫描</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 递归扫描（自动检测子目录并继续）───</span><br>ffuf -w wordlist.txt -u https://target.com/FUZZ -recursion<br><br><span class="hljs-comment"># ─── 限制递归深度 ───</span><br>ffuf -w wordlist.txt -u https://target.com/FUZZ -recursion -recursion-depth 3<br><br><span class="hljs-comment"># ─── 贪婪递归（所有匹配都递归，默认仅 301/302）───</span><br>ffuf -w wordlist.txt -u https://target.com/FUZZ \<br>  -recursion -recursion-strategy greedy<br><br><span class="hljs-comment"># ─── 递归 + 单任务时间限制 ───</span><br>ffuf -w wordlist.txt -u https://target.com/FUZZ \<br>  -recursion -recursion-depth 2 -maxtime-job 60 -maxtime 600<br></code></pre></td></tr></table></figure>
+
+<h3 id="4-4-请求配置"><a href="#4-4-请求配置" class="headerlink" title="4.4 请求配置"></a>4.4 请求配置</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 自定义 User-Agent ───</span><br>ffuf -w wordlist.txt -u https://target.com/FUZZ \<br>  -H <span class="hljs-string">&quot;User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36&quot;</span><br><br><span class="hljs-comment"># ─── 自定义 Header ───</span><br>ffuf -w wordlist.txt -u https://target.com/FUZZ \<br>  -H <span class="hljs-string">&quot;X-Forwarded-For: 127.0.0.1&quot;</span> \<br>  -H <span class="hljs-string">&quot;Authorization: Bearer TOKEN&quot;</span><br><br><span class="hljs-comment"># ─── Cookie ───</span><br>ffuf -w wordlist.txt -u https://target.com/FUZZ -b <span class="hljs-string">&quot;session=abc123&quot;</span><br><br><span class="hljs-comment"># ─── 跟随重定向 ───</span><br>ffuf -w wordlist.txt -u https://target.com/FUZZ -r<br><br><span class="hljs-comment"># ─── 跳过 TLS 验证 ───</span><br>ffuf -w wordlist.txt -u https://target.com/FUZZ -k   <span class="hljs-comment"># 注：ffuf 默认不验证</span><br><br><span class="hljs-comment"># ─── HTTP/2 ───</span><br>ffuf -w wordlist.txt -u https://target.com/FUZZ -http2<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="五、文件后缀名爆破"><a href="#五、文件后缀名爆破" class="headerlink" title="五、文件后缀名爆破"></a>五、文件后缀名爆破</h2><p>用于发现同一文件名的不同后缀（如 <code>index.php</code>、<code>index.bak</code>、<code>index.old</code>）。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 后缀名爆破（FUZZ 在后缀位置）───</span><br>ffuf -w web-extensions.txt -u https://target.com/indexFUZZ<br><br><span class="hljs-comment"># ─── 发现管理页面的备份文件 ───</span><br>ffuf -w extensions.txt -u https://target.com/admin.phpFUZZ \<br>  -e .bak,.old,.orig,.swp,.save,.copy,.tmp \<br>  -ac -c<br><br><span class="hljs-comment"># ─── 同时扫描目录 + 后缀（先扫目录，再对发现的目录扫后缀）───</span><br><span class="hljs-comment"># 第一步：扫目录</span><br>ffuf -w dirs.txt -u https://target.com/FUZZ -ac -c -o dirs.json -of json<br><br><span class="hljs-comment"># 第二步：对发现的 php 文件扫备份后缀</span><br>ffuf -w backup_ext.txt -u https://target.com/adminFUZZ \<br>  -ac -c -o backups.json -of json<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="六、子域名与虚拟主机发现"><a href="#六、子域名与虚拟主机发现" class="headerlink" title="六、子域名与虚拟主机发现"></a>六、子域名与虚拟主机发现</h2><h3 id="6-1-公开子域名枚举"><a href="#6-1-公开子域名枚举" class="headerlink" title="6.1 公开子域名枚举"></a>6.1 公开子域名枚举</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 通过 DNS 解析（FUZZ 在子域位置）───</span><br>ffuf -w subdomains.txt -u https://FUZZ.target.com -mc 200,301,302<br><br><span class="hljs-comment"># ─── 带自动校准 ───</span><br>ffuf -w subdomains.txt -u https://FUZZ.target.com -ac -c<br></code></pre></td></tr></table></figure>
+
+<h3 id="6-2-隐藏虚拟主机发现（关键技巧）"><a href="#6-2-隐藏虚拟主机发现（关键技巧）" class="headerlink" title="6.2 隐藏虚拟主机发现（关键技巧）"></a>6.2 隐藏虚拟主机发现（关键技巧）</h3><p>原理：许多网站有不公开的子域名，公共 DNS 无记录。通过修改 Host 头，直接向已知 IP 发请求，绕过 DNS 解析。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── Host 头 Fuzzing（过滤默认响应大小）───</span><br>ffuf -w vhosts.txt -u https://target-ip -H <span class="hljs-string">&quot;Host: FUZZ.target.com&quot;</span> -fs 4242<br><br><span class="hljs-comment"># ─── 自动校准模式（推荐）───</span><br>ffuf -w vhosts.txt -u https://target-ip -H <span class="hljs-string">&quot;Host: FUZZ.target.com&quot;</span> -ac -c<br><br><span class="hljs-comment"># ─── 排除状态码 + 响应大小 ───</span><br>ffuf -w vhosts.txt -u https://target-ip \<br>  -H <span class="hljs-string">&quot;Host: FUZZ.target.com&quot;</span> -mc all -<span class="hljs-built_in">fc</span> 404,403 -fs &lt;default_size&gt; -c<br><br><span class="hljs-comment"># ─── 输出到文件 ───</span><br>ffuf -w subdomains-top1million-5000.txt \<br>  -u https://target-ip/ \<br>  -H <span class="hljs-string">&quot;Host: FUZZ.target.com&quot;</span> -ac -c -o vhosts.json -of json<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="七、参数-Fuzzing（GET-POST）"><a href="#七、参数-Fuzzing（GET-POST）" class="headerlink" title="七、参数 Fuzzing（GET&#x2F;POST）"></a>七、参数 Fuzzing（GET&#x2F;POST）</h2><p>发现隐藏参数是渗透测试的关键步骤——参数是攻击的入口点。</p>
+<h3 id="7-1-GET-参数名发现"><a href="#7-1-GET-参数名发现" class="headerlink" title="7.1 GET 参数名发现"></a>7.1 GET 参数名发现</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 爆破参数名（过滤无效参数的响应大小）───</span><br>ffuf -w burp-parameter-names.txt \<br>  -u https://target.com/api.php?FUZZ=<span class="hljs-built_in">test</span> \<br>  -fs &lt;default_response_size&gt;<br><br><span class="hljs-comment"># ─── 自动校准（推荐）───</span><br>ffuf -w burp-parameter-names.txt \<br>  -u https://target.com/page?FUZZ=value -ac -c<br><br><span class="hljs-comment"># ─── 输出到文件 ───</span><br>ffuf -w burp-parameter-names.txt \<br>  -u https://target.com/admin/admin.php?FUZZ=key \<br>  -ac -c -o params.json -of json<br></code></pre></td></tr></table></figure>
+
+<h3 id="7-2-POST-参数名发现"><a href="#7-2-POST-参数名发现" class="headerlink" title="7.2 POST 参数名发现"></a>7.2 POST 参数名发现</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 表单参数名发现 ───</span><br>ffuf -w burp-parameter-names.txt \<br>  -u https://target.com/admin/admin.php \<br>  -X POST \<br>  -H <span class="hljs-string">&quot;Content-Type: application/x-www-form-urlencoded&quot;</span> \<br>  -d <span class="hljs-string">&quot;FUZZ=key&quot;</span> \<br>  -ac -c<br><br><span class="hljs-comment"># ─── JSON 参数名发现 ───</span><br>ffuf -w burp-parameter-names.txt \<br>  -u https://target.com/api \<br>  -X POST \<br>  -H <span class="hljs-string">&quot;Content-Type: application/json&quot;</span> \<br>  -d <span class="hljs-string">&#x27;&#123;&quot;FUZZ&quot;:&quot;value&quot;&#125;&#x27;</span> \<br>  -ac -c<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="八、参数值-Fuzzing"><a href="#八、参数值-Fuzzing" class="headerlink" title="八、参数值 Fuzzing"></a>八、参数值 Fuzzing</h2><h3 id="8-1-GET-参数值"><a href="#8-1-GET-参数值" class="headerlink" title="8.1 GET 参数值"></a>8.1 GET 参数值</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 已知参数名，爆破值 ───</span><br>ffuf -w values.txt -u https://target.com/api.php?<span class="hljs-built_in">id</span>=FUZZ -<span class="hljs-built_in">fc</span> 401<br><br><span class="hljs-comment"># ─── 路径参数 ───</span><br>ffuf -w ids.txt -u https://target.com/api/users/FUZZ -mc 200,301<br><br><span class="hljs-comment"># ─── 多参数值 ───</span><br>ffuf -w roles.txt -u https://target.com/api?role=FUZZ -ac -c<br></code></pre></td></tr></table></figure>
+
+<h3 id="8-2-POST-参数值"><a href="#8-2-POST-参数值" class="headerlink" title="8.2 POST 参数值"></a>8.2 POST 参数值</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 表单值爆破 ───</span><br>ffuf -w ids.txt \<br>  -u https://target.com/admin/admin.php \<br>  -X POST \<br>  -H <span class="hljs-string">&quot;Content-Type: application/x-www-form-urlencoded&quot;</span> \<br>  -d <span class="hljs-string">&quot;id=FUZZ&quot;</span> \<br>  -ac -c<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="九、POST-数据-Fuzzing"><a href="#九、POST-数据-Fuzzing" class="headerlink" title="九、POST 数据 Fuzzing"></a>九、POST 数据 Fuzzing</h2><h3 id="9-1-表单数据"><a href="#9-1-表单数据" class="headerlink" title="9.1 表单数据"></a>9.1 表单数据</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 密码爆破 ───</span><br>ffuf -w passwords.txt -X POST \<br>  -d <span class="hljs-string">&quot;username=admin&amp;password=FUZZ&quot;</span> \<br>  -u https://target.com/login.php \<br>  -<span class="hljs-built_in">fc</span> 401<br><br><span class="hljs-comment"># ─── 用户名枚举（固定错误密码，观察响应差异）───</span><br>ffuf -w usernames.txt -X POST \<br>  -d <span class="hljs-string">&quot;username=FUZZ&amp;password=wrongpass&quot;</span> \<br>  -u https://target.com/login.php \<br>  -fs &lt;success_response_size&gt; -c<br></code></pre></td></tr></table></figure>
+
+<h3 id="9-2-JSON-数据"><a href="#9-2-JSON-数据" class="headerlink" title="9.2 JSON 数据"></a>9.2 JSON 数据</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── JSON 密码爆破 ───</span><br>ffuf -w passwords.txt -X POST \<br>  -H <span class="hljs-string">&quot;Content-Type: application/json&quot;</span> \<br>  -d <span class="hljs-string">&#x27;&#123;&quot;username&quot;:&quot;admin&quot;,&quot;password&quot;:&quot;FUZZ&quot;&#125;&#x27;</span> \<br>  -u https://target.com/api/login \<br>  -<span class="hljs-built_in">fc</span> 401<br><br><span class="hljs-comment"># ─── JSON 值变异测试 ───</span><br>ffuf -w fuzz_inputs.txt -X POST \<br>  -H <span class="hljs-string">&quot;Content-Type: application/json&quot;</span> \<br>  -d <span class="hljs-string">&#x27;&#123;&quot;id&quot;:&quot;FUZZ&quot;&#125;&#x27;</span> \<br>  -u https://target.com/api/user \<br>  -mc all -<span class="hljs-built_in">fc</span> 400<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十、Header-Fuzzing"><a href="#十、Header-Fuzzing" class="headerlink" title="十、Header Fuzzing"></a>十、Header Fuzzing</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── Host 头 Fuzzing ───</span><br>ffuf -w hosts.txt -u https://target.com -H <span class="hljs-string">&quot;Host: FUZZ&quot;</span> -mc 200<br><br><span class="hljs-comment"># ─── X-Forwarded-For（IP 白名单绕过）───</span><br>ffuf -w ips.txt -u https://target.com/admin \<br>  -H <span class="hljs-string">&quot;X-Forwarded-For: FUZZ&quot;</span> -mc 200<br><br><span class="hljs-comment"># ─── X-Forwarded-Host ───</span><br>ffuf -w hosts.txt -u https://target.com \<br>  -H <span class="hljs-string">&quot;X-Forwarded-Host: FUZZ&quot;</span> -mr <span class="hljs-string">&quot;admin&quot;</span> -c<br><br><span class="hljs-comment"># ─── User-Agent Fuzzing ───</span><br>ffuf -w ua_list.txt -u https://target.com \<br>  -H <span class="hljs-string">&quot;User-Agent: FUZZ&quot;</span> -mc 200<br><br><span class="hljs-comment"># ─── Authorization Token 爆破 ───</span><br>ffuf -w tokens.txt -u https://target.com/api \<br>  -H <span class="hljs-string">&quot;Authorization: Bearer FUZZ&quot;</span> -mc 200<br><br><span class="hljs-comment"># ─── Origin 头 Fuzzing（CORS 测试）───</span><br>ffuf -w origins.txt -u https://target.com/api \<br>  -H <span class="hljs-string">&quot;Origin: FUZZ&quot;</span> -mr <span class="hljs-string">&quot;Access-Control-Allow-Origin&quot;</span> -v<br><br><span class="hljs-comment"># ─── 自定义头值（关键字在 Header 值中）───</span><br>ffuf -w wordlist.txt -u https://ffuf.io.fi/ -H <span class="hljs-string">&#x27;FUZZ: 127.0.0.1&#x27;</span><br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十一、匹配器与过滤器详解"><a href="#十一、匹配器与过滤器详解" class="headerlink" title="十一、匹配器与过滤器详解"></a>十一、匹配器与过滤器详解</h2><h3 id="11-1-匹配器（保留结果）"><a href="#11-1-匹配器（保留结果）" class="headerlink" title="11.1 匹配器（保留结果）"></a>11.1 匹配器（保留结果）</h3><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>条件</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>-mc</code></td>
+<td>HTTP 状态码</td>
+<td><code>-mc 200,301,302</code> 或 <code>-mc all</code></td>
+</tr>
+<tr>
+<td><code>-ms</code></td>
+<td>响应大小（字节）</td>
+<td><code>-ms 1024</code></td>
+</tr>
+<tr>
+<td><code>-mw</code></td>
+<td>单词数</td>
+<td><code>-mw 42</code></td>
+</tr>
+<tr>
+<td><code>-ml</code></td>
+<td>行数</td>
+<td><code>-ml 15</code></td>
+</tr>
+<tr>
+<td><code>-mr</code></td>
+<td>正则表达式</td>
+<td><code>-mr &quot;admin|dashboard&quot;</code></td>
+</tr>
+<tr>
+<td><code>-mt</code></td>
+<td>响应时间（ms）</td>
+<td><code>-mt &quot;&gt;5000&quot;</code></td>
+</tr>
+<tr>
+<td><code>-mmode</code></td>
+<td>匹配逻辑</td>
+<td><code>-mmode and</code></td>
+</tr>
+</tbody></table>
+<p><strong><code>-mc</code> 默认值</strong>：<code>200-299,301,302,307,401,403,405,500</code></p>
+<h3 id="11-2-过滤器（排除结果）"><a href="#11-2-过滤器（排除结果）" class="headerlink" title="11.2 过滤器（排除结果）"></a>11.2 过滤器（排除结果）</h3><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>条件</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>-fc</code></td>
+<td>HTTP 状态码</td>
+<td><code>-fc 404,403</code></td>
+</tr>
+<tr>
+<td><code>-fs</code></td>
+<td>响应大小</td>
+<td><code>-fs 1234,5678</code></td>
+</tr>
+<tr>
+<td><code>-fw</code></td>
+<td>单词数</td>
+<td><code>-fw 42</code></td>
+</tr>
+<tr>
+<td><code>-fl</code></td>
+<td>行数</td>
+<td><code>-fl 15</code></td>
+</tr>
+<tr>
+<td><code>-fr</code></td>
+<td>正则表达式</td>
+<td><code>-fr &quot;Not Found&quot;</code></td>
+</tr>
+<tr>
+<td><code>-ft</code></td>
+<td>响应时间</td>
+<td><code>-ft &quot;&gt;3000&quot;</code></td>
+</tr>
+<tr>
+<td><code>-fmode</code></td>
+<td>过滤逻辑</td>
+<td><code>-fmode and</code></td>
+</tr>
+</tbody></table>
+<h3 id="11-3-数值范围语法"><a href="#11-3-数值范围语法" class="headerlink" title="11.3 数值范围语法"></a>11.3 数值范围语法</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 状态码范围 ───</span><br>-mc 200,300-304,401-403<br><br><span class="hljs-comment"># ─── 响应大小范围 ───</span><br>-fs 0-100,1000-2000<br></code></pre></td></tr></table></figure>
+
+<h3 id="11-4-执行逻辑"><a href="#11-4-执行逻辑" class="headerlink" title="11.4 执行逻辑"></a>11.4 执行逻辑</h3><p>ffuf 内部处理顺序：</p>
+<ol>
+<li>发送请求</li>
+<li>接收响应</li>
+<li><strong>匹配器</strong>检查 → 不匹配则丢弃</li>
+<li><strong>过滤器</strong>检查 → 匹配则丢弃</li>
+<li><code>-replay-proxy</code> 存在则转发匹配请求到代理</li>
+<li>显示结果并保存</li>
+</ol>
+<h3 id="11-5-自动校准（-ac）"><a href="#11-5-自动校准（-ac）" class="headerlink" title="11.5 自动校准（-ac）"></a>11.5 自动校准（-ac）</h3><p><strong>强烈推荐</strong>。ffuf 自动发送随机请求检测噪声模式并排除。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 自动校准（自动排除自定义 404、错误页等）───</span><br>ffuf -w wordlist.txt -u https://target.com/FUZZ -ac<br><br><span class="hljs-comment"># ─── 自动校准 + 自定义字符串 ───</span><br>ffuf -w wordlist.txt -u https://target.com/FUZZ -ac -acc <span class="hljs-string">&quot;custom error&quot;</span><br><br><span class="hljs-comment"># ─── 按主机自动校准（多目标场景）───</span><br>ffuf -w wordlist.txt -u https://target.com/FUZZ -ac -ach<br><br><span class="hljs-comment"># ─── 自定义校准关键字 ───</span><br>ffuf -w wordlist.txt -u https://target.com/MYWORD -ac -ack MYWORD<br></code></pre></td></tr></table></figure>
+
+<h3 id="11-6-正则过滤-匹配进阶"><a href="#11-6-正则过滤-匹配进阶" class="headerlink" title="11.6 正则过滤 &#x2F; 匹配进阶"></a>11.6 正则过滤 &#x2F; 匹配进阶</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 匹配不区分大小写（(?i) 前缀）───</span><br>ffuf -w wordlist.txt -u https://target.com/FUZZ -mr <span class="hljs-string">&quot;(?i)admin&quot;</span><br><br><span class="hljs-comment"># ─── 检测开放重定向（检查 Location 头）───</span><br>ffuf -w payloads.txt -u https://target.com/redirect?url=FUZZ \<br>  -mr <span class="hljs-string">&quot;Location:.*evil\.com&quot;</span><br><br><span class="hljs-comment"># ─── 检测 SQL 注入错误回显 ───</span><br>ffuf -w sqli.txt -u https://target.com/page?<span class="hljs-built_in">id</span>=FUZZ \<br>  -mr <span class="hljs-string">&quot;sql|syntax|mysql|ORA|PostgreSQL&quot;</span><br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十二、高级用法"><a href="#十二、高级用法" class="headerlink" title="十二、高级用法"></a>十二、高级用法</h2><h3 id="12-1-原始-HTTP-请求文件"><a href="#12-1-原始-HTTP-请求文件" class="headerlink" title="12.1 原始 HTTP 请求文件"></a>12.1 原始 HTTP 请求文件</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 使用保存的 HTTP 请求 ───</span><br>ffuf -w wordlist.txt -request raw_request.txt<br><br><span class="hljs-comment"># ─── 指定协议（默认 https）───</span><br>ffuf -w wordlist.txt -request raw_request.txt -request-proto http<br></code></pre></td></tr></table></figure>
+
+<p><strong>raw_request.txt 示例：</strong></p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-keyword">GET</span> <span class="hljs-string">/FUZZ</span> <span class="hljs-meta">HTTP/1.1</span><br><span class="hljs-attribute">Host</span><span class="hljs-punctuation">: </span>target.com<br><span class="hljs-attribute">User-Agent</span><span class="hljs-punctuation">: </span>Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36<br><span class="hljs-attribute">Cookie</span><span class="hljs-punctuation">: </span>session=abc123<br><span class="hljs-attribute">Accept</span><span class="hljs-punctuation">: </span>*/*<br></code></pre></td></tr></table></figure>
+
+<h3 id="12-2-外部命令生成输入（–input-cmd）"><a href="#12-2-外部命令生成输入（–input-cmd）" class="headerlink" title="12.2 外部命令生成输入（–input-cmd）"></a>12.2 外部命令生成输入（–input-cmd）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 使用 radamsa 进行变异测试 ───</span><br>ffuf --input-cmd <span class="hljs-string">&#x27;radamsa --seed $FFUF_NUM example1.txt example2.txt&#x27;</span> \<br>  -H <span class="hljs-string">&quot;Content-Type: application/json&quot;</span> \<br>  -X POST -u https://target.com/FUZZ \<br>  -mc all -<span class="hljs-built_in">fc</span> 400<br><br><span class="hljs-comment"># ─── 预生成变异数据 ───</span><br>radamsa -n 1000 -o %n.txt example1.txt example2.txt<br>ffuf --input-cmd <span class="hljs-string">&#x27;cat $FFUF_NUM.txt&#x27;</span> \<br>  -H <span class="hljs-string">&quot;Content-Type: application/json&quot;</span> \<br>  -X POST -u https://target.com/ \<br>  -mc all -<span class="hljs-built_in">fc</span> 400<br></code></pre></td></tr></table></figure>
+
+<h3 id="12-3-URL-编码"><a href="#12-3-URL-编码" class="headerlink" title="12.3 URL 编码"></a>12.3 URL 编码</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 对 FUZZ 内容 URL 编码 ───</span><br>ffuf -w payloads.txt -u https://target.com/search?q=FUZZ -enc <span class="hljs-string">&#x27;FUZZ:urlencode&#x27;</span><br><br><span class="hljs-comment"># ─── 多重编码（URL + Base64）───</span><br>ffuf -w payloads.txt -u https://target.com/search?q=FUZZ -enc <span class="hljs-string">&#x27;FUZZ:urlencode b64encode&#x27;</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="12-4-代理配置"><a href="#12-4-代理配置" class="headerlink" title="12.4 代理配置"></a>12.4 代理配置</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 所有请求走代理（配合 Burp 分析）───</span><br>ffuf -w wordlist.txt -u https://target.com/FUZZ -x http://127.0.0.1:8080<br><br><span class="hljs-comment"># ─── 仅匹配结果发代理（推荐，减少代理负担）───</span><br>ffuf -w wordlist.txt -u https://target.com/FUZZ -replay-proxy http://127.0.0.1:8080<br><br><span class="hljs-comment"># ─── SOCKS5 代理 ───</span><br>ffuf -w wordlist.txt -u https://target.com/FUZZ -x socks5://127.0.0.1:1080<br></code></pre></td></tr></table></figure>
+
+<h3 id="12-5-定时控制"><a href="#12-5-定时控制" class="headerlink" title="12.5 定时控制"></a>12.5 定时控制</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 总运行时间限制（秒）───</span><br>ffuf -w wordlist.txt -u https://target.com/FUZZ -maxtime 60<br><br><span class="hljs-comment"># ─── 单任务时间限制（配合递归）───</span><br>ffuf -w wordlist.txt -u https://target.com/FUZZ \<br>  -recursion -recursion-depth 2 -maxtime-job 60 -maxtime 300<br></code></pre></td></tr></table></figure>
+
+<h3 id="12-6-错误控制"><a href="#12-6-错误控制" class="headerlink" title="12.6 错误控制"></a>12.6 错误控制</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 95% 响应为 403 时自动停止（WAF 被触发时）───</span><br>ffuf -w wordlist.txt -u https://target.com/FUZZ -sf<br><br><span class="hljs-comment"># ─── 任何错误即停止 ───</span><br>ffuf -w wordlist.txt -u https://target.com/FUZZ -sa<br><br><span class="hljs-comment"># ─── 异常错误停止 ───</span><br>ffuf -w wordlist.txt -u https://target.com/FUZZ -se<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十三、输出控制"><a href="#十三、输出控制" class="headerlink" title="十三、输出控制"></a>十三、输出控制</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── JSON 格式（默认）───</span><br>ffuf -w wordlist.txt -u https://target.com/FUZZ -o results -of json<br><br><span class="hljs-comment"># ─── HTML 报告 ───</span><br>ffuf -w wordlist.txt -u https://target.com/FUZZ -o report -of html<br><br><span class="hljs-comment"># ─── Markdown 格式 ───</span><br>ffuf -w wordlist.txt -u https://target.com/FUZZ -o report -of md<br><br><span class="hljs-comment"># ─── CSV 格式 ───</span><br>ffuf -w wordlist.txt -u https://target.com/FUZZ -o results -of csv<br><br><span class="hljs-comment"># ─── 同时输出所有格式 ───</span><br>ffuf -w wordlist.txt -u https://target.com/FUZZ -o results -of all<br><br><span class="hljs-comment"># ─── 无结果时不创建文件 ───</span><br>ffuf -w wordlist.txt -u https://target.com/FUZZ -o results -of json -or<br><br><span class="hljs-comment"># ─── JSON 输出到 stdout ───</span><br>ffuf -w wordlist.txt -u https://target.com/FUZZ -json<br><br><span class="hljs-comment"># ─── 静默模式（只输出结果）───</span><br>ffuf -w wordlist.txt -u https://target.com/FUZZ -s<br><br><span class="hljs-comment"># ─── 从历史中搜索 hash ───</span><br>ffuf -search &lt;FFUFHASH&gt;<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十四、配置文件"><a href="#十四、配置文件" class="headerlink" title="十四、配置文件"></a>十四、配置文件</h2><h3 id="14-1-默认配置路径"><a href="#14-1-默认配置路径" class="headerlink" title="14.1 默认配置路径"></a>14.1 默认配置路径</h3><p><code>$XDG_CONFIG_HOME/ffuf/ffufrc</code>（通常 <code>~/.config/ffuf/ffufrc</code>）</p>
+<p><strong>ffufrc 示例：</strong></p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-comment"># 默认线程数</span><br>-t 50<br><br><span class="hljs-comment"># 跟随重定向</span><br>-r<br><br><span class="hljs-comment"># 彩色输出</span><br>-c<br><br><span class="hljs-comment"># 默认扩展名</span><br>-e .php,.html,.js<br><br><span class="hljs-comment"># 默认 UA</span><br>-H &quot;User-Agent: Mozilla/5.0 (X11<span class="hljs-comment">; Linux x86_64) AppleWebKit/537.36&quot;</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="14-2-自定义配置文件"><a href="#14-2-自定义配置文件" class="headerlink" title="14.2 自定义配置文件"></a>14.2 自定义配置文件</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 指定配置文件 ───</span><br>ffuf -config /path/to/my-config.json -w wordlist.txt -u https://target.com/FUZZ<br></code></pre></td></tr></table></figure>
+
+<p><strong>注意</strong>：命令行参数覆盖配置文件。但 <code>-H</code> 等可多次使用的参数会<strong>追加</strong>而非覆盖。</p>
+<hr>
+<h2 id="十五、交互模式"><a href="#十五、交互模式" class="headerlink" title="十五、交互模式"></a>十五、交互模式</h2><p>运行中按 <strong>Enter</strong> 进入交互模式：</p>
+<figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs scss">可用命令：<br>  fc <span class="hljs-selector-attr">[value]</span>     - 重新配置状态码过滤器（如 fc <span class="hljs-number">404</span>,<span class="hljs-number">403</span>）<br>  afc <span class="hljs-selector-attr">[value]</span>    - 追加状态码过滤器<br>  fl <span class="hljs-selector-attr">[value]</span>     - 重新配置行数过滤器<br>  fw <span class="hljs-selector-attr">[value]</span>     - 重新配置单词数过滤器<br>  fs <span class="hljs-selector-attr">[value]</span>     - 重新配置大小过滤器<br>  ft <span class="hljs-selector-attr">[value]</span>     - 重新配置时间过滤器<br>  rate <span class="hljs-selector-attr">[value]</span>   - 调整请求速率<br>  show           - 显示当前结果<br>  savejson <span class="hljs-selector-attr">[fn]</span>  - 保存当前匹配结果到文件<br>  queueshow      - 显示任务队列<br>  queuedel <span class="hljs-selector-attr">[n]</span>   - 删除队列中的任务<br>  queueskip      - 跳到下一个任务<br>  restart        - 重启当前任务<br>  resume         - 继续执行（或直接按 Enter）<br>  help           - 帮助<br></code></pre></td></tr></table></figure>
+
+<p><strong>典型用法</strong>：扫描中发现噪声太多 → 按 Enter → <code>fs 1234</code> 过滤大小 → <code>resume</code> 继续。</p>
+<hr>
+<h2 id="十六、渗透测试-Fuzzing-方法论"><a href="#十六、渗透测试-Fuzzing-方法论" class="headerlink" title="十六、渗透测试 Fuzzing 方法论"></a>十六、渗透测试 Fuzzing 方法论</h2><p>当发现一个 Web 应用时，从多个层面发起信息收集：</p>
+<h3 id="16-1-完整-Fuzzing-流程"><a href="#16-1-完整-Fuzzing-流程" class="headerlink" title="16.1 完整 Fuzzing 流程"></a>16.1 完整 Fuzzing 流程</h3><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs markdown"><span class="hljs-bullet">1.</span> 目录/文件发现  →  了解 Web 结构<br><span class="hljs-bullet">2.</span> 文件后缀名爆破 →  了解后端语言（php/asp/jsp）<br><span class="hljs-bullet">3.</span> 子域名/VHost   →  发现隐藏服务<br><span class="hljs-bullet">4.</span> 参数名发现     →  找到攻击入口<br><span class="hljs-bullet">5.</span> 参数值爆破     →  测试参数边界<br><span class="hljs-bullet">6.</span> 漏洞 Payload   →  SQLi/XSS/SSRF/LFI 测试<br></code></pre></td></tr></table></figure>
+
+<h3 id="16-2-各阶段-ffuf-命令"><a href="#16-2-各阶段-ffuf-命令" class="headerlink" title="16.2 各阶段 ffuf 命令"></a>16.2 各阶段 ffuf 命令</h3><p><strong>第一阶段：目录发现</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">ffuf -w directory-list.txt -u https://target.com/FUZZ -ac -c -o dirs.json -of json<br></code></pre></td></tr></table></figure>
+
+<p><strong>第二阶段：后缀名确认</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">ffuf -w web-extensions.txt -u https://target.com/indexFUZZ -ac -c<br><span class="hljs-comment"># 结果：发现 .php → 确认后端为 PHP</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>第三阶段：子域名 &#x2F; VHost</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">ffuf -w subdomains.txt -u https://FUZZ.target.com -ac -c<br><span class="hljs-comment"># 或</span><br>ffuf -w subdomains.txt -u https://target-ip -H <span class="hljs-string">&quot;Host: FUZZ.target.com&quot;</span> -ac -c<br></code></pre></td></tr></table></figure>
+
+<p><strong>第四阶段：参数发现</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># GET 参数</span><br>ffuf -w burp-parameter-names.txt -u https://target.com/admin.php?FUZZ=<span class="hljs-built_in">test</span> -ac -c<br><br><span class="hljs-comment"># POST 参数</span><br>ffuf -w burp-parameter-names.txt -u https://target.com/admin.php \<br>  -X POST -d <span class="hljs-string">&quot;FUZZ=test&quot;</span> \<br>  -H <span class="hljs-string">&quot;Content-Type: application/x-www-form-urlencoded&quot;</span> -ac -c<br></code></pre></td></tr></table></figure>
+
+<p><strong>第五阶段：参数值测试</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">ffuf -w values.txt -u https://target.com/admin.php?<span class="hljs-built_in">id</span>=FUZZ -ac -c<br></code></pre></td></tr></table></figure>
+
+<p><strong>第六阶段：漏洞 Payload 测试</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># SQL 注入</span><br>ffuf -w sqli.txt -u https://target.com/page?<span class="hljs-built_in">id</span>=FUZZ -mr <span class="hljs-string">&quot;sql|syntax|error&quot;</span> -c<br><br><span class="hljs-comment"># LFI</span><br>ffuf -w lfi.txt -u https://target.com/page?file=FUZZ -mr <span class="hljs-string">&quot;root:|etc/passwd&quot;</span> -c<br><br><span class="hljs-comment"># SSRF</span><br>ffuf -w ssrf.txt -u https://target.com/fetch?url=FUZZ -mr <span class="hljs-string">&quot;Internal Server|root:&quot;</span> -c<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十七、实战场景速查"><a href="#十七、实战场景速查" class="headerlink" title="十七、实战场景速查"></a>十七、实战场景速查</h2><h3 id="场景-1：标准目录扫描"><a href="#场景-1：标准目录扫描" class="headerlink" title="场景 1：标准目录扫描"></a>场景 1：标准目录扫描</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">ffuf -w /usr/share/seclists/Discovery/Web-Content/raft-large-directories.txt \<br>  -u https://target.com/FUZZ \<br>  -e .php,.html,.txt,.js,.json,.bak,.old \<br>  -ac -c -o directories.json -of json<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-2：递归深度扫描"><a href="#场景-2：递归深度扫描" class="headerlink" title="场景 2：递归深度扫描"></a>场景 2：递归深度扫描</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash">ffuf -w /usr/share/seclists/Discovery/Web-Content/raft-large-directories.txt \<br>  -u https://target.com/FUZZ \<br>  -e .php,.html,.bak \<br>  -recursion -recursion-depth 3 \<br>  -ac -c -maxtime 600 -o recursive.json -of json<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-3：子域名发现"><a href="#场景-3：子域名发现" class="headerlink" title="场景 3：子域名发现"></a>场景 3：子域名发现</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">ffuf -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-5000.txt \<br>  -u https://FUZZ.target.com \<br>  -mc 200,301,302 -c -o subdomains.json -of json<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-4：隐藏-VHost-发现"><a href="#场景-4：隐藏-VHost-发现" class="headerlink" title="场景 4：隐藏 VHost 发现"></a>场景 4：隐藏 VHost 发现</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">ffuf -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-5000.txt \<br>  -u https://target-ip/ \<br>  -H <span class="hljs-string">&quot;Host: FUZZ.target.com&quot;</span> -ac -c -o vhosts.json -of json<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-5：API-端点发现"><a href="#场景-5：API-端点发现" class="headerlink" title="场景 5：API 端点发现"></a>场景 5：API 端点发现</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash">ffuf -w /usr/share/seclists/Discovery/Web-Content/api-endpoints.txt \<br>  -u https://api.target.com/v1/FUZZ \<br>  -e .json \<br>  -H <span class="hljs-string">&quot;Authorization: Bearer &lt;token&gt;&quot;</span> \<br>  -H <span class="hljs-string">&quot;Content-Type: application/json&quot;</span> \<br>  -ac -c -o api_results.json -of json<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-6：GET-参数名发现"><a href="#场景-6：GET-参数名发现" class="headerlink" title="场景 6：GET 参数名发现"></a>场景 6：GET 参数名发现</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">ffuf -w /usr/share/seclists/Discovery/Web-Content/burp-parameter-names.txt \<br>  -u <span class="hljs-string">&quot;https://target.com/page?FUZZ=test&quot;</span> -ac -c<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-7：POST-参数名发现"><a href="#场景-7：POST-参数名发现" class="headerlink" title="场景 7：POST 参数名发现"></a>场景 7：POST 参数名发现</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash">ffuf -w /usr/share/seclists/Discovery/Web-Content/burp-parameter-names.txt \<br>  -u https://target.com/api \<br>  -X POST \<br>  -H <span class="hljs-string">&quot;Content-Type: application/x-www-form-urlencoded&quot;</span> \<br>  -d <span class="hljs-string">&quot;FUZZ=test&quot;</span> -ac -c<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-8：密码爆破"><a href="#场景-8：密码爆破" class="headerlink" title="场景 8：密码爆破"></a>场景 8：密码爆破</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash">ffuf -w /usr/share/wordlists/rockyou.txt \<br>  -u https://target.com/login \<br>  -X POST \<br>  -H <span class="hljs-string">&quot;Content-Type: application/x-www-form-urlencoded&quot;</span> \<br>  -d <span class="hljs-string">&quot;username=admin&amp;password=FUZZ&quot;</span> \<br>  -<span class="hljs-built_in">fc</span> 200 -fs &lt;fail_response_size&gt; \<br>  -c -rate 10 -p 0.1-0.5<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-9：用户名枚举"><a href="#场景-9：用户名枚举" class="headerlink" title="场景 9：用户名枚举"></a>场景 9：用户名枚举</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash">ffuf -w /usr/share/seclists/Usernames/top-usernames-shortlist.txt \<br>  -u https://target.com/login \<br>  -X POST \<br>  -H <span class="hljs-string">&quot;Content-Type: application/x-www-form-urlencoded&quot;</span> \<br>  -d <span class="hljs-string">&quot;username=FUZZ&amp;password=wrongpass&quot;</span> \<br>  -fs &lt;success_response_size&gt; -c<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-10：SQL-注入检测（时间盲注）"><a href="#场景-10：SQL-注入检测（时间盲注）" class="headerlink" title="场景 10：SQL 注入检测（时间盲注）"></a>场景 10：SQL 注入检测（时间盲注）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash">ffuf -w sqli_payloads.txt \<br>  -u https://target.com/api \<br>  -H <span class="hljs-string">&quot;Content-Type: application/json&quot;</span> \<br>  -d <span class="hljs-string">&#x27;&#123;&quot;id&quot;:&quot;FUZZ&quot;&#125;&#x27;</span> \<br>  -mt <span class="hljs-string">&quot;&gt;5000&quot;</span> -mc all -c<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-11：SQL-注入检测（错误回显）"><a href="#场景-11：SQL-注入检测（错误回显）" class="headerlink" title="场景 11：SQL 注入检测（错误回显）"></a>场景 11：SQL 注入检测（错误回显）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">ffuf -w sqli_payloads.txt \<br>  -u https://target.com/page?<span class="hljs-built_in">id</span>=FUZZ \<br>  -mr <span class="hljs-string">&quot;sql|syntax|mysql|ORA|PostgreSQL|ODBC&quot;</span> -c<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-12：开放重定向测试"><a href="#场景-12：开放重定向测试" class="headerlink" title="场景 12：开放重定向测试"></a>场景 12：开放重定向测试</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">ffuf -w redirect_payloads.txt \<br>  -u https://target.com/redirect?url=FUZZ \<br>  -mr <span class="hljs-string">&quot;Location:.*evil\.com&quot;</span> -c<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-13：SSRF-测试"><a href="#场景-13：SSRF-测试" class="headerlink" title="场景 13：SSRF 测试"></a>场景 13：SSRF 测试</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">ffuf -w ssrf_payloads.txt \<br>  -u https://target.com/fetch?url=FUZZ \<br>  -mr <span class="hljs-string">&quot;root:|Internal Server|Daemon&quot;</span> -c<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-14：LFI（本地文件包含）"><a href="#场景-14：LFI（本地文件包含）" class="headerlink" title="场景 14：LFI（本地文件包含）"></a>场景 14：LFI（本地文件包含）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">ffuf -w lfi_payloads.txt \<br>  -u https://target.com/page?file=FUZZ \<br>  -mr <span class="hljs-string">&quot;root:|/bin/bash|\\[boot loader\\]&quot;</span> -c<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-15：CORS-配置测试"><a href="#场景-15：CORS-配置测试" class="headerlink" title="场景 15：CORS 配置测试"></a>场景 15：CORS 配置测试</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">ffuf -w origins.txt \<br>  -u https://target.com/api/userdata \<br>  -H <span class="hljs-string">&quot;Origin: FUZZ&quot;</span> \<br>  -mr <span class="hljs-string">&quot;Access-Control-Allow-Origin&quot;</span> -v<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-16：备份文件发现"><a href="#场景-16：备份文件发现" class="headerlink" title="场景 16：备份文件发现"></a>场景 16：备份文件发现</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">ffuf -w /usr/share/seclists/Discovery/Web-Content/raft-large-files.txt \<br>  -u https://target.com/FUZZ \<br>  -e .zip,.tar.gz,.bak,.old,.orig,.swp,.save,.sql,.db \<br>  -ac -c -o backups.json -of json<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-17：后缀名爆破（发现备份-副本）"><a href="#场景-17：后缀名爆破（发现备份-副本）" class="headerlink" title="场景 17：后缀名爆破（发现备份&#x2F;副本）"></a>场景 17：后缀名爆破（发现备份&#x2F;副本）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">ffuf -w extensions.txt -u https://target.com/adminFUZZ \<br>  -e .bak,.old,.orig,.swp,.save,.copy,.tmp,.1,.2 \<br>  -ac -c<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-18：HTTP-方法测试"><a href="#场景-18：HTTP-方法测试" class="headerlink" title="场景 18：HTTP 方法测试"></a>场景 18：HTTP 方法测试</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">ffuf -w methods.txt -X FUZZ -u https://target.com/admin \<br>  -mc 200,204,301,302 -v<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-19：JWT-Token-爆破"><a href="#场景-19：JWT-Token-爆破" class="headerlink" title="场景 19：JWT Token 爆破"></a>场景 19：JWT Token 爆破</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">ffuf -w jwt_tokens.txt \<br>  -u https://target.com/api/protected \<br>  -H <span class="hljs-string">&quot;Authorization: Bearer FUZZ&quot;</span> \<br>  -mc 200 -c<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-20：云存储桶名称枚举"><a href="#场景-20：云存储桶名称枚举" class="headerlink" title="场景 20：云存储桶名称枚举"></a>场景 20：云存储桶名称枚举</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── AWS S3 ───</span><br>ffuf -w bucket-names.txt -u https://FUZZ.s3.amazonaws.com -mc 200,403 -c<br><br><span class="hljs-comment"># ─── 检查 S3 是否公开可读 ───</span><br>ffuf -w bucket-names.txt -u https://FUZZ.s3.amazonaws.com/ -mc 200 -c<br><br><span class="hljs-comment"># ─── Azure Blob ───</span><br>ffuf -w bucket-names.txt -u https://FUZZ.blob.core.windows.net/ -mc 200,403 -c<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十八、管道组合"><a href="#十八、管道组合" class="headerlink" title="十八、管道组合"></a>十八、管道组合</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── Subfinder → ffuf 子域名扫描 ───</span><br>subfinder -d target.com -silent | \<br>  ffuf -w - -u https://FUZZ.target.com -mc 200,301,302 -c<br><br><span class="hljs-comment"># ─── ffuf → httpx 存活验证 ───</span><br>ffuf -w wordlist.txt -u https://target.com/FUZZ -o json -of json | \<br>  jq -r <span class="hljs-string">&#x27;.results[].url&#x27;</span> | httpx -silent -status-code<br><br><span class="hljs-comment"># ─── httpx → ffuf 批量目录扫描 ───</span><br>httpx -l alive.txt -silent | \<br>  xargs -I&#123;&#125; ffuf -w wordlist.txt -u &#123;&#125;/FUZZ -ac -q<br><br><span class="hljs-comment"># ─── ffuf → nuclei 漏洞扫描 ───</span><br>ffuf -w wordlist.txt -u https://target.com/FUZZ -mc 200 -o json -of json | \<br>  jq -r <span class="hljs-string">&#x27;.results[].url&#x27;</span> | nuclei -t exposures/ -o leaks.txt<br><br><span class="hljs-comment"># ─── ffuf → Burp Suite（仅匹配结果）───</span><br>ffuf -w wordlist.txt -u https://target.com/FUZZ \<br>  -replay-proxy http://127.0.0.1:8080 -ac -c<br><br><span class="hljs-comment"># ─── naabu 端口扫描 → ffuf 目录扫描 ───</span><br>naabu -host target.com -silent -p 80,443,8080,8443 | \<br>  xargs -I&#123;&#125; ffuf -w wordlist.txt -u https://&#123;&#125;/FUZZ -ac -q<br><br><span class="hljs-comment"># ─── ffuf 结果提取 URL 列表 ───</span><br>ffuf -w wordlist.txt -u https://target.com/FUZZ -o json -of json -ac | \<br>  jq -r <span class="hljs-string">&#x27;.results[] | .url&#x27;</span><br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十九、字典推荐"><a href="#十九、字典推荐" class="headerlink" title="十九、字典推荐"></a>十九、字典推荐</h2><table>
+<thead>
+<tr>
+<th>字典</th>
+<th>路径</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>raft-large-directories</strong></td>
+<td><code>SecLists/Discovery/Web-Content/</code></td>
+<td>大型目录枚举</td>
+</tr>
+<tr>
+<td><strong>raft-large-files</strong></td>
+<td>同上</td>
+<td>大型文件枚举</td>
+</tr>
+<tr>
+<td><strong>common.txt</strong></td>
+<td>同上</td>
+<td>经典轻量字典</td>
+</tr>
+<tr>
+<td><strong>big.txt</strong></td>
+<td>同上</td>
+<td>大型字典</td>
+</tr>
+<tr>
+<td><strong>api-endpoints.txt</strong></td>
+<td>同上</td>
+<td>API 端点</td>
+</tr>
+<tr>
+<td><strong>burp-parameter-names</strong></td>
+<td>同上</td>
+<td>参数名发现</td>
+</tr>
+<tr>
+<td><strong>web-extensions.txt</strong></td>
+<td>同上</td>
+<td>文件后缀</td>
+</tr>
+<tr>
+<td><strong>subdomains-top1million-5000</strong></td>
+<td><code>SecLists/Discovery/DNS/</code></td>
+<td>子域名</td>
+</tr>
+<tr>
+<td><strong>raft-small-words</strong></td>
+<td><code>SecLists/Discovery/Web-Content/</code></td>
+<td>精简目录</td>
+</tr>
+<tr>
+<td><strong>OneListForAll</strong></td>
+<td>github.com&#x2F;six2dez&#x2F;OneListForAll</td>
+<td>多源合并目录</td>
+</tr>
+<tr>
+<td><strong>rockyou</strong></td>
+<td><code>/usr/share/wordlists/</code></td>
+<td>密码字典</td>
+</tr>
+<tr>
+<td><strong>top-usernames-shortlist</strong></td>
+<td><code>SecLists/Usernames/</code></td>
+<td>用户名</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="二十、性能调优与反-WAF"><a href="#二十、性能调优与反-WAF" class="headerlink" title="二十、性能调优与反 WAF"></a>二十、性能调优与反 WAF</h2><h3 id="20-1-线程数"><a href="#20-1-线程数" class="headerlink" title="20.1 线程数"></a>20.1 线程数</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 高速扫描（授权环境）───</span><br>ffuf -w wordlist.txt -u https://target.com/FUZZ -t 100<br><br><span class="hljs-comment"># ─── 稳妥扫描（生产环境）───</span><br>ffuf -w wordlist.txt -u https://target.com/FUZZ -t 20<br><br><span class="hljs-comment"># ─── 保守扫描（易触发 WAF）───</span><br>ffuf -w wordlist.txt -u https://target.com/FUZZ -t 10<br></code></pre></td></tr></table></figure>
+
+<h3 id="20-2-限速（反-WAF-反封禁）"><a href="#20-2-限速（反-WAF-反封禁）" class="headerlink" title="20.2 限速（反 WAF &#x2F; 反封禁）"></a>20.2 限速（反 WAF &#x2F; 反封禁）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 限制每秒请求数 ───</span><br>ffuf -w wordlist.txt -u https://target.com/FUZZ -rate 50<br><br><span class="hljs-comment"># ─── 固定延迟 ───</span><br>ffuf -w wordlist.txt -u https://target.com/FUZZ -p 0.5<br><br><span class="hljs-comment"># ─── 随机延迟（反 WAF 推荐）───</span><br>ffuf -w wordlist.txt -u https://target.com/FUZZ -p 0.3-2.0<br></code></pre></td></tr></table></figure>
+
+<h3 id="20-3-提速技巧"><a href="#20-3-提速技巧" class="headerlink" title="20.3 提速技巧"></a>20.3 提速技巧</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 忽略响应体（只关心状态码/大小，大幅提速）───</span><br>ffuf -w wordlist.txt -u https://target.com/FUZZ -ignore-body<br><br><span class="hljs-comment"># ─── 仅匹配结果发代理（减少代理开销）───</span><br>ffuf -w wordlist.txt -u https://target.com/FUZZ -replay-proxy http://127.0.0.1:8080<br></code></pre></td></tr></table></figure>
+
+<h3 id="20-4-WAF-规避组合"><a href="#20-4-WAF-规避组合" class="headerlink" title="20.4 WAF 规避组合"></a>20.4 WAF 规避组合</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 完整的反 WAF 配置 ───</span><br>ffuf -w wordlist.txt -u https://target.com/FUZZ \<br>  -t 10 -p 0.5-2.0 \<br>  -H <span class="hljs-string">&quot;User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36&quot;</span> \<br>  -H <span class="hljs-string">&quot;X-Forwarded-For: 127.0.0.1&quot;</span> \<br>  -sf -ac -c<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="二十一、常见踩坑"><a href="#二十一、常见踩坑" class="headerlink" title="二十一、常见踩坑"></a>二十一、常见踩坑</h2><h3 id="21-1-POST-JSON-忘记-Content-Type"><a href="#21-1-POST-JSON-忘记-Content-Type" class="headerlink" title="21.1 POST JSON 忘记 Content-Type"></a>21.1 POST JSON 忘记 Content-Type</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ❌ 错误：JSON 数据没设 Content-Type，服务端无法解析</span><br>ffuf -w wordlist.txt -X POST -d <span class="hljs-string">&#x27;&#123;&quot;user&quot;:&quot;FUZZ&quot;&#125;&#x27;</span> -u https://target.com/api<br><br><span class="hljs-comment"># ✅ 正确</span><br>ffuf -w wordlist.txt -X POST \<br>  -H <span class="hljs-string">&quot;Content-Type: application/json&quot;</span> \<br>  -d <span class="hljs-string">&#x27;&#123;&quot;user&quot;:&quot;FUZZ&quot;&#125;&#x27;</span> -u https://target.com/api<br></code></pre></td></tr></table></figure>
+
+<h3 id="21-2-过滤器误杀有效结果"><a href="#21-2-过滤器误杀有效结果" class="headerlink" title="21.2 过滤器误杀有效结果"></a>21.2 过滤器误杀有效结果</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ❌ 盲目过滤 404（可能遗漏自定义 404 但实际存在的路径）</span><br>ffuf -w wordlist.txt -u https://target.com/FUZZ -<span class="hljs-built_in">fc</span> 404<br><br><span class="hljs-comment"># ✅ 先自动校准，再根据实际结果微调</span><br>ffuf -w wordlist.txt -u https://target.com/FUZZ -ac -c -v<br></code></pre></td></tr></table></figure>
+
+<h3 id="21-3-特殊字符编码问题"><a href="#21-3-特殊字符编码问题" class="headerlink" title="21.3 特殊字符编码问题"></a>21.3 特殊字符编码问题</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 路径含特殊字符时禁用自动编码 ───</span><br>ffuf -w wordlist.txt -u https://target.com/FUZZ -raw<br><br><span class="hljs-comment"># ─── 或手动指定编码 ───</span><br>ffuf -w payloads.txt -u https://target.com/search?q=FUZZ -enc <span class="hljs-string">&#x27;FUZZ:urlencode&#x27;</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="21-4-递归扫描耗时过长"><a href="#21-4-递归扫描耗时过长" class="headerlink" title="21.4 递归扫描耗时过长"></a>21.4 递归扫描耗时过长</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 设置递归深度 + 时间限制 ───</span><br>ffuf -w wordlist.txt -u https://target.com/FUZZ \<br>  -recursion -recursion-depth 2 \<br>  -maxtime 600 -maxtime-job 60<br></code></pre></td></tr></table></figure>
+
+<h3 id="21-5-大字典导致连接-内存爆满"><a href="#21-5-大字典导致连接-内存爆满" class="headerlink" title="21.5 大字典导致连接&#x2F;内存爆满"></a>21.5 大字典导致连接&#x2F;内存爆满</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 限速 + 减少线程 ───</span><br>ffuf -w huge_wordlist.txt -u https://target.com/FUZZ -rate 100 -t 20<br></code></pre></td></tr></table></figure>
+
+<h3 id="21-6-H-参数追加而非覆盖"><a href="#21-6-H-参数追加而非覆盖" class="headerlink" title="21.6 -H 参数追加而非覆盖"></a>21.6 <code>-H</code> 参数追加而非覆盖</h3><p><code>-H</code> 在命令行和配置文件中是<strong>追加</strong>关系，不是覆盖。若配置文件有 <code>-H &quot;Cookie: x=1&quot;</code>，命令行再加 <code>-H &quot;Cookie: x=2&quot;</code> 会发送两个 Cookie 头。</p>
+<h3 id="21-7-RESTful-风格路径后缀问题"><a href="#21-7-RESTful-风格路径后缀问题" class="headerlink" title="21.7 RESTful 风格路径后缀问题"></a>21.7 RESTful 风格路径后缀问题</h3><p>RESTful API 路径（如 <code>/api/users/1</code>）通常没有文件后缀，此时 <code>-e</code> 扩展名扫描无效。应直接用目录字典扫描路径段。</p>
+<h3 id="21-8-状态码全-200-的场景"><a href="#21-8-状态码全-200-的场景" class="headerlink" title="21.8 状态码全 200 的场景"></a>21.8 状态码全 200 的场景</h3><p>某些网站对所有路径返回 200 + 自定义错误页面。此时必须使用 <code>-fs</code>（响应大小）或 <code>-fw</code>（单词数）来区分：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">ffuf -w wordlist.txt -u https://target.com/FUZZ -mc all -fs &lt;error_page_size&gt;<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="速查表"><a href="#速查表" class="headerlink" title="速查表"></a>速查表</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 目录扫描</span><br>ffuf -w wordlist.txt -u https://target.com/FUZZ -ac -c<br><br><span class="hljs-comment"># 带扩展名</span><br>ffuf -w wordlist.txt -u https://target.com/FUZZ -e .php,.html -ac -c<br><br><span class="hljs-comment"># 递归扫描</span><br>ffuf -w wordlist.txt -u https://target.com/FUZZ -recursion -recursion-depth 2 -ac -c<br><br><span class="hljs-comment"># VHost 发现</span><br>ffuf -w sub.txt -u https://target-ip -H <span class="hljs-string">&quot;Host: FUZZ.target.com&quot;</span> -ac -c<br><br><span class="hljs-comment"># 参数发现</span><br>ffuf -w params.txt -u https://target.com/page?FUZZ=<span class="hljs-built_in">test</span> -ac -c<br><br><span class="hljs-comment"># POST 参数发现</span><br>ffuf -w params.txt -u https://target.com/api -X POST -d <span class="hljs-string">&quot;FUZZ=test&quot;</span> \<br>  -H <span class="hljs-string">&quot;Content-Type: application/x-www-form-urlencoded&quot;</span> -ac -c<br><br><span class="hljs-comment"># POST 密码爆破</span><br>ffuf -w pass.txt -X POST -d <span class="hljs-string">&quot;user=admin&amp;pass=FUZZ&quot;</span> -u https://target.com/login -<span class="hljs-built_in">fc</span> 401<br><br><span class="hljs-comment"># JSON API Fuzzing</span><br>ffuf -w payloads.txt -X POST -H <span class="hljs-string">&quot;Content-Type: application/json&quot;</span> \<br>  -d <span class="hljs-string">&#x27;&#123;&quot;input&quot;:&quot;FUZZ&quot;&#125;&#x27;</span> -u https://target.com/api -mc all -<span class="hljs-built_in">fc</span> 400<br><br><span class="hljs-comment"># SQL 注入时间盲注</span><br>ffuf -w sqli.txt -u https://target.com/api -d <span class="hljs-string">&quot;id=FUZZ&quot;</span> -mt <span class="hljs-string">&quot;&gt;5000&quot;</span><br><br><span class="hljs-comment"># 代理 + 仅匹配结果</span><br>ffuf -w wordlist.txt -u https://target.com/FUZZ -replay-proxy http://127.0.0.1:8080<br><br><span class="hljs-comment"># HTML 报告</span><br>ffuf -w wordlist.txt -u https://target.com/FUZZ -recursion -recursion-depth 2 \<br>  -ac -o report -of html<br></code></pre></td></tr></table></figure>
+
+<hr>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86%E5%B7%A5%E5%85%B7/" class="print-no-link">#信息收集工具</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>ffuf-使用手册</div>
+      <div>https://xiaobite-hacker.github.io/2026/03/09/ffuf-使用手册/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>xiaobite</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2026年3月9日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2026/03/09/rustscan-%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/" title="rustscan-使用手册">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">rustscan-使用手册</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2026/02/19/naabu-%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/" title="Naabu-使用手册">
+                        <span class="hidden-mobile">Naabu-使用手册</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

