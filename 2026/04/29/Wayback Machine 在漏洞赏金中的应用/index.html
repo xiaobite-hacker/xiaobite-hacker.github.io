@@ -1,0 +1,700 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/admin.jpg">
+  <link rel="icon" href="/img/admin.jpg">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="xiaobite">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Wayback Machine 在漏洞赏金中的应用 什么是 Wayback MachineWayback Machine 是由 互联网档案馆（Internet Archive） 提供的服务，存储网站随时间变化的快照。它充当网络的时间胶囊，保存着可能已经不再在线的数据。  隐藏或遗忘的文件：访问不再可访问的旧配置或文件 过时的安全措施：识别旧系统中的漏洞 历史数据：分析网站的先前状态以获得更深入的洞">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Wayback Machine 在漏洞赏金中的应用">
+<meta property="og:url" content="https://xiaobite-hacker.github.io/2026/04/29/Wayback%20Machine%20%E5%9C%A8%E6%BC%8F%E6%B4%9E%E8%B5%8F%E9%87%91%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/index.html">
+<meta property="og:site_name" content="xiaobite">
+<meta property="og:description" content="Wayback Machine 在漏洞赏金中的应用 什么是 Wayback MachineWayback Machine 是由 互联网档案馆（Internet Archive） 提供的服务，存储网站随时间变化的快照。它充当网络的时间胶囊，保存着可能已经不再在线的数据。  隐藏或遗忘的文件：访问不再可访问的旧配置或文件 过时的安全措施：识别旧系统中的漏洞 历史数据：分析网站的先前状态以获得更深入的洞">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-04-29T08:30:00.000Z">
+<meta property="article:modified_time" content="2026-05-03T04:10:15.056Z">
+<meta property="article:author" content="xiaobite">
+<meta property="article:tag" content="信息收集">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Wayback Machine 在漏洞赏金中的应用 - xiaobite</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"xiaobite-hacker.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>xiaobite</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/prompt/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>prompt</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Wayback Machine 在漏洞赏金中的应用"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-04-29 16:30" pubdate>
+          2026年4月29日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.6k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          14 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Wayback Machine 在漏洞赏金中的应用</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="Wayback-Machine-在漏洞赏金中的应用"><a href="#Wayback-Machine-在漏洞赏金中的应用" class="headerlink" title="Wayback Machine 在漏洞赏金中的应用"></a>Wayback Machine 在漏洞赏金中的应用</h1><hr>
+<h2 id="什么是-Wayback-Machine"><a href="#什么是-Wayback-Machine" class="headerlink" title="什么是 Wayback Machine"></a>什么是 Wayback Machine</h2><p>Wayback Machine 是由 <strong>互联网档案馆（Internet Archive）</strong> 提供的服务，存储网站随时间变化的快照。它充当网络的时间胶囊，保存着可能已经不再在线的数据。</p>
+<ul>
+<li><strong>隐藏或遗忘的文件</strong>：访问不再可访问的旧配置或文件</li>
+<li><strong>过时的安全措施</strong>：识别旧系统中的漏洞</li>
+<li><strong>历史数据</strong>：分析网站的先前状态以获得更深入的洞察</li>
+</ul>
+<hr>
+<h2 id="WebArchive-方法"><a href="#WebArchive-方法" class="headerlink" title="WebArchive 方法"></a>WebArchive 方法</h2><h3 id="使用-CDX-API-检索被动-URL"><a href="#使用-CDX-API-检索被动-URL" class="headerlink" title="使用 CDX API 检索被动 URL"></a>使用 CDX API 检索被动 URL</h3><p>搜索与特定域名关联的所有 URL 的最有效方法之一是使用 Wayback Machine 的 <strong>CDX API</strong>。该工具可以返回目标域名及其子域名的完整归档 URL 列表。以下是你可以使用的简单命令：</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">https:<span class="hljs-regexp">//</span>web.archive.org<span class="hljs-regexp">/cdx/</span>search<span class="hljs-regexp">/cdx?url=*.example.com/</span>*&amp;collapse=urlkey&amp;output=text&amp;fl=original<br></code></pre></td></tr></table></figure>
+
+<p>此命令调用 Wayback Machine 的 CDX API，获取特定域名（如 example.com）下所有子域名和路径的唯一归档 URL 的纯文本列表。请确保将域名更改为目标域名。</p>
+<h3 id="搜索敏感文件"><a href="#搜索敏感文件" class="headerlink" title="搜索敏感文件"></a>搜索敏感文件</h3><p>获取结果后，你可以搜索端点、电子邮件和密码泄漏，或者查找所有具有敏感扩展名的文件，如 <code>.db</code>、<code>.rar</code>、<code>.zip</code>、<code>.docx</code>、<code>.xls</code>、<code>.pdf</code> 等。</p>
+<h3 id="基于-Curl-的数据检索"><a href="#基于-Curl-的数据检索" class="headerlink" title="基于 Curl 的数据检索"></a>基于 Curl 的数据检索</h3><p>当处理来自 Wayback Machine 的大型数据集时，使用浏览器可能缓慢且不可靠。更好的方法是使用 <strong>CURL 工具</strong>，它允许你在几秒钟内下载结果。以下是一个简单的 CURL 命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash">curl -G <span class="hljs-string">&quot;https://web.archive.org/cdx/search/cdx&quot;</span> \<br>  --data-urlencode <span class="hljs-string">&quot;url=*.example.com/*&quot;</span> \<br>  --data-urlencode <span class="hljs-string">&quot;collapse=urlkey&quot;</span> \<br>  --data-urlencode <span class="hljs-string">&quot;output=text&quot;</span> \<br>  --data-urlencode <span class="hljs-string">&quot;fl=original&quot;</span> &gt; output.txt<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs kotlin">curl -G <span class="hljs-string">&quot;https://web.archive.org/cdx/search/cdx&quot;</span> --<span class="hljs-keyword">data</span>-urlencode <span class="hljs-string">&quot;url=*.mi.com/*&quot;</span>--<span class="hljs-keyword">data</span>-urlencode <span class="hljs-string">&quot;collapse=urlkey&quot;</span> --<span class="hljs-keyword">data</span>-urlencode <span class="hljs-string">&quot;output=text&quot;</span> --<span class="hljs-keyword">data</span>-urlencode <span class="hljs-string">&quot;fl=original&quot;</span> &gt; <span class="hljs-keyword">out</span>.txt<br></code></pre></td></tr></table></figure>
+
+<p>运行此命令后，所有域名输出将保存在 <code>output.txt</code> 文件中。然后你可以使用 <code>grep</code> 命令提取电子邮件、密码和具有特定扩展名的文件。</p>
+<p>你还可以使用此命令 grep 包含敏感信息的高价值扩展名文件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cat</span> out.txt | uro | grep -E <span class="hljs-string">&#x27;\.xls|\.xml|\.xlsx|\.json|\.pdf|\.sql|\.doc|\.docx|\.pptx|\.txt|\.zip|\.tar\.gz|\.tgz|\.bak|\.7z|\.rar|\.log|\.cache|\.secret|\.db|\.backup|\.yml|\.gz|\.config|\.csv|\.yaml|\.md|\.md5|\.exe|\.dll|\.bin|\.ini|\.bat|\.sh|\.tar|\.deb|\.git|\.env|\.rpm|\.iso|\.img|\.apk|\.msi|\.dmg|\.tmp|\.crt|\.pem|\.key|\.pub|\.asc&#x27;</span><br></code></pre></td></tr></table></figure>
+
+
+<h3 id="获取特定扩展名的文件"><a href="#获取特定扩展名的文件" class="headerlink" title="获取特定扩展名的文件"></a>获取特定扩展名的文件</h3><p>为了获得更好的结果，你可以在浏览器中使用此命令来获取具有特定扩展名的文件。此方法确保更快、更精细的结果直接显示在浏览器屏幕上：</p>
+<figure class="highlight coq"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs coq">https://web.archive.org/cdx/search/cdx?url=*.example.com/*&amp;collapse=urlkey&amp;output=text&amp;fl=original&amp;filter=original:.*\.(xls|<span class="hljs-type">xml</span>|<span class="hljs-type">xlsx</span>|<span class="hljs-type">json</span>|<span class="hljs-type">pdf</span>|<span class="hljs-type">sql</span>|<span class="hljs-type">doc</span>|<span class="hljs-type">docx</span>|<span class="hljs-type">pptx</span>|<span class="hljs-type">txt</span>|<span class="hljs-type">zip</span>|<span class="hljs-type">tar</span>\.gz|<span class="hljs-type">tgz</span>|<span class="hljs-type">bak</span>|<span class="hljs-type">7z</span>|<span class="hljs-type">rar</span>|<span class="hljs-type">log</span>|<span class="hljs-type">cache</span>|<span class="hljs-type">secret</span>|<span class="hljs-type">db</span>|<span class="hljs-type">backup</span>|<span class="hljs-type">yml</span>|<span class="hljs-type">gz</span>|<span class="hljs-type">git</span>|<span class="hljs-type">config</span>|<span class="hljs-type">csv</span>|<span class="hljs-type">yaml</span>|<span class="hljs-type">md</span>|<span class="hljs-type">md5</span>|<span class="hljs-type">exe</span>|<span class="hljs-type">dll</span>|<span class="hljs-type">bin</span>|<span class="hljs-type">ini</span>|<span class="hljs-type">bat</span>|<span class="hljs-type">sh</span>|<span class="hljs-type">tar</span>|<span class="hljs-type">deb</span>|<span class="hljs-type">rpm</span>|<span class="hljs-type">iso</span>|<span class="hljs-type">img</span>|<span class="hljs-type">apk</span>|<span class="hljs-type">msi</span>|<span class="hljs-type">env</span>|<span class="hljs-type">dmg</span>|<span class="hljs-type">tmp</span>|<span class="hljs-type">crt</span>|<span class="hljs-type">pem</span>|<span class="hljs-type">key</span>|<span class="hljs-type">pub</span>|<span class="hljs-type">asc</span>)$<br></code></pre></td></tr></table></figure>
+
+<p>你也可以使用 CURL 命令在终端中直接下载这些结果。它将在屏幕上显示输出，同时将结果保存到输出文件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">curl <span class="hljs-string">&quot;https://web.archive.org/cdx/search/cdx?url=*.example.com/*&amp;collapse=urlkey&amp;output=text&amp;fl=original&amp;filter=original:.*\.(xls|xml|xlsx|json|pdf|sql|doc|docx|pptx|txt|git|zip|tar\.gz|tgz|bak|7z|rar|log|cache|secret|db|backup|yml|gz|config|csv|yaml|md|md5|exe|dll|bin|ini|bat|sh|tar|deb|rpm|iso|img|env|apk|msi|dmg|tmp|crt|pem|key|pub|asc)$&quot;</span> | <span class="hljs-built_in">tee</span> output.txt<br></code></pre></td></tr></table></figure>
+
+<h3 id="浏览器过滤"><a href="#浏览器过滤" class="headerlink" title="浏览器过滤"></a>浏览器过滤</h3><p>另一种方法，如果你不想使用 CDX 搜索或下载输出文件，可以使用 <strong>Wayback URL 方法</strong>。只需替换 URL 中的域名并按回车。这将仅显示与目标域名关联的所有 URL：</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">https:<span class="hljs-regexp">//</span>web.archive.org<span class="hljs-regexp">/web/</span>*<span class="hljs-regexp">/example.com/</span>*<br></code></pre></td></tr></table></figure>
+
+<p>如结果所示，它将显示与目标域名关联的所有被动 URL。在搜索栏中，你可以输入特定扩展名如 <code>.xls</code>、<code>.zip</code> 或 <code>.pdf</code> 来过滤并仅访问这些文件类型。此方法在浏览器中更易于使用，欢迎尝试。</p>
+<hr>
+<h2 id="在-PDF-中查找敏感数据"><a href="#在-PDF-中查找敏感数据" class="headerlink" title="在 PDF 中查找敏感数据"></a>在 PDF 中查找敏感数据</h2><p>使用了前面提到的所有 CURL 单行命令后，你可以尝试这个额外的单行命令来搜索 PDF 文件中的敏感数据：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cat</span> output.txt | grep -Ea <span class="hljs-string">&#x27;\.pdf&#x27;</span> | <span class="hljs-keyword">while</span> <span class="hljs-built_in">read</span> -r url; <span class="hljs-keyword">do</span><br>  curl -s <span class="hljs-string">&quot;<span class="hljs-variable">$url</span>&quot;</span> | pdftotext - - | grep -Eaiq <span class="hljs-string">&#x27;(internal use only|confidential|strictly private|personal &amp; confidential|private|restricted|internal|not for distribution|do not share|proprietary|trade secret|classified|sensitive|bank statement|invoice|salary|contract|agreement|non disclosure|passport|social security|ssn|date of birth|credit card|identity|id number|company confidential|staff only|management only|internal only)&#x27;</span> &amp;&amp; <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;<span class="hljs-variable">$url</span>&quot;</span><br><span class="hljs-keyword">done</span><br></code></pre></td></tr></table></figure>
+
+<p>此命令将首先从输出中 grep 所有 PDF 文件，然后将这些 PDF 文件转换为文本。接着在文本中搜索任何指定的敏感词。如果在 PDF 中找到这些词中的任何一个，相应的 URL 将显示在屏幕上。</p>
+<p>之后手动检查这些 PDF 并向提交报告。</p>
+<hr>
+<h2 id="访问（-404-错误）已删除文件"><a href="#访问（-404-错误）已删除文件" class="headerlink" title="访问（ 404 错误）已删除文件"></a>访问（ 404 错误）已删除文件</h2><h3 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h3><ol>
+<li>前往 <a target="_blank" rel="noopener" href="https://web.archive.org/">https://web.archive.org/</a></li>
+<li>将你从 Wayback Archive 找到的 404 URL 粘贴到搜索栏中，然后按回车</li>
+<li>你将看到该 URL 的完整时间线</li>
+<li>从时间线中选择一个较旧的快照并点击它</li>
+<li>这将为你提供已删除文件的下载链接</li>
+</ol>
+<hr>
+<h2 id="Robots-txt-文件"><a href="#Robots-txt-文件" class="headerlink" title="Robots.txt 文件"></a>Robots.txt 文件</h2><p>许多网站都有 <code>robots.txt</code> 文件，它为网络爬虫提供关于网站哪些部分可以访问、哪些应该避免的指令。有时这些文件包含有价值的数据，例如隐藏的端点或不打算公开的 URL。通过检查 Wayback Machine 中 <code>robots.txt</code> 文件的旧版本，你可以发现用于安全测试的额外端点。</p>
+<hr>
+<h2 id="关键工具和命令速查"><a href="#关键工具和命令速查" class="headerlink" title="关键工具和命令速查"></a>关键工具和命令速查</h2><h3 id="1-CDX-API-基础查询"><a href="#1-CDX-API-基础查询" class="headerlink" title="1. CDX API 基础查询"></a>1. CDX API 基础查询</h3><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">https:<span class="hljs-regexp">//</span>web.archive.org<span class="hljs-regexp">/cdx/</span>search<span class="hljs-regexp">/cdx?url=*.TARGET.com/</span>*&amp;collapse=urlkey&amp;output=text&amp;fl=original<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-Curl-批量下载"><a href="#2-Curl-批量下载" class="headerlink" title="2. Curl 批量下载"></a>2. Curl 批量下载</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash">curl -G <span class="hljs-string">&quot;https://web.archive.org/cdx/search/cdx&quot;</span> \<br>  --data-urlencode <span class="hljs-string">&quot;url=*.TARGET.com/*&quot;</span> \<br>  --data-urlencode <span class="hljs-string">&quot;collapse=urlkey&quot;</span> \<br>  --data-urlencode <span class="hljs-string">&quot;output=text&quot;</span> \<br>  --data-urlencode <span class="hljs-string">&quot;fl=original&quot;</span> &gt; output.txt<br></code></pre></td></tr></table></figure>
+
+<h3 id="3-敏感文件扩展名过滤"><a href="#3-敏感文件扩展名过滤" class="headerlink" title="3. 敏感文件扩展名过滤"></a>3. 敏感文件扩展名过滤</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cat</span> output.txt | grep -E <span class="hljs-string">&#x27;\.(env|git|sql|bak|backup|key|pem|crt|secret|config|yml|yaml|db|log)$&#x27;</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="4-PDF-敏感内容扫描"><a href="#4-PDF-敏感内容扫描" class="headerlink" title="4. PDF 敏感内容扫描"></a>4. PDF 敏感内容扫描</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cat</span> output.txt | grep -Ea <span class="hljs-string">&#x27;\.pdf&#x27;</span> | <span class="hljs-keyword">while</span> <span class="hljs-built_in">read</span> -r url; <span class="hljs-keyword">do</span><br>  curl -s <span class="hljs-string">&quot;<span class="hljs-variable">$url</span>&quot;</span> | pdftotext - - | grep -Eaiq <span class="hljs-string">&#x27;(confidential|secret|password|api.key|token)&#x27;</span> &amp;&amp; <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;<span class="hljs-variable">$url</span>&quot;</span><br><span class="hljs-keyword">done</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="5-浏览器快速过滤"><a href="#5-浏览器快速过滤" class="headerlink" title="5. 浏览器快速过滤"></a>5. 浏览器快速过滤</h3><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">https:<span class="hljs-regexp">//</span>web.archive.org<span class="hljs-regexp">/web/</span>*<span class="hljs-regexp">/TARGET.com/</span>*<br></code></pre></td></tr></table></figure>
+
+<p>在搜索栏中输入扩展名即可过滤。</p>
+<h3 id="6-已删除文件恢复"><a href="#6-已删除文件恢复" class="headerlink" title="6. 已删除文件恢复"></a>6. 已删除文件恢复</h3><p>在 Wayback Machine 搜索栏中粘贴 404 URL → 选择旧快照 → 下载已删除文件。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/" class="print-no-link">#信息收集</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Wayback Machine 在漏洞赏金中的应用</div>
+      <div>https://xiaobite-hacker.github.io/2026/04/29/Wayback Machine 在漏洞赏金中的应用/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>xiaobite</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2026年4月29日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2026/05/01/%E7%9C%9F%E5%AE%9ESSRF%E6%BC%8F%E6%B4%9E%EF%BC%9AIPv6%E4%B8%8E%E9%87%8D%E5%AE%9A%E5%90%91%E7%9A%84%E5%88%A9%E7%94%A8/" title="真实SSRF漏洞：IPv6与重定向的利用">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">真实SSRF漏洞：IPv6与重定向的利用</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2026/04/23/SSRF-%E4%BB%8E%E6%8E%A2%E6%B5%8B%E5%88%B0RCE/" title="SSRF — 从探测到 RCE">
+                        <span class="hidden-mobile">SSRF — 从探测到 RCE</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

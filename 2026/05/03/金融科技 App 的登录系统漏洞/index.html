@@ -1,0 +1,723 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/admin.jpg">
+  <link rel="icon" href="/img/admin.jpg">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="xiaobite">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="金融科技 App 的登录系统漏洞 那是一个普通的周二晚上。我没什么特别的计划——只有我、我的笔记本电脑，和桌上一杯渐渐变凉的茶。 我在一个漏洞赏金平台上浏览，寻找新的目标。然后我看到了——一家金融科技公司刚刚开放了他们的计划。他们处理真钱。数字钱包。加密货币组合。银行转账。 我想：这会很有趣。 我创建了一个账户，打开 Burp Suite（一个可以拦截和检查 Web 流量的工具），开始四处探索。在">
+<meta property="og:type" content="article">
+<meta property="og:title" content="金融科技 App 的登录系统漏洞">
+<meta property="og:url" content="https://xiaobite-hacker.github.io/2026/05/03/%E9%87%91%E8%9E%8D%E7%A7%91%E6%8A%80%20App%20%E7%9A%84%E7%99%BB%E5%BD%95%E7%B3%BB%E7%BB%9F%E6%BC%8F%E6%B4%9E/index.html">
+<meta property="og:site_name" content="xiaobite">
+<meta property="og:description" content="金融科技 App 的登录系统漏洞 那是一个普通的周二晚上。我没什么特别的计划——只有我、我的笔记本电脑，和桌上一杯渐渐变凉的茶。 我在一个漏洞赏金平台上浏览，寻找新的目标。然后我看到了——一家金融科技公司刚刚开放了他们的计划。他们处理真钱。数字钱包。加密货币组合。银行转账。 我想：这会很有趣。 我创建了一个账户，打开 Burp Suite（一个可以拦截和检查 Web 流量的工具），开始四处探索。在">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-05-02T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-05-03T09:23:11.959Z">
+<meta property="article:author" content="xiaobite">
+<meta property="article:tag" content="漏洞案例">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>金融科技 App 的登录系统漏洞 - xiaobite</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"xiaobite-hacker.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>xiaobite</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/prompt/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>prompt</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="金融科技 App 的登录系统漏洞"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-05-03 00:00" pubdate>
+          2026年5月3日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.9k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          16 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">金融科技 App 的登录系统漏洞</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="金融科技-App-的登录系统漏洞"><a href="#金融科技-App-的登录系统漏洞" class="headerlink" title="金融科技 App 的登录系统漏洞"></a>金融科技 App 的登录系统漏洞</h1><hr>
+<p>那是一个普通的周二晚上。我没什么特别的计划——只有我、我的笔记本电脑，和桌上一杯渐渐变凉的茶。</p>
+<p>我在一个漏洞赏金平台上浏览，寻找新的目标。然后我看到了——一家金融科技公司刚刚开放了他们的计划。他们处理真钱。数字钱包。加密货币组合。银行转账。</p>
+<p>我想：这会很有趣。</p>
+<p>我创建了一个账户，打开 Burp Suite（一个可以拦截和检查 Web 流量的工具），开始四处探索。在点击应用不到 10 分钟内，我在请求头中发现了某个东西。</p>
+<p>一个长而奇怪的字符串，放在 Authorization 头中：</p>
+<figure class="highlight llvm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs llvm">eyJhbGciOiJIUzI<span class="hljs-number">1</span>NiIsInR<span class="hljs-number">5</span>cCI<span class="hljs-number">6</span>IkpXVCJ<span class="hljs-number">9</span>.eyJ<span class="hljs-number">1</span><span class="hljs-keyword">c</span><span class="hljs-number">2</span>VySWQiOiI<span class="hljs-number">0</span>MjE<span class="hljs-number">4</span>In<span class="hljs-number">0</span>.SflKxwRJSMeKKF<span class="hljs-number">2</span>QT<span class="hljs-number">4</span><br></code></pre></td></tr></table></figure>
+
+<p>我立刻认出来了。这是一个 JWT 令牌。我立刻开始提出问题。</p>
+<hr>
+<p>在继续之前，让我用简单的语言解释什么是 JWT。</p>
+<p>当你登录一个网站时，服务器需要一种方式来记住你是谁。一种流行的方法是给你一个令牌——一小段文本，写着”嘿，这个人已登录，他们的用户 ID 是 4218，这个令牌在这个日期之前有效。”</p>
+<p>这个令牌叫做 <strong>JWT——JSON Web Token</strong>。</p>
+<p>它看起来像三段由点连接的文本：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">HEADER</span> . PAYLOAD . SIGNATURE<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>Header</strong> 说明了令牌类型和使用的签名算法</li>
+<li><strong>Payload</strong> 是实际数据——你的用户 ID、你的角色（管理员或普通用户）、令牌创建时间和过期时间</li>
+<li><strong>Signature</strong> 就像蜡封。它证明令牌没有被篡改</li>
+</ul>
+<p>以下是解码后的 payload（你可以在一个叫 jwt.io 的免费网站上做这个——只需粘贴令牌，它就会显示所有内容）：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;userId&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;4218&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;role&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;user&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;email&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;myemail@example.com&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;iat&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">1710000000</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;exp&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">1711296000</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p><code>iat</code> 表示”签发时间”，<code>exp</code> 表示”过期时间”。这些数字是 Unix 时间戳——基本上就是用数字存储日期和时间的方式。</p>
+<p>那么我解码这个令牌后注意到了什么？</p>
+<p>过期时间是创建后的 <strong>15 天</strong>。</p>
+<p>这已经很可疑了。对于一个处理真钱的金融科技应用，15 天太长了。大多数安全应用使用 15 分钟到 1 小时。但过期时间甚至不是最大的问题。</p>
+<hr>
+<h2 id="漏洞-1——令牌实际上从未过期"><a href="#漏洞-1——令牌实际上从未过期" class="headerlink" title="漏洞 1——令牌实际上从未过期"></a>漏洞 1——令牌实际上从未过期</h2><p>注意到 15 天的过期窗口后，我有了一个想法：如果我在令牌应该过期之后使用它，服务器会拒绝它吗？</p>
+<p>所以我手动将过期日期改为过去的时间戳。我使用一个弱密钥重新签署了令牌（稍后详述），然后发送了请求。</p>
+<p>以下是我在 Burp Suite 中发送的内容：</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-keyword">POST</span> <span class="hljs-string">/api/v1/wallet/transfer</span> <span class="hljs-meta">HTTP/1.1</span><br><span class="hljs-attribute">Host</span><span class="hljs-punctuation">: </span>app.pocketpay.com<br><span class="hljs-attribute">Authorization</span><span class="hljs-punctuation">: </span>Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.<br>  [payload with PAST expiry date].<br>  [my re-signed signature]<br><span class="hljs-attribute">Content-Type</span><span class="hljs-punctuation">: </span>application/json<br><br><span class="language-json"><span class="hljs-punctuation">&#123;</span></span><br><span class="language-json">  <span class="hljs-attr">&quot;toWalletId&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;9999&quot;</span><span class="hljs-punctuation">,</span></span><br><span class="language-json">  <span class="hljs-attr">&quot;amount&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">100</span></span><br><span class="language-json"><span class="hljs-punctuation">&#125;</span></span><br></code></pre></td></tr></table></figure>
+
+<p>服务器的回复：</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-meta">HTTP/1.1</span> <span class="hljs-number">200</span> OK<br>&#123;<br>  &quot;status&quot;: &quot;success&quot;,<br>  &quot;message&quot;: &quot;Transfer initiated&quot;,<br>  &quot;transactionId&quot;: &quot;TXN-20240309-884421&quot;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<p>服务器接受了过期的令牌并处理了转账。这意味着服务器读取了令牌但从不检查它是否真的过期了。这就像夜店的保镖检查你的身份证看你的名字，但从不看日期来确认是否仍然有效。</p>
+<hr>
+<h2 id="漏洞-2——退出后旧令牌仍然有效"><a href="#漏洞-2——退出后旧令牌仍然有效" class="headerlink" title="漏洞 2——退出后旧令牌仍然有效"></a>漏洞 2——退出后旧令牌仍然有效</h2><p>这个更简单但同样危险。</p>
+<p>当你从应用登出时，你的令牌应该被销毁。加入黑名单。变得无用。这就是登出的全部意义。</p>
+<p>所以我这样做：</p>
+<ol>
+<li>我登录并从 Burp Suite 的历史记录中保存了我的令牌</li>
+<li>我正常从应用登出</li>
+<li>我拿到那个旧的保存令牌，手动在请求中发送</li>
+</ol>
+<p>我发送的请求：</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-keyword">GET</span> <span class="hljs-string">/api/v1/user/dashboard</span> <span class="hljs-meta">HTTP/1.1</span><br><span class="hljs-attribute">Host</span><span class="hljs-punctuation">: </span>app.pocketpay.com<br><span class="hljs-attribute">Authorization</span><span class="hljs-punctuation">: </span>Bearer [my old token from before I logged out]<br></code></pre></td></tr></table></figure>
+
+<p>我得到的响应：</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-meta">HTTP/1.1</span> <span class="hljs-number">200</span> OK<br>&#123;<br>  &quot;status&quot;: &quot;success&quot;,<br>  &quot;userId&quot;: &quot;4218&quot;,<br>  &quot;walletBalance&quot;: 84250.00,<br>  &quot;email&quot;: &quot;victim@example.com&quot;,<br>  &quot;transactions&quot;: [...]<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><strong>完全访问权限。</strong> 钱包余额。交易历史。一切。</p>
+<p>登出在服务端完全没有做任何事情。令牌仍然活着且运转良好。如果有人之前窃取了我的令牌——比如在咖啡店的 WiFi 上——他们可以继续使用整整 15 天，即使我登出了并以为自己是安全的。</p>
+<hr>
+<h2 id="漏洞-3——你可以用别人的令牌编辑他们的账户"><a href="#漏洞-3——你可以用别人的令牌编辑他们的账户" class="headerlink" title="漏洞 3——你可以用别人的令牌编辑他们的账户"></a>漏洞 3——你可以用别人的令牌编辑他们的账户</h2><p>这个让我有点目瞪口呆。</p>
+<p>我有两个测试账户——让我们称它们为账户 A（我的）和账户 B（我的测试受害者）。我在不同的浏览器中登录了两个账户并收集了两个令牌。</p>
+<p>现在，这个应用中的一些 API 端点做了一些非常愚蠢的事情。它们不是在服务器上检查”这个用户是否真的拥有这个账户？”，而是直接信任令牌中的用户 ID。</p>
+<p>所以我拿了账户 B 的令牌，在以账户 A 身份访问个人资料更新端点时使用它。</p>
+<p>请求：</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-keyword">PUT</span> <span class="hljs-string">/api/v1/profile/update</span> <span class="hljs-meta">HTTP/1.1</span><br><span class="hljs-attribute">Host</span><span class="hljs-punctuation">: </span>app.pocketpay.com<br><span class="hljs-attribute">Authorization</span><span class="hljs-punctuation">: </span>Bearer [TOKEN BELONGING TO ACCOUNT B]<br><span class="hljs-attribute">Content-Type</span><span class="hljs-punctuation">: </span>application/json<br><br><span class="language-perl">&#123;</span><br><span class="language-perl">  <span class="hljs-string">&quot;email&quot;</span>: <span class="hljs-string">&quot;attacker<span class="hljs-variable">@evil</span>.com&quot;</span>,</span><br><span class="language-perl">  <span class="hljs-string">&quot;phone&quot;</span>: <span class="hljs-string">&quot;+91-9999999999&quot;</span></span><br><span class="language-perl">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p>响应：</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs http"><span class="hljs-meta">HTTP/1.1</span> <span class="hljs-number">200</span> OK<br>&#123;<br>  &quot;status&quot;: &quot;updated&quot;,<br>  &quot;userId&quot;: &quot;5501&quot;,<br>  &quot;email&quot;: &quot;attacker@evil.com&quot;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>我刚刚将账户 B 的邮箱地址改为了我控制的邮箱。这意味着我可以将他们锁定在自己的账户之外，接收他们的密码重置邮件，并完全接管他们的账户——完全不需要知道他们的密码。</p>
+<hr>
+<h2 id="如何在-jwt-io-上解码JWT"><a href="#如何在-jwt-io-上解码JWT" class="headerlink" title="如何在 jwt.io 上解码JWT"></a>如何在 jwt.io 上解码JWT</h2><p>让我准确展示我如何使用 jwt.io 调查令牌。这是一个免费的公共工具，任何开发人员或漏洞猎人都可以使用。</p>
+<p><strong>步骤 1</strong>：打开浏览器，访问 jwt.io</p>
+<p><strong>步骤 2</strong>：在 Burp Suite 中，从 Authorization 头复制长令牌字符串</p>
+<p><strong>步骤 3</strong>：粘贴到 jwt.io 左侧的框中</p>
+<p><strong>步骤 4</strong>：右侧立即显示解码后的 header 和 payload</p>
+<p>这是我看到的：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs json">Header<span class="hljs-punctuation">:</span><br><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;alg&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;HS256&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;typ&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;JWT&quot;</span><br><span class="hljs-punctuation">&#125;</span><br><br>Payload<span class="hljs-punctuation">:</span><br><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;userId&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;4218&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;role&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;user&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;email&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;myemail@example.com&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;iat&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">1710000000</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;exp&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">1711296000</span>  ← 这是 <span class="hljs-number">15</span> 天后<br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p>jwt.io 上的签名部分还允许你测试令牌是否使用弱密钥签署。我用常见密码词表对密钥进行了字典攻击，破解了它。密钥是像 <code>secret123</code> 这样令人尴尬的简单东西。</p>
+<p>一旦我有了密钥，我就可以用任何想要的 payload 生成新令牌——包括不同的用户 ID、管理员角色或过去的过期日期。</p>
+<hr>
+<h2 id="修复方案"><a href="#修复方案" class="headerlink" title="修复方案"></a>修复方案</h2><p><strong>过期问题</strong>：金融应用的令牌应在 15 分钟到 1 小时内过期。过期后，用户使用”刷新令牌”自动获取新令牌。服务器必须在每个请求上检查过期时间戳。</p>
+<p><strong>登出问题</strong>：当用户登出时，服务器应将该令牌加入黑名单——一个”死亡令牌”列表。每个传入请求都检查此列表。如果令牌在上面，即使签名有效，也拒绝访问。</p>
+<p><strong>替换问题</strong>：服务器不应仅信任令牌中的用户 ID。它还应检查令牌中的用户 ID 与正在访问的资源是否匹配。这称为<strong>所有权验证</strong>，是基本的安全实践。</p>
+<hr>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E6%BC%8F%E6%B4%9E%E6%A1%88%E4%BE%8B/" class="print-no-link">#漏洞案例</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>金融科技 App 的登录系统漏洞</div>
+      <div>https://xiaobite-hacker.github.io/2026/05/03/金融科技 App 的登录系统漏洞/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>xiaobite</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2026年5月3日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2026/05/03/%E7%BB%95%E8%BF%87%E5%8F%8C%E5%9B%A0%E7%B4%A0%E8%AE%A4%E8%AF%81%EF%BC%882FA%EF%BC%89/" title="绕过双因素认证（2FA）">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">绕过双因素认证（2FA）</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2026/05/02/SSRF%EF%BC%9A%E7%AA%83%E5%8F%96AWS%E5%AF%86%E9%92%A5%E5%B9%B6%E8%8E%B7%E5%BE%97%E9%93%AD%E6%84%9F%E4%BF%A1%E6%81%AF/" title="SSRF：窃取 AWS 密钥获得铭感信息">
+                        <span class="hidden-mobile">SSRF：窃取 AWS 密钥获得铭感信息</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

